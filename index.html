@@ -1,0 +1,768 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Health UI Purple Edition - Responsive</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/swiper@11/swiper-bundle.min.css" />
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;600;800&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.2/css/all.min.css">
+
+    <style>
+        body {
+            font-family: 'Inter', sans-serif;
+        }
+
+        .bg-deep-purple {
+            background-color: #2e1065;
+        }
+
+        .bg-lavender {
+            background-color: #f5f3ff;
+        }
+
+        .text-accent-purple {
+            color: #a78bfa;
+        }
+
+        .bg-accent-purple {
+            background-color: #8b5cf6;
+        }
+
+        .promo-gradient {
+            background: linear-gradient(135deg, #7c3aed 0%, #c084fc 100%);
+        }
+
+        .active-dot {
+            background-color: #2e1065;
+            width: 1.5rem;
+            transition: all 0.3s ease;
+        }
+
+        @keyframes slideUp {
+            from {
+                transform: translateY(100%);
+            }
+
+            to {
+                transform: translateY(0);
+            }
+        }
+
+        .animate-slide-up {
+            animation: slideUp 0.3s ease-out;
+        }
+
+        /* Desktop specific adjustments */
+        @media (min-width: 1024px) {
+            .hero-section {
+                height: 400px;
+                display: flex;
+                align-items: center;
+                background: #f8fafc;
+                border-radius: 2rem;
+                margin-top: 2rem;
+            }
+        }
+
+        .swiper-pagination-bullet-active {
+            background: #6d28d9 !important;
+            width: 25px !important;
+            border-radius: 5px !important;
+        }
+
+        /* Clean Pagination Design */
+        .custom-pagination .swiper-pagination-bullet {
+            background: #e2e8f0;
+            opacity: 1;
+            width: 10px;
+            height: 6px;
+            border-radius: 10px;
+            transition: all 0.4s cubic-bezier(0.4, 0, 0.2, 1);
+        }
+
+        .custom-pagination .swiper-pagination-bullet-active {
+            background: #2e1065;
+            width: 35px;
+        }
+
+        /* Smooth Fade for Info Swiper */
+        .infoSwiper .swiper-slide {
+            opacity: 0 !important;
+            transition: opacity 0.5s;
+        }
+
+        .infoSwiper .swiper-slide-active {
+            opacity: 1 !important;
+        }
+    </style>
+</head>
+
+<body class="bg-slate-50 lg:bg-white">
+
+    <header
+        class="bg-deep-purple lg:bg-white text-white lg:text-slate-800 p-5 lg:px-12 lg:py-4 lg:shadow-sm sticky top-0 z-50 rounded-b-[2.5rem] lg:rounded-none">
+        <div class="max-w-7xl mx-auto flex flex-col lg:flex-row lg:justify-between lg:items-center gap-4">
+            <div class="flex justify-between items-center">
+                <div class="flex items-center gap-1">
+                    <span class="text-xl lg:text-2xl font-extrabold tracking-tight">DIGICLINIX</span>
+                    <span class="text-xl lg:text-2xl font-light text-accent-purple lg:text-purple-600">Health</span>
+                </div>
+                <div onclick="toggleLocation()"
+                    class="lg:hidden flex items-center text-sm cursor-pointer bg-white/10 px-3 py-1.5 rounded-full border border-white/10">
+                    <span id="city-text-mob" class="font-bold mr-2">Hyderabad</span>
+                    <i class="fas fa-map-marker-alt text-accent-purple"></i>
+                </div>
+            </div>
+
+            <div class="hidden lg:flex items-center gap-8">
+                <div onclick="toggleLocation()"
+                    class="flex items-center text-sm cursor-pointer bg-slate-100 px-4 py-2 rounded-lg border border-slate-200">
+                    <i class="fas fa-map-marker-alt text-purple-600 mr-2"></i>
+                    <span id="city-text-pc" class="font-bold text-slate-700">Hyderabad</span>
+                    <i class="fas fa-chevron-down ml-2 text-[10px] text-slate-400"></i>
+                </div>
+                <nav class="flex items-center gap-6 font-semibold text-slate-600">
+                    <a href="#" class="hover:text-purple-600">Tests</a>
+                    <a href="#" class="hover:text-purple-600">Checkups</a>
+                    <a href="#"
+                        class="border border-green-500 text-green-600 px-4 py-1.5 rounded-lg hover:bg-green-50 transition-all"><i
+                            class="fab fa-whatsapp mr-1"></i> Support</a>
+                    <div onclick="toggleCart(true)"
+                        class="bg-deep-purple text-white p-2 px-5 rounded-xl cursor-pointer flex items-center gap-3 hover:bg-opacity-90 active:scale-95 transition-all shadow-lg shadow-purple-100 relative">
+
+                        <div class="relative">
+                            <i class="fas fa-shopping-cart text-sm"></i>
+                            <span id="header-cart-badge"
+                                class="absolute -top-3 -right-3 bg-orange-500 text-white text-[10px] w-5 h-5 rounded-full flex items-center justify-center border-2 border-deep-purple font-bold hidden">
+                                0
+                            </span>
+                        </div>
+
+                        <span class="font-bold text-sm tracking-tight">Cart</span>
+                    </div>
+                </nav>
+            </div>
+
+            <div class="lg:hidden relative text-gray-800">
+                <input type="text" placeholder="Search for tests"
+                    class="w-full py-3.5 px-6 rounded-2xl shadow-inner focus:outline-none text-md border-none">
+                <i class="fas fa-search absolute right-6 top-4 text-gray-400"></i>
+            </div>
+        </div>
+    </header>
+
+    <main class="max-w-7xl mx-auto px-5 lg:px-12 py-8">
+
+        <div class="lg:flex lg:flex-row-reverse lg:items-center lg:gap-16 lg:py-12">
+
+            <div
+                class="relative overflow-hidden rounded-[2.5rem] h-64 lg:h-[450px] lg:flex-1 shadow-[0_20px_50px_rgba(139,92,246,0.15)] mt-5 lg:mt-0 group border border-purple-100">
+                <div id="slider" class="flex transition-transform duration-1000 cubic-bezier(0.23, 1, 0.32, 1) h-full">
+                    <div class="min-w-full promo-gradient p-8 lg:p-20 flex flex-col justify-center text-white relative">
+                        <div
+                            class="hidden lg:block absolute right-10 top-1/2 -translate-y-1/2 opacity-10 rotate-12 transition-transform group-hover:scale-110 duration-700">
+                            <i class="fas fa-dna text-[250px]"></i>
+                        </div>
+                        <div class="relative z-10">
+                            <span
+                                class="bg-white/20 backdrop-blur-md px-4 py-1 rounded-full text-[10px] lg:text-xs font-bold tracking-widest uppercase mb-4 inline-block">Premium
+                                Pass</span>
+                            <h2 class="text-4xl lg:text-6xl font-black italic leading-none">DIGICLINIX <br><span
+                                    class="text-5xl lg:text-8xl text-purple-900/20">one</span></h2>
+                            <p class="mt-4 lg:mt-6 text-sm lg:text-xl font-medium opacity-90 max-w-xs">Smart health
+                                management for a smarter you.</p>
+                            <div class="mt-6 lg:mt-10 flex items-center gap-4">
+                                <div class="flex flex-col">
+                                    <span class="text-xs lg:text-sm line-through opacity-50">₹14,999</span>
+                                    <span class="text-3xl lg:text-5xl font-black">₹2,999</span>
+                                </div>
+                                <button
+                                    class="bg-white text-purple-700 px-6 py-2 lg:px-8 lg:py-3 rounded-xl font-bold text-sm lg:text-base shadow-xl hover:bg-purple-50 transition-all">Explore</button>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="min-w-full bg-deep-purple p-8 lg:p-20 flex flex-col justify-center text-white">
+                        <h2 class="text-3xl lg:text-5xl font-extrabold leading-tight">Full Body Checkups <br> <span
+                                class="text-accent-purple italic">start @ ₹1599</span></h2>
+                        <p class="text-accent-purple/80 text-sm lg:text-xl font-medium mt-4 flex items-center gap-2">
+                            <i class="fas fa-bolt"></i> Reports in 6 hours
+                        </p>
+                        <button
+                            class="mt-8 lg:mt-12 bg-accent-purple text-white py-4 px-10 lg:px-14 rounded-2xl w-max font-extrabold shadow-[0_10px_30px_rgba(139,92,246,0.4)] hover:scale-105 hover:shadow-purple-500/50 transition-all">Book
+                            Now</button>
+                    </div>
+                </div>
+
+                <div class="absolute bottom-6 left-1/2 -translate-x-1/2 flex items-center gap-4 z-20">
+                    <div
+                        class="bg-black/40 backdrop-blur-xl px-4 py-1.5 rounded-full text-[10px] text-white font-black tracking-widest border border-white/10">
+                        <span id="slide-count">1</span> / 2
+                    </div>
+                    <div class="flex gap-2.5">
+                        <div
+                            class="slider-dot active-dot w-2 h-2 rounded-full bg-white/40 cursor-pointer transition-all duration-300">
+                        </div>
+                        <div
+                            class="slider-dot w-2 h-2 rounded-full bg-white/40 cursor-pointer transition-all duration-300">
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <div class="hidden lg:block lg:w-[480px] space-y-10">
+                <div class="space-y-4">
+                    <span class="text-purple-600 font-bold tracking-[0.2em] uppercase text-sm">Welcome to
+                        DIGICLINIXHealth</span>
+                    <h1 class="text-6xl font-black text-slate-900 leading-[1.1]">Prevention is <br> <span
+                            class="text-transparent bg-clip-text bg-gradient-to-r from-purple-600 to-indigo-600">better
+                            than</span> <br> cure</h1>
+                </div>
+
+                <div class="relative group">
+                    <div
+                        class="absolute -inset-1 bg-gradient-to-r from-purple-400 to-indigo-400 rounded-[2rem] blur opacity-20 group-focus-within:opacity-40 transition duration-500">
+                    </div>
+                    <div class="relative">
+                        <input type="text" placeholder="Search for tests (e.g. CBC, Diabetes)"
+                            class="w-full py-6 px-10 rounded-[2rem] text-xl border border-slate-100 bg-white shadow-sm focus:ring-4 focus:ring-purple-100 outline-none transition-all placeholder:text-slate-300">
+                        <i class="fas fa-search absolute right-10 top-7 text-purple-600 text-xl"></i>
+                    </div>
+                </div>
+
+                <div class="flex gap-5">
+                    <div
+                        class="flex-1 bg-gradient-to-br from-orange-400 to-orange-600 p-6 rounded-3xl text-white font-black text-center cursor-pointer shadow-[0_10px_20px_rgba(249,115,22,0.2)] hover:shadow-orange-500/40 hover:-translate-y-1.5 transition-all">
+                        Book Lab Tests
+                    </div>
+                    <div
+                        class="flex-1 bg-gradient-to-br from-emerald-400 to-emerald-600 p-6 rounded-3xl text-white font-black text-center cursor-pointer shadow-[0_10px_20px_rgba(16,185,129,0.2)] hover:shadow-emerald-500/40 hover:-translate-y-1.5 transition-all">
+                        Book Checkups
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <div class="grid grid-cols-2 gap-5 mt-12 lg:hidden">
+            <a href="labtesting.html"
+                class="bg-gradient-to-br from-purple-50 to-white p-6 rounded-[2.5rem] flex flex-col items-center justify-between h-52 border border-purple-100 shadow-[0_10px_25px_rgba(139,92,246,0.08)] active:scale-95 transition-all cursor-pointer group">
+
+                <span class="font-black text-purple-900 text-xl leading-tight text-center">
+                    Book Lab<br>Tests
+                </span>
+
+                <div
+                    class="bg-white p-5 rounded-[1.5rem] shadow-md group-hover:bg-purple-600 group-hover:text-white transition-all flex items-center justify-center">
+                    <i class="fa-solid fa-flask text-purple-600 group-hover:text-white text-4xl"></i>
+                </div>
+
+            </a>
+
+
+            <div
+                class="bg-gradient-to-br from-indigo-50 to-white p-6 rounded-[2.5rem] flex flex-col items-center justify-between h-52 border border-indigo-100 shadow-[0_10px_25px_rgba(99,102,241,0.08)] active:scale-95 transition-all cursor-pointer group">
+
+                <span class="font-black text-indigo-900 text-xl leading-tight text-center">
+                    Book<br>Checkups
+                </span>
+
+                <div
+                    class="bg-white p-5 rounded-[1.5rem] shadow-md group-hover:bg-indigo-600 group-hover:text-white transition-all flex items-center justify-center">
+                    <i class="fas fa-box text-indigo-600 group-hover:text-white text-4xl"></i>
+                </div>
+            </div>
+        </div>
+        <div class="grid grid-cols-3 gap-4 lg:gap-16 mt-5 py-2 lg:py-0 border-t border-slate-100">
+            <div class="flex flex-col items-center lg:flex-row lg:justify-center gap-4 text-center lg:text-left group">
+                <div
+                    class="w-14 h-14 bg-slate-50 rounded-2xl flex items-center justify-center group-hover:bg-purple-50 transition-colors">
+                    <i class="fas fa-award text-3xl text-slate-400 group-hover:text-purple-500"></i>
+                </div>
+                <div>
+                    <p class="text-[10px] lg:text-xs text-slate-500 font-bold uppercase tracking-widest">Quality
+                        Assurance</p>
+                    <p class="text-xs lg:text-xl text-slate-900 font-black">Certified Labs</p>
+                </div>
+            </div>
+            <div
+                class="flex flex-col items-center lg:flex-row lg:justify-center gap-4 text-center lg:text-left border-x border-slate-100 lg:border-none group">
+                <div
+                    class="w-14 h-14 bg-slate-50 rounded-2xl flex items-center justify-center group-hover:bg-blue-50 transition-colors">
+                    <i class="fas fa-file-medical-alt text-3xl text-slate-400 group-hover:text-blue-500"></i>
+                </div>
+                <div>
+                    <p class="text-[10px] lg:text-xs text-slate-500 font-bold uppercase tracking-widest">Fast Collection
+                    </p>
+                    <p class="text-xs lg:text-xl text-slate-900 font-black">6 AM - 10 PM</p>
+                </div>
+            </div>
+            <div class="flex flex-col items-center lg:flex-row lg:justify-center gap-4 text-center lg:text-left group">
+                <div
+                    class="w-14 h-14 bg-slate-50 rounded-2xl flex items-center justify-center group-hover:bg-emerald-50 transition-colors">
+                    <i class="fas fa-clock text-3xl text-slate-400 group-hover:text-emerald-500"></i>
+                </div>
+                <div>
+                    <p class="text-[10px] lg:text-xs text-slate-500 font-bold uppercase tracking-widest">Express
+                        Delivery</p>
+                    <p class="text-xs lg:text-xl text-slate-900 font-black">In 6 hours</p>
+                </div>
+            </div>
+        </div>
+        <!-- <div id="locModal"
+            class="fixed inset-0 bg-black/60 backdrop-blur-sm z-[100] hidden items-end lg:items-center lg:justify-center">
+            <div
+                class="bg-white w-full lg:max-w-md rounded-t-[3rem] lg:rounded-[2rem] p-10 animate-slide-up shadow-2xl">
+                <div class="w-12 h-1.5 bg-slate-200 rounded-full mx-auto mb-6 lg:hidden"></div>
+                <h3 class="text-2xl font-extrabold text-deep-purple mb-6">Select City</h3>
+                <div class="space-y-3">
+                    <button onclick="updateCity('Hyderabad')"
+                        class="w-full text-left p-5 bg-purple-50 rounded-2xl font-bold text-deep-purple border-2 border-purple-200 flex justify-between items-center">
+                        Hyderabad <i class="fas fa-check-circle text-purple-600"></i>
+                    </button>
+                    <button onclick="updateCity('Bhubaneswar')"
+                        class="w-full text-left p-5 border border-slate-100 rounded-2xl font-bold hover:bg-slate-50">Bhubaneswar</button>
+                    <button onclick="updateCity('Bangalore')"
+                        class="w-full text-left p-5 border border-slate-100 rounded-2xl font-bold hover:bg-slate-50">Bangalore</button>
+                </div>
+            </div>
+        </div> -->
+
+
+        <!-- fullbody checkup-card -->
+        <section class="max-w-7xl mx-auto px-6 py-12 lg:py-24">
+            <div class="flex justify-between items-center mb-10">
+                <div>
+                    <h2 class="text-3xl lg:text-5xl font-black text-slate-800 tracking-tight leading-tight">
+                        Recommended <span class="text-purple-700 italic">Checkups</span>
+                    </h2>
+                    <p class="text-slate-500 font-medium mt-2">Book the best health packages at discounted rates.</p>
+                </div>
+                <div class="hidden lg:flex gap-3">
+                    <button
+                        class="checkup-prev w-12 h-12 rounded-full bg-white border border-slate-200 flex items-center justify-center text-slate-400 hover:text-purple-600 hover:border-purple-600 transition-all shadow-sm">
+                        <i class="fas fa-chevron-left"></i>
+                    </button>
+                    <button
+                        class="checkup-next w-12 h-12 rounded-full bg-white border border-slate-200 flex items-center justify-center text-slate-400 hover:text-purple-600 hover:border-purple-600 transition-all shadow-sm">
+                        <i class="fas fa-chevron-right"></i>
+                    </button>
+                </div>
+            </div>
+
+            <div class="swiper checkupSwiper !pb-12">
+                <div id="checkup-container" class="swiper-wrapper">
+
+                    <div class="swiper-slide h-auto">
+                        <div
+                            class="checkup-card bg-white rounded-[2.5rem] overflow-hidden flex flex-col h-full shadow-sm border border-slate-50 transition-all hover:shadow-xl">
+                            <div class="bg-gradient-to-br from-purple-700 to-indigo-800 p-6 text-white relative">
+                                <span
+                                    class="absolute top-4 right-5 bg-white/20 text-[10px] px-2 py-0.5 rounded font-black uppercase tracking-widest">Most
+                                    Popular</span>
+                                <h3 class="text-xl font-bold pr-8 leading-tight mb-4 h-12">Essential Full Body Checkup
+                                </h3>
+                                <div class="flex items-end gap-2">
+                                    <div>
+                                        <span class="text-[10px] line-through opacity-60 block">₹5,243</span>
+                                        <span class="text-2xl font-black">₹1,599</span>
+                                    </div>
+                                    <span
+                                        class="bg-emerald-400 text-purple-900 text-[10px] font-black px-2 py-1 rounded-lg">70%
+                                        OFF</span>
+                                </div>
+                            </div>
+                            <div class="p-6 flex flex-col flex-1">
+                                <p class="text-xs font-bold text-slate-500 mb-6 flex items-center gap-2">
+                                    <i class="fas fa-flask text-purple-600"></i> 91 Parameters Included
+                                </p>
+                                <div class="flex gap-2 mt-auto">
+                                    <button onclick="openDetails(1)"
+                                        class="flex-1 py-3 border border-purple-100 text-purple-700 rounded-xl font-bold text-[10px] uppercase tracking-widest">Details</button>
+                                    <button onclick="addToCart({id: 1, name: 'Essential Checkup', price: 1599})"
+                                        class="flex-[1.5] py-3 bg-orange-400 text-white rounded-xl font-bold text-[10px] uppercase shadow-lg active:scale-95 transition-all">Add
+                                        to Cart</button>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="swiper-slide h-auto">
+                        <div
+                            class="checkup-card bg-white rounded-[2.5rem] overflow-hidden flex flex-col h-full shadow-sm border border-slate-50">
+                            <div class="bg-gradient-to-br from-indigo-700 to-purple-800 p-6 text-white relative">
+                                <span
+                                    class="absolute top-4 right-5 bg-white/20 text-[10px] px-2 py-0.5 rounded font-black uppercase">Advanced</span>
+                                <h3 class="text-xl font-bold pr-8 leading-tight mb-4 h-12">Advanced Full Body Checkup
+                                </h3>
+                                <div class="flex items-end gap-2">
+                                    <div><span class="text-[10px] line-through opacity-60 block">₹7,708</span><span
+                                            class="text-2xl font-black">₹2,799</span></div>
+                                    <span
+                                        class="bg-emerald-400 text-purple-900 text-[10px] font-black px-2 py-1 rounded-lg">64%
+                                        OFF</span>
+                                </div>
+                            </div>
+                            <div class="p-6 flex flex-col flex-1">
+                                <p class="text-xs font-bold text-slate-500 mb-6 flex items-center gap-2">
+                                    <i class="fas fa-flask text-indigo-600"></i> 100 Parameters Included
+                                </p>
+                                <div class="flex gap-2 mt-auto">
+                                    <button onclick="openDetails(2)"
+                                        class="flex-1 py-3 border border-purple-100 text-purple-700 rounded-xl font-bold text-[10px] uppercase tracking-widest">Details</button>
+                                    <button onclick="addToCart({id: 2, name: 'Advanced Checkup', price: 2799})"
+                                        class="flex-[1.5] py-3 bg-orange-400 text-white rounded-xl font-bold text-[10px] uppercase active:scale-95 transition-all">Add
+                                        to Cart</button>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="swiper-slide h-auto">
+                        <div
+                            class="checkup-card bg-white rounded-[2.5rem] overflow-hidden flex flex-col h-full shadow-sm border border-slate-50">
+                            <div class="bg-gradient-to-br from-slate-700 to-slate-900 p-6 text-white relative">
+                                <span
+                                    class="absolute top-4 right-5 bg-white/20 text-[10px] px-2 py-0.5 rounded font-black uppercase tracking-widest">Premium</span>
+                                <h3 class="text-xl font-bold pr-8 leading-tight mb-4 h-12">Ultra Full Body Checkup -
+                                    Male</h3>
+                                <div class="flex items-end gap-3">
+                                    <div><span
+                                            class="text-[10px] line-through opacity-60 block font-medium">₹35,364</span><span
+                                            class="text-2xl font-black">₹11,999</span></div>
+                                    <span
+                                        class="bg-green-400 text-purple-900 text-[10px] font-black px-2 py-1 rounded-lg shadow-md">66%
+                                        OFF</span>
+                                </div>
+                            </div>
+                            <div class="p-6 flex flex-col flex-1">
+                                <p class="text-xs font-bold text-slate-500 mb-6 flex items-center gap-2">
+                                    <i class="fas fa-flask text-slate-600"></i> 129 Parameters Included
+                                </p>
+                                <div class="flex gap-2 mt-auto">
+                                    <button onclick="openDetails(3)"
+                                        class="flex-1 py-3 border border-purple-100 text-purple-700 rounded-xl font-bold text-[10px] uppercase tracking-widest">Details</button>
+                                    <button onclick="addToCart({id: 3, name: 'Ultra Male Checkup', price: 11999})"
+                                        class="flex-[1.5] py-3 bg-orange-400 text-white rounded-xl font-bold text-[10px] uppercase active:scale-95 transition-all">Add
+                                        to Cart</button>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="swiper-slide h-auto">
+                        <div
+                            class="checkup-card bg-white rounded-[2.5rem] overflow-hidden flex flex-col h-full shadow-sm border border-slate-50">
+                            <div class="bg-gradient-to-br from-pink-700 to-purple-800 p-6 text-white relative">
+                                <span
+                                    class="absolute top-4 right-5 bg-white/20 text-[10px] px-2 py-0.5 rounded font-black uppercase tracking-widest">Premium</span>
+                                <h3 class="text-xl font-bold pr-8 leading-tight mb-4 h-12">Ultra Full Body Checkup -
+                                    Female</h3>
+                                <div class="flex items-end gap-3">
+                                    <div><span
+                                            class="text-[10px] line-through opacity-60 block font-medium">₹41,609</span><span
+                                            class="text-2xl font-black">₹11,999</span></div>
+                                    <span
+                                        class="bg-green-400 text-purple-900 text-[10px] font-black px-2 py-1 rounded-lg shadow-md">71%
+                                        OFF</span>
+                                </div>
+                            </div>
+                            <div class="p-6 flex flex-col flex-1">
+                                <p class="text-xs font-bold text-slate-500 mb-6 flex items-center gap-2">
+                                    <i class="fas fa-flask text-pink-600"></i> 136 Parameters Included
+                                </p>
+                                <div class="flex gap-2 mt-auto">
+                                    <button onclick="openDetails(4)"
+                                        class="flex-1 py-3 border border-purple-100 text-purple-700 rounded-xl font-bold text-[10px] uppercase tracking-widest">Details</button>
+                                    <button onclick="addToCart({id: 4, name: 'Ultra Female Checkup', price: 11999})"
+                                        class="flex-[1.8] py-3 bg-orange-400 text-white rounded-xl font-bold text-[10px] uppercase active:scale-95 transition-all">Add
+                                        to Cart</button>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+
+                </div>
+                <div class="checkup-pagination !flex lg:hidden !justify-center !gap-2"></div>
+            </div>
+        </section>
+
+    
+
+
+        <section class="max-w-7xl mx-auto px-5 lg:px-12 py-16 lg:py-24 bg-white">
+            <div class="flex flex-col lg:flex-row items-center gap-12 lg:gap-24">
+
+                <div class="lg:w-1/2 space-y-8 text-center lg:text-left">
+                    <div class="space-y-4">
+                        <h2 class="text-4xl lg:text-6xl font-black text-slate-900 leading-tight">
+                            Most Booked <br> <span class="text-purple-600">Checkups</span>
+                        </h2>
+                        <p class="text-slate-500 text-lg lg:text-xl font-medium max-w-lg mx-auto lg:mx-0">
+                            India's fastest AI powered & temperature-controlled supply chain to collect and test your
+                            blood in freshest state.
+                        </p>
+                    </div>
+
+                    <a href="/all-checkups"
+                        class="inline-block px-10 py-4 border-2 border-purple-100 text-purple-700 font-bold rounded-2xl hover:bg-purple-600 hover:text-white transition-all duration-300 shadow-sm">
+                        View All Checkups
+                    </a>
+                </div>
+
+                <div class="lg:w-1/2 w-full grid grid-cols-2 gap-4 lg:gap-6 items-stretch">
+
+                    <div class="flex flex-col gap-4 lg:gap-6">
+                        <div
+                            class="bg-gradient-to-br from-purple-600 to-indigo-700 p-6 lg:p-8 rounded-[2rem] lg:rounded-[2.5rem] shadow-xl shadow-purple-100 h-48 lg:h-[250px] flex flex-col justify-between group cursor-pointer hover:-translate-y-2 transition-transform duration-300">
+                            <div class="flex justify-between items-start">
+                                <h3 class="text-white text-lg lg:text-2xl font-black leading-tight">Full Body
+                                    <br>Checkup
+                                </h3>
+                                <div
+                                    class="w-8 h-8 lg:w-10 lg:h-10 bg-white/20 rounded-xl flex items-center justify-center text-white backdrop-blur-md">
+                                    <i class="fa-solid fa-chevron-right text-xs lg:text-sm"></i>
+                                </div>
+                            </div>
+                            <div class="text-white/20 text-5xl lg:text-7xl self-center">
+                                <i class="fa-solid fa-users"></i>
+                            </div>
+                        </div>
+
+                        <div
+                            class="bg-gradient-to-br from-purple-500 to-indigo-600 p-6 lg:p-8 rounded-[2rem] lg:rounded-[2.5rem] shadow-xl shadow-purple-100 h-48 lg:h-[250px] flex flex-col justify-between group cursor-pointer hover:-translate-y-2 transition-transform duration-300">
+                            <div class="flex justify-between items-start">
+                                <h3 class="text-white text-lg lg:text-2xl font-bold leading-tight">Allergy <br>Checkup
+                                </h3>
+                                <div
+                                    class="w-8 h-8 lg:w-10 lg:h-10 bg-white/20 rounded-xl flex items-center justify-center text-white">
+                                    <i class="fa-solid fa-chevron-right text-[10px] lg:text-xs"></i>
+                                </div>
+                            </div>
+                            <div class="text-white/20 text-5xl lg:text-6xl self-end">
+                                <i class="fa-solid fa-virus"></i>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="flex flex-col gap-4 lg:gap-6">
+                        <div
+                            class="bg-gradient-to-br from-purple-400 to-purple-500 p-6 lg:p-8 rounded-[2rem] lg:rounded-[2.2rem] shadow-lg shadow-purple-50 h-48 lg:h-[250px] flex flex-col justify-between group cursor-pointer hover:-translate-y-1 transition-all">
+                            <div class="flex justify-between items-start">
+                                <h3 class="text-white text-lg lg:text-xl font-bold leading-tight">Sexual <br>Health</h3>
+                                <div
+                                    class="w-8 h-8 bg-white/20 rounded-xl flex items-center justify-center text-white text-[10px]">
+                                    <i class="fa-solid fa-chevron-right"></i>
+                                </div>
+                            </div>
+                            <div class="text-white/10 text-4xl lg:text-5xl self-end">
+                                <i class="fa-solid fa-heart-pulse"></i>
+                            </div>
+                        </div>
+
+                        <div
+                            class="bg-gradient-to-br from-indigo-400 to-indigo-500 p-6 lg:p-8 rounded-[2rem] lg:rounded-[2.2rem] shadow-lg shadow-indigo-50 h-48 lg:h-[250px] flex flex-col justify-between group cursor-pointer hover:-translate-y-1 transition-all">
+                            <div class="flex justify-between items-start">
+                                <h3 class="text-white text-lg lg:text-xl font-bold leading-tight">Women's <br>Health
+                                </h3>
+                                <div
+                                    class="w-8 h-8 bg-white/20 rounded-xl flex items-center justify-center text-white text-[10px]">
+                                    <i class="fa-solid fa-chevron-right"></i>
+                                </div>
+                            </div>
+                            <div class="text-white/10 text-4xl lg:text-5xl self-end">
+                                <i class="fa-solid fa-venus"></i>
+                            </div>
+                        </div>
+                    </div>
+
+                </div>
+            </div>
+        </section>
+
+        <section class="max-w-7xl mx-auto px-6 lg:px-12 py-12 lg:py-24 bg-white overflow-hidden">
+            <div class="flex flex-col lg:flex-row items-center gap-12 lg:gap-24 relative">
+
+                <button
+                    class="custom-prev absolute left-0 top-1/2 -translate-y-1/2 z-30 w-12 h-12 hidden lg:flex items-center justify-center rounded-full bg-white border border-slate-100 shadow-xl text-slate-400 hover:text-purple-600 transition-all active:scale-90">
+                    <i class="fas fa-chevron-left"></i>
+                </button>
+                <button
+                    class="custom-next absolute right-0 top-1/2 -translate-y-1/2 z-30 w-12 h-12 hidden lg:flex items-center justify-center rounded-full bg-white border border-slate-100 shadow-xl text-slate-400 hover:text-purple-600 transition-all active:scale-90">
+                    <i class="fas fa-chevron-right"></i>
+                </button>
+
+                <div class="w-full lg:w-[450px] shrink-0">
+                    <div class="swiper cardSwiper !px-2 !py-6">
+                        <div class="swiper-wrapper">
+
+                            <div class="swiper-slide">
+                                <div
+                                    class="bg-white rounded-[2.5rem] shadow-[0_20px_50px_rgba(0,0,0,0.08)] border border-slate-50 overflow-hidden group">
+                                    <div
+                                        class="bg-gradient-to-br from-purple-700 to-indigo-900 p-8 text-white relative">
+                                        <span
+                                            class="bg-white/10 backdrop-blur-md px-3 py-1 rounded-full text-[9px] font-black uppercase tracking-widest inline-block mb-3">Popular</span>
+                                        <h3 class="text-2xl lg:text-3xl font-black leading-tight mb-6">Full Body
+                                            <br>Checkup
+                                        </h3>
+                                        <div class="flex items-end gap-3">
+                                            <div>
+                                                <span
+                                                    class="text-[11px] line-through opacity-50 block mb-1">₹4,999</span>
+                                                <span class="text-3xl font-black">₹1,599</span>
+                                            </div>
+                                            <span
+                                                class="bg-emerald-400 text-purple-900 text-[10px] font-black px-2.5 py-1.5 rounded-xl shadow-lg">68%
+                                                OFF</span>
+                                        </div>
+                                    </div>
+                                    <div class="p-8 space-y-8">
+                                        <div
+                                            class="flex justify-between items-center text-slate-400 font-bold text-[11px] uppercase tracking-widest">
+                                            <div class="flex items-center gap-2"><i
+                                                    class="fas fa-flask text-purple-400 text-sm"></i> 85 Parameters
+                                            </div>
+                                            <div class="flex items-center gap-2"><i
+                                                    class="fas fa-clock text-purple-400 text-sm"></i> 6 Hrs</div>
+                                        </div>
+                                        <div class="flex gap-3">
+                                            <button
+                                                class="flex-1 py-4 border-2 border-slate-100 rounded-2xl text-[10px] font-black uppercase text-slate-400 hover:border-purple-600 hover:text-purple-600 transition-all">Details</button>
+                                            <button onclick="addToCart('Full Body Checkup', 1599)"
+                                                class="flex-[1.8] py-4 bg-orange-400 text-white rounded-2xl font-black text-[10px] uppercase shadow-lg shadow-orange-100 active:scale-95 transition-all">Add
+                                                to Cart</button>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+
+                            <div class="swiper-slide">
+                                <div
+                                    class="bg-white rounded-[2.5rem] shadow-[0_20px_50px_rgba(0,0,0,0.08)] border border-slate-50 overflow-hidden">
+                                    <div class="bg-gradient-to-br from-red-600 to-rose-800 p-8 text-white relative">
+                                        <span
+                                            class="bg-white/10 backdrop-blur-md px-3 py-1 rounded-full text-[9px] font-black uppercase tracking-widest inline-block mb-3">Cardiac</span>
+                                        <h3 class="text-2xl lg:text-3xl font-black leading-tight mb-6">Heart Health
+                                            <br>Monitoring
+                                        </h3>
+                                        <div class="flex items-end gap-3">
+                                            <div><span
+                                                    class="text-[11px] line-through opacity-50 block mb-1">₹2,500</span><span
+                                                    class="text-3xl font-black">₹1,299</span></div>
+                                            <span
+                                                class="bg-emerald-400 text-purple-900 text-[10px] font-black px-2.5 py-1.5 rounded-xl">48%
+                                                OFF</span>
+                                        </div>
+                                    </div>
+                                    <div class="p-8 space-y-8">
+                                        <div
+                                            class="flex justify-between items-center text-slate-400 font-bold text-[11px] uppercase tracking-widest">
+                                            <div class="flex items-center gap-2"><i
+                                                    class="fas fa-heartbeat text-red-500 text-sm"></i> Cardiac Risk
+                                            </div>
+                                            <div class="flex items-center gap-2"><i
+                                                    class="fas fa-user-md text-red-500 text-sm"></i> Specialist</div>
+                                        </div>
+                                        <div class="flex gap-3">
+                                            <button
+                                                class="flex-1 py-4 border-2 border-slate-100 rounded-2xl text-[10px] font-black uppercase text-slate-400 hover:border-red-600 transition-all">Details</button>
+                                            <button onclick="addToCart('Heart Health Monitoring', 1299)"
+                                                class="flex-[1.8] py-4 bg-orange-400 text-white rounded-2xl font-black text-[10px] uppercase shadow-lg shadow-orange-100 active:scale-95 transition-all">Add
+                                                to Cart</button>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="w-full lg:flex-1">
+                    <div class="swiper infoSwiper">
+                        <div class="swiper-wrapper">
+
+                            <div class="swiper-slide py-6 lg:py-10">
+                                <div class="flex flex-col lg:flex-row items-center gap-10">
+                                    <div class="flex-1 text-center lg:text-left order-2 lg:order-1">
+                                        <h2
+                                            class="text-4xl lg:text-7xl font-black text-slate-900 leading-[1.05] tracking-tight">
+                                            Complete <span
+                                                class="text-transparent bg-clip-text bg-gradient-to-r from-purple-600 to-indigo-600">body
+                                                analysis</span> for peace of mind
+                                        </h2>
+                                        <p
+                                            class="text-slate-500 text-base lg:text-xl font-medium mt-6 max-w-lg mx-auto lg:mx-0">
+                                            Stay ahead of potential health risks with our comprehensive preventive
+                                            screening.</p>
+                                    </div>
+                                    <div class="w-48 h-48 lg:w-80 lg:h-80 shrink-0 order-1 lg:order-2">
+                                        <img src="https://img.freepik.com/free-photo/doctor-offering-medical-checkup-patient_23-2148901355.jpg"
+                                            class="w-full h-full object-cover rounded-full border-8 border-slate-50 shadow-2xl grayscale hover:grayscale-0 transition-all duration-700"
+                                            alt="Checkup">
+                                    </div>
+                                </div>
+                            </div>
+
+                            <div class="swiper-slide py-6 lg:py-10">
+                                <div class="flex flex-col lg:flex-row items-center gap-10">
+                                    <div class="flex-1 text-center lg:text-left order-2 lg:order-1">
+                                        <h2 class="text-4xl lg:text-7xl font-black text-slate-900 leading-[1.05]">
+                                            Keep your <span class="text-red-500">heart beating</span> strong
+                                        </h2>
+                                        <p
+                                            class="text-slate-500 text-base lg:text-xl font-medium mt-6 max-w-lg mx-auto lg:mx-0">
+                                            Advanced lipid profiles and cardiac markers to detect risks early and
+                                            protect your life.</p>
+                                    </div>
+                                    <div class="w-48 h-48 lg:w-80 lg:h-80 shrink-0 order-1 lg:order-2">
+                                        <img src="https://img.freepik.com/free-photo/close-up-doctor-holding-heart_23-2149191357.jpg"
+                                            class="w-full h-full object-cover rounded-full border-8 border-slate-50 shadow-2xl grayscale hover:grayscale-0 transition-all duration-700"
+                                            alt="Heart">
+                                    </div>
+                                </div>
+                            </div>
+
+                        </div>
+                    </div>
+
+                    <div class="mt-12 flex justify-center lg:justify-start">
+                        <div class="custom-pagination !flex !gap-2"></div>
+                    </div>
+                </div>
+
+            </div>
+        </section>
+
+
+        <!-- cartslider -->
+        <div id="cartSidebar"
+            class="fixed top-0 right-0 h-full w-80 bg-white shadow-2xl z-[100] transform translate-x-full transition-transform duration-300 flex flex-col">
+            <div class="p-6 bg-deep-purple text-white flex justify-between items-center">
+                <h3 class="font-black">Your Cart</h3>
+                <button onclick="toggleCart()" class="text-white"><i class="fas fa-times"></i></button>
+            </div>
+            <div id="cartItems" class="p-6 flex-1 overflow-y-auto space-y-4">
+            </div>
+            <div class="p-6 border-t">
+                <div class="flex justify-between font-bold mb-4">
+                    <span>Total:</span>
+                    <span id="cartTotal">₹0</span>
+                </div>
+                <button onclick="checkoutWhatsApp()"
+                    class="w-full py-4 bg-green-500 text-white rounded-xl font-bold flex items-center justify-center gap-2">
+                    <i class="fab fa-whatsapp"></i> Book via WhatsApp
+                </button>
+            </div>
+        </div>
+    </main>
+
+
+    <script src="https://cdn.jsdelivr.net/npm/swiper@11/swiper-bundle.min.js"></script>
+    <script src="script.js"></script>
+</body>
+
+</html>
