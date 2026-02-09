@@ -1,0 +1,225 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Heart Health | DIGICLINIX Diagnostics</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;600;800;900&display=swap" rel="stylesheet">
+    <style>
+        body { font-family: 'Inter', sans-serif; background-color: #f8fafc; overflow-x: hidden; }
+        .cardiac-card { transition: all 0.4s cubic-bezier(0.175, 0.885, 0.32, 1.275); border: 1px solid #f1f5f9; }
+        .cardiac-card:hover { transform: translateY(-10px); box-shadow: 0 25px 50px -12px rgba(76, 29, 149, 0.2); }
+        #cartSidebar { transition: transform 0.5s cubic-bezier(0.4, 0, 0.2, 1); }
+        .no-scrollbar::-webkit-scrollbar { display: none; }
+        .modal-bg { background: rgba(15, 23, 42, 0.6); backdrop-filter: blur(8px); }
+        .purple-gradient { background: linear-gradient(135deg, #6d28d9 0%, #4c1d95 100%); }
+    </style>
+</head>
+<body class="pb-20">
+
+    <nav class="bg-white/90 backdrop-blur-md border-b sticky top-0 z-40 px-5 py-4 lg:px-12">
+        <div class="max-w-7xl mx-auto flex items-center justify-between">
+            <div class="flex items-center gap-4">
+                <button onclick="window.history.back()" class="w-10 h-10 rounded-full bg-purple-50 flex items-center justify-center text-purple-600 hover:bg-purple-600 hover:text-white transition-all">
+                    <i class="fas fa-arrow-left"></i>
+                </button>
+                <div class="flex flex-col">
+                    <span class="text-xl font-black text-slate-800 tracking-tighter leading-none">DIGICLINIX</span>
+                    <span class="text-[10px] font-bold text-purple-600 uppercase tracking-[0.2em]">Diagnostics</span>
+                </div>
+            </div>
+            <button onclick="toggleCart(true)" class="relative bg-purple-600 text-white px-6 py-2.5 rounded-2xl font-bold flex items-center gap-3 active:scale-95 transition-all shadow-lg">
+                <i class="fas fa-shopping-basket"></i>
+                <span id="cart-badge" class="bg-orange-500 text-white text-[10px] w-5 h-5 rounded-full flex items-center justify-center border-2 border-white absolute -top-2 -right-2 font-black">0</span>
+            </button>
+        </div>
+    </nav>
+
+    <header class="max-w-7xl mx-auto px-5 lg:px-12 pt-10">
+        <div class="purple-gradient rounded-[3rem] p-10 lg:p-20 text-white relative overflow-hidden shadow-2xl">
+            <div class="relative z-10 max-w-2xl text-center lg:text-left">
+                <div class="inline-flex items-center gap-2 bg-white/10 px-4 py-1.5 rounded-full mb-6 border border-white/20">
+                    <i class="fas fa-heart text-red-400 text-[10px]"></i>
+                    <span class="text-[10px] font-black uppercase tracking-widest text-purple-100">Trusted by 1M+ customers</span>
+                </div>
+                <h1 class="text-4xl lg:text-7xl font-black leading-tight tracking-tighter">
+                    Monitor Your <br><span class="text-transparent bg-clip-text bg-gradient-to-r from-purple-200 to-white italic">Heart Health</span>
+                </h1>
+                <p class="mt-6 text-purple-100 text-lg font-medium opacity-80 leading-relaxed">
+                    Test silent issues with advanced cardiac tests and cut medical bills with home diagnostics. Reports within 12 hours.
+                </p>
+            </div>
+            <div class="absolute -right-20 -bottom-20 text-[20rem] text-white/5 rotate-12 pointer-events-none">
+                <i class="fas fa-heart-pulse"></i>
+            </div>
+        </div>
+    </header>
+
+    <main class="max-w-7xl mx-auto px-5 lg:px-12 py-16">
+        <div class="mb-12">
+            <h2 class="text-2xl font-black text-slate-800 tracking-tight">Showing 13 specialized cardiac tests</h2>
+        </div>
+
+        <div id="heart-grid" class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-8">
+            </div>
+    </main>
+
+    <div id="cartOverlay" class="fixed inset-0 bg-black/40 z-[100] hidden backdrop-blur-sm" onclick="toggleCart(false)"></div>
+    <div id="cartSidebar" class="fixed top-0 right-0 h-full w-full max-w-[420px] bg-white z-[110] shadow-2xl translate-x-full flex flex-col">
+        <div class="p-8 bg-purple-700 text-white flex justify-between items-center">
+            <h2 class="text-2xl font-black tracking-tight">Your Selections</h2>
+            <button onclick="toggleCart(false)" class="text-white/70 hover:text-white transition-colors"><i class="fas fa-times text-2xl"></i></button>
+        </div>
+        <div id="cart-list" class="flex-1 overflow-y-auto p-6 space-y-4 no-scrollbar"></div>
+        <div class="p-8 border-t border-slate-50 bg-slate-50">
+            <div class="flex justify-between items-center mb-8">
+                <span class="font-bold text-slate-400 uppercase tracking-widest text-xs">Total Bill</span>
+                <span id="cart-total" class="font-black text-3xl text-slate-900">₹0</span>
+            </div>
+            <button onclick="checkoutWhatsApp()" class="w-full py-5 bg-green-500 text-white rounded-[2rem] font-black uppercase tracking-widest shadow-xl flex items-center justify-center gap-3 active:scale-95 transition-all">
+                <i class="fab fa-whatsapp text-2xl"></i> Finalize Booking
+            </button>
+        </div>
+    </div>
+
+    <div id="detailsModal" class="fixed inset-0 z-[200] hidden items-center justify-center p-4 modal-bg">
+        <div class="bg-white w-full max-w-lg rounded-[3rem] overflow-hidden shadow-2xl transition-all scale-95" id="modalContent">
+            <div id="m-header" class="p-10 text-white relative purple-gradient">
+                <button onclick="closeModal()" class="absolute top-8 right-8 text-white/80 hover:text-white text-xl"><i class="fas fa-times-circle"></i></button>
+                <h2 id="m-title" class="text-2xl font-black leading-tight"></h2>
+                <p id="m-price" class="text-xl font-bold mt-2 opacity-90"></p>
+            </div>
+            <div class="p-10 text-center">
+                <div class="w-20 h-20 bg-purple-50 rounded-full flex items-center justify-center mx-auto mb-6 text-purple-600 text-3xl shadow-inner">
+                    <i class="fas fa-vial"></i>
+                </div>
+                <h4 class="font-black text-slate-800 mb-2 uppercase tracking-widest text-[10px]">Test Information:</h4>
+                <p id="m-info" class="text-sm text-slate-500 leading-relaxed mb-10"></p>
+                <button id="m-add-btn" class="w-full py-5 bg-orange-400 text-white rounded-[1.5rem] font-black uppercase tracking-widest active:scale-95 transition-all shadow-lg">Add to Cart</button>
+            </div>
+        </div>
+    </div>
+
+    <script>
+        const WHATSAPP = "9348148310";
+        let cart = [];
+
+        // 13 Tests directly from image_594329.png & image_982557.png
+        const heartTests = [
+            { id: 1, name: "Lipid Profile", price: 550, mrp: 715, off: "23%", params: 9, color: "from-purple-500 to-indigo-600", info: "Measures cholesterol levels to assess cardiac risk." },
+            { id: 2, name: "High Sensitive CRP", price: 800, mrp: 999, off: "20%", params: 1, color: "from-rose-500 to-purple-600", info: "Inflammation marker for heart attack risk." },
+            { id: 3, name: "Cholesterol Total", price: 210, mrp: 241, off: "13%", params: 1, color: "from-blue-500 to-indigo-700", info: "Basic check for blood cholesterol levels." },
+            { id: 4, name: "Lipoprotein (A)", price: 649, mrp: 1117, off: "42%", params: 1, color: "from-indigo-600 to-purple-800", info: "Tests for hereditary risk factor for heart disease." },
+            { id: 5, name: "Creatine Phosphokinase (CPK)", price: 380, mrp: 555, off: "31%", params: 1, color: "from-slate-600 to-indigo-900", info: "Measures enzymes released during heart muscle stress." },
+            { id: 6, name: "N-Terminal Pro B Type Natriuretic Peptide", price: 1936, mrp: 4534, off: "57%", params: 1, color: "from-emerald-600 to-purple-800", info: "Helps diagnose and monitor heart failure." },
+            { id: 7, name: "Troponin-I", price: 1650, mrp: 2418, off: "32%", params: 1, color: "from-red-600 to-purple-700", info: "Sensitive marker for heart muscle damage." },
+            { id: 8, name: "Apolipoprotein B (Apo-B)", price: 650, mrp: 865, off: "25%", params: 1, color: "from-purple-400 to-indigo-600", info: "Evaluates risk for cardiovascular disease." },
+            { id: 9, name: "APO-A1/APO-B Ratio", price: 1080, mrp: 1292, off: "16%", params: 3, color: "from-teal-600 to-purple-900", info: "Advanced ratio for cardiac risk assessment." },
+            { id: 10, name: "Direct LDL Cholesterol", price: 500, mrp: 616, off: "19%", params: 1, color: "from-sky-500 to-indigo-800", info: "Measures 'bad' cholesterol directly." },
+            { id: 11, name: "Apolipoprotein A1 (Apo-A1)", price: 650, mrp: 719, off: "10%", params: 1, color: "from-blue-700 to-purple-900", info: "Measures 'good' cholesterol related protein." },
+            { id: 12, name: "Creatine Phosphokinase-MB", price: 700, mrp: 1005, off: "30%", params: 1, color: "from-indigo-900 to-black", info: "Specific marker for heart muscle injury." },
+            { id: 13, name: "HDL Cholesterol", price: 240, mrp: 312, off: "23%", params: 1, color: "from-emerald-500 to-indigo-700", info: "Measures 'good' cholesterol levels." }
+        ];
+
+        function init() {
+            const grid = document.getElementById('heart-grid');
+            grid.innerHTML = heartTests.map(t => `
+                <div class="cardiac-card bg-white rounded-[2.5rem] overflow-hidden flex flex-col h-full shadow-sm">
+                    <div class="bg-gradient-to-br ${t.color} p-8 text-white relative">
+                        <span class="absolute top-4 right-4 bg-white/20 text-[9px] px-2 py-0.5 rounded font-black uppercase tracking-widest backdrop-blur-md">Test</span>
+                        <h3 class="text-xl font-black pr-12 leading-tight mb-6 h-12">${t.name}</h3>
+                        <div class="flex items-end gap-3">
+                            <div>
+                                <span class="text-[11px] line-through opacity-50 block mb-0.5 italic font-medium">₹${t.mrp}</span>
+                                <span class="text-3xl font-black tracking-tight">₹${t.price}</span>
+                            </div>
+                            <span class="bg-emerald-400 text-purple-900 text-[10px] font-black px-3 py-1.5 rounded-xl border border-white/20">${t.off} OFF</span>
+                        </div>
+                    </div>
+                    <div class="p-8 flex flex-col flex-1 bg-white">
+                        <div class="flex items-center gap-3 text-slate-400 font-bold text-[10px] mb-8 uppercase tracking-widest">
+                            <i class="fas fa-clock text-purple-600 text-sm"></i> Reports within 12 Hours
+                        </div>
+                        <div class="flex gap-3 mt-auto">
+                            <button onclick="openDetails(${t.id})" class="flex-1 py-4 border-2 border-slate-100 rounded-2xl text-[10px] font-black uppercase text-slate-400 hover:border-purple-600 hover:text-purple-600 transition-all">Details</button>
+                            <button onclick="addToCart({id: ${t.id}, name: '${t.name}', price: ${t.price}})" 
+                                    class="flex-[1.8] py-4 bg-orange-400 text-white rounded-2xl font-black text-[10px] uppercase shadow-lg shadow-orange-100 active:scale-95 transition-all">Add to Cart</button>
+                        </div>
+                    </div>
+                </div>
+            `).join('');
+        }
+
+        function addToCart(pkg) {
+            cart.push(pkg);
+            updateUI();
+            toggleCart(true);
+        }
+
+        function removeFromCart(index) {
+            cart.splice(index, 1);
+            updateUI();
+        }
+
+        function updateUI() {
+            document.getElementById('cart-badge').innerText = cart.length;
+            document.getElementById('cart-badge').classList.toggle('hidden', cart.length === 0);
+            const list = document.getElementById('cart-list');
+            const totalDisplay = document.getElementById('cart-total');
+            
+            if(cart.length === 0) {
+                list.innerHTML = `<div class="h-full flex flex-col items-center justify-center py-20 opacity-30 text-center"><i class="fas fa-shopping-basket text-6xl mb-4"></i><p class="font-black text-xs uppercase tracking-widest">No tests selected</p></div>`;
+            } else {
+                list.innerHTML = cart.map((item, index) => `
+                    <div class="bg-white p-5 rounded-[2rem] flex justify-between items-center border border-purple-50 shadow-sm">
+                        <div>
+                            <h4 class="font-bold text-slate-800 text-xs leading-tight">${item.name}</h4>
+                            <p class="text-purple-600 font-black text-sm mt-1">₹${item.price}</p>
+                        </div>
+                        <button onclick="removeFromCart(${index})" class="w-10 h-10 rounded-full bg-red-50 text-red-500 flex items-center justify-center hover:bg-red-500 hover:text-white transition-all"><i class="fas fa-trash-alt text-xs"></i></button>
+                    </div>
+                `).join('');
+            }
+            const total = cart.reduce((sum, item) => sum + item.price, 0);
+            totalDisplay.innerText = `₹${total}`;
+        }
+
+        function toggleCart(show) {
+            const sidebar = document.getElementById('cartSidebar');
+            const overlay = document.getElementById('cartOverlay');
+            if(show) { sidebar.classList.remove('translate-x-full'); overlay.classList.remove('hidden'); }
+            else { sidebar.classList.add('translate-x-full'); overlay.classList.add('hidden'); }
+        }
+
+        function openDetails(id) {
+            const t = heartTests.find(p => p.id === id);
+            document.getElementById('m-header').className = `p-10 text-white relative bg-gradient-to-br ${t.color}`;
+            document.getElementById('m-title').innerText = t.name;
+            document.getElementById('m-price').innerText = `Special Price: ₹${t.price}`;
+            document.getElementById('m-info').innerText = t.info;
+            document.getElementById('m-add-btn').onclick = () => { addToCart({id: t.id, name: t.name, price: t.price}); closeModal(); };
+            document.getElementById('detailsModal').classList.remove('hidden');
+            document.getElementById('detailsModal').classList.add('flex');
+            setTimeout(() => document.getElementById('modalContent').classList.remove('scale-95'), 10);
+            document.body.style.overflow = 'hidden';
+        }
+
+        function closeModal() {
+            document.getElementById('modalContent').classList.add('scale-95');
+            setTimeout(() => { document.getElementById('detailsModal').classList.add('hidden'); document.body.style.overflow = 'auto'; }, 200);
+        }
+
+        function checkoutWhatsApp() {
+            if(cart.length === 0) return;
+            const items = cart.map((p, i) => `${i+1}. ${p.name} (₹${p.price})`).join('%0A');
+            const total = cart.reduce((sum, item) => sum + item.price, 0);
+            const msg = `*Heart Care Booking - DIGICLINIX*%0A%0A*Selected Tests:*%0A${items}%0A%0A*Total: ₹${total}*%0A_Please provide home collection details._`;
+            window.open(`https://wa.me/${WHATSAPP}?text=${msg}`);
+        }
+
+        init();
+    </script>
+</body>
+</html>

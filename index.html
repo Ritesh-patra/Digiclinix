@@ -99,67 +99,161 @@
         .infoSwiper .swiper-slide-active {
             opacity: 1 !important;
         }
+
+          .no-scrollbar::-webkit-scrollbar {
+
+                    display: none;
+
+                }
+
+
+
+                .no-scrollbar {
+
+                    -ms-overflow-style: none;
+
+                    scrollbar-width: none;
+
+                }
     </style>
 </head>
 
 <body class="bg-slate-50 lg:bg-white">
 
     <header
-        class="bg-deep-purple lg:bg-white text-white lg:text-slate-800 p-5 lg:px-12 lg:py-4 lg:shadow-sm sticky top-0 z-50 rounded-b-[2.5rem] lg:rounded-none">
-        <div class="max-w-7xl mx-auto flex flex-col lg:flex-row lg:justify-between lg:items-center gap-4">
-            <div class="flex justify-between items-center">
-                <div class="flex items-center gap-1">
-                    <span class="text-xl lg:text-2xl font-extrabold tracking-tight">DIGICLINIX</span>
-                    <span class="text-xl lg:text-2xl font-light text-accent-purple lg:text-purple-600">DIAGNOSTICS</span>
-                </div>
-                <div onclick="toggleLocation()"
-                    class="lg:hidden flex items-center text-sm cursor-pointer bg-white/10 px-3 py-1.5 rounded-full border border-white/10">
-                    <span id="city-text-mob" class="font-bold mr-2">Hyderabad</span>
-                    <i class="fas fa-map-marker-alt text-accent-purple"></i>
-                </div>
-            </div>
+        class="bg-deep-purple lg:bg-white text-white lg:text-slate-800 sticky top-0 z-50 rounded-b-[2.5rem] lg:rounded-none shadow-lg lg:shadow-sm transition-all duration-300">
+        <div class="max-w-7xl mx-auto p-4 lg:px-12 lg:py-4">
 
-            <div class="hidden lg:flex items-center gap-8">
-                <div onclick="toggleLocation()"
-                    class="flex items-center text-sm cursor-pointer bg-slate-100 px-4 py-2 rounded-lg border border-slate-200">
-                    <i class="fas fa-map-marker-alt text-purple-600 mr-2"></i>
-                    <span id="city-text-pc" class="font-bold text-slate-700">Hyderabad</span>
-                    <i class="fas fa-chevron-down ml-2 text-[10px] text-slate-400"></i>
-                </div>
-                <nav class="flex items-center gap-6 font-semibold text-slate-600">
-                    <a href="#" class="hover:text-purple-600">Tests</a>
-                    <a href="#" class="hover:text-purple-600">Checkups</a>
-                    <a href="#"
-                        class="border border-green-500 text-green-600 px-4 py-1.5 rounded-lg hover:bg-green-50 transition-all"><i
-                            class="fab fa-whatsapp mr-1"></i> Support</a>
-                    <div onclick="toggleCart(true)"
-                        class="bg-deep-purple text-white p-2 px-5 rounded-xl cursor-pointer flex items-center gap-3 hover:bg-opacity-90 active:scale-95 transition-all shadow-lg shadow-purple-100 relative">
+            <div class="flex justify-between items-center gap-4">
 
-                        <div class="relative">
-                            <i class="fas fa-shopping-cart text-sm"></i>
-                            <span id="header-cart-badge"
-                                class="absolute -top-3 -right-3 bg-orange-500 text-white text-[10px] w-5 h-5 rounded-full flex items-center justify-center border-2 border-deep-purple font-bold hidden">
-                                0
-                            </span>
+                <div class="flex items-center gap-1 group cursor-pointer" onclick="window.location.href='/'">
+                    <div
+                        class="w-8 h-8 lg:w-10 lg:h-10 bg-white lg:bg-purple-600 rounded-xl flex items-center justify-center shadow-inner transition-transform group-hover:rotate-12">
+                        <i class="fas fa-plus text-purple-600 lg:text-white text-xs lg:text-base"></i>
+                    </div>
+                    <div class="flex flex-col lg:flex-row lg:items-center lg:gap-1 ml-1">
+                        <span class="text-lg lg:text-2xl font-black tracking-tighter leading-none">DIGICLINIX</span>
+                        <span
+                            class="text-[10px] lg:text-2xl font-light tracking-[0.2em] lg:tracking-normal text-purple-200 lg:text-purple-600 leading-none uppercase lg:capitalize">Diagnostics</span>
+                    </div>
+                </div>
+
+                <div class="hidden lg:flex items-center gap-8">
+
+                    <div onclick="toggleLocation()"
+                        class="flex items-center text-sm cursor-pointer bg-slate-50 px-4 py-2.5 rounded-2xl border border-slate-100 hover:border-purple-200 transition-all">
+                        <i class="fas fa-map-marker-alt text-purple-600 mr-2"></i>
+                        <span id="city-text-pc" class="font-bold text-slate-700">Hyderabad</span>
+                        <i class="fas fa-chevron-down ml-2 text-[10px] text-slate-400"></i>
+                    </div>
+
+                    <nav class="flex items-center gap-6 font-bold text-slate-600 text-sm tracking-tight">
+
+                        <div class="relative group py-2">
+                            <button
+                                class="flex items-center gap-1 hover:text-purple-600 transition-colors uppercase tracking-wider text-[11px]">
+                                Popular Tests <i
+                                    class="fas fa-chevron-down text-[8px] opacity-50 group-hover:rotate-180 transition-all"></i>
+                            </button>
+                            <div
+                                class="absolute top-full left-0 w-64 bg-white shadow-2xl rounded-2xl py-4 border border-slate-100 opacity-0 invisible group-hover:opacity-100 group-hover:visible translate-y-2 group-hover:translate-y-0 transition-all z-50">
+                                <a href="Heart.html"
+                                    class="flex items-center gap-3 px-6 py-3 hover:bg-purple-50 hover:text-purple-600 transition-all">
+                                    <i class="fas fa-heart text-rose-500 w-5"></i> Heart Health
+                                </a>
+                                <a href="daibitig.html"
+                                    class="flex items-center gap-3 px-6 py-3 hover:bg-purple-50 hover:text-purple-600 transition-all">
+                                    <i class="fas fa-droplet text-red-500 w-5"></i> Diabetes Care
+                                </a>
+                                <a href="vitamncheckup.html"
+                                    class="flex items-center gap-3 px-6 py-3 hover:bg-purple-50 hover:text-purple-600 transition-all">
+                                    <i class="fas fa-capsules text-amber-500 w-5"></i> Vitamin Panels
+                                </a>
+                            </div>
                         </div>
 
-                        <span class="font-bold text-sm tracking-tight">Cart</span>
+                        <div class="relative group py-2">
+                            <button
+                                class="flex items-center gap-1 hover:text-purple-600 transition-colors uppercase tracking-wider text-[11px]">
+                                Checkups <i
+                                    class="fas fa-chevron-down text-[8px] opacity-50 group-hover:rotate-180 transition-all"></i>
+                            </button>
+                            <div
+                                class="absolute top-full left-0 w-64 bg-white shadow-2xl rounded-2xl py-4 border border-slate-100 opacity-0 invisible group-hover:opacity-100 group-hover:visible translate-y-2 group-hover:translate-y-0 transition-all z-50">
+                                <a href="viewall.html"
+                                    class="flex items-center gap-3 px-6 py-3 hover:bg-purple-50 hover:text-purple-600 transition-all">
+                                    <i class="fas fa-shield-virus text-purple-500 w-5"></i> Full Body Packages
+                                </a>
+                                <a href="womenhealth.html"
+                                    class="flex items-center gap-3 px-6 py-3 hover:bg-purple-50 hover:text-purple-600 transition-all">
+                                    <i class="fas fa-venus text-pink-500 w-5"></i> Women Health
+                                </a>
+                                <a href="allergy.html"
+                                    class="flex items-center gap-3 px-6 py-3 hover:bg-purple-50 hover:text-purple-600 transition-all">
+                                    <i class="fas fa-virus-slash text-emerald-500 w-5"></i> Allergy Testing
+                                </a>
+                            </div>
+                        </div>
+
+                        <a href="https://wa.me/9348148310"
+                            class="flex items-center gap-2 text-emerald-600 bg-emerald-50 px-4 py-2 rounded-2xl border border-emerald-100 hover:bg-emerald-600 hover:text-white transition-all">
+                            <i class="fab fa-whatsapp"></i> Support
+                        </a>
+
+                        <div onclick="toggleCart(true)"
+                            class="bg-purple-600 text-white py-2.5 px-6 rounded-2xl cursor-pointer flex items-center gap-3 hover:bg-purple-700 active:scale-95 transition-all shadow-md shadow-purple-100 relative">
+                            <div class="relative">
+                                <i class="fas fa-shopping-basket text-sm"></i>
+                                <span id="header-cart-badge-pc"
+                                    class="absolute -top-3 -right-3 bg-orange-500 text-white text-[9px] w-5 h-5 rounded-full flex items-center justify-center border-2 border-white font-black hidden">0</span>
+                            </div>
+                            <span class="uppercase tracking-widest text-[11px]">Cart</span>
+                        </div>
+                    </nav>
+                </div>
+
+                <div class="flex lg:hidden items-center gap-3">
+                    <div onclick="toggleLocation()"
+                        class="flex items-center bg-white/10 px-3 py-2 rounded-xl border border-white/10 active:scale-90 transition-transform">
+                        <span id="city-text-mob" class="text-xs font-black mr-1 uppercase">HYD</span>
+                        <i class="fas fa-caret-down text-[10px] text-purple-300"></i>
                     </div>
-                </nav>
+                    <div onclick="toggleCart(true)"
+                        class="w-10 h-10 bg-white text-purple-700 rounded-xl flex items-center justify-center relative active:scale-90 transition-transform shadow-lg">
+                        <i class="fas fa-shopping-basket"></i>
+                        <span id="header-cart-badge-mob"
+                            class="absolute -top-1.5 -right-1.5 bg-orange-500 text-white text-[8px] w-4 h-4 rounded-full flex items-center justify-center border border-white font-bold hidden">0</span>
+                    </div>
+                </div>
             </div>
 
-            <div class="lg:hidden relative text-gray-800">
-                <input type="text" placeholder="Search for tests"
-                    class="w-full py-3.5 px-6 rounded-2xl shadow-inner focus:outline-none text-md border-none">
-                <i class="fas fa-search absolute right-6 top-4 text-gray-400"></i>
+            <div class="lg:hidden mt-4 flex gap-3 overflow-x-auto no-scrollbar pb-2 px-1">
+                <a href="daibitig.html"
+                    class="flex-shrink-0 flex items-center gap-2 bg-white/10 border border-white/20 px-4 py-2 rounded-xl active:scale-95 transition-all">
+                    <i class="fas fa-droplet text-[10px] text-purple-300"></i>
+                    <span class="text-xs font-bold text-white tracking-wide">Diabetes</span>
+                </a>
+                <a href="Heart.html"
+                    class="flex-shrink-0 flex items-center gap-2 bg-white/10 border border-white/20 px-4 py-2 rounded-xl active:scale-95 transition-all">
+                    <i class="fas fa-heart text-[10px] text-purple-300"></i>
+                    <span class="text-xs font-bold text-white tracking-wide">Heart</span>
+                </a>
+                <a href="vitamncheckup.html"
+                    class="flex-shrink-0 flex items-center gap-2 bg-white/10 border border-white/20 px-4 py-2 rounded-xl active:scale-95 transition-all">
+                    <i class="fas fa-capsules text-[10px] text-purple-300"></i>
+                    <span class="text-xs font-bold text-white tracking-wide">Vitamins</span>
+                </a>
+                <a href="viewall.html"
+                    class="flex-shrink-0 flex items-center gap-2 bg-white/10 border border-white/20 px-4 py-2 rounded-xl active:scale-95 transition-all">
+                    <i class="fas fa-shield-virus text-[10px] text-purple-300"></i>
+                    <span class="text-xs font-bold text-white tracking-wide">Full Body</span>
+                </a>
             </div>
         </div>
     </header>
 
     <main class="max-w-7xl mx-auto px-5 lg:px-12 py-8">
-
         <div class="lg:flex lg:flex-row-reverse lg:items-center lg:gap-16 lg:py-12">
-
             <div
                 class="relative overflow-hidden rounded-[2.5rem] h-64 lg:h-[450px] lg:flex-1 shadow-[0_20px_50px_rgba(139,92,246,0.15)] mt-5 lg:mt-0 group border border-purple-100">
                 <div id="slider" class="flex transition-transform duration-1000 cubic-bezier(0.23, 1, 0.32, 1) h-full">
@@ -217,7 +311,7 @@
             <div class="hidden lg:block lg:w-[480px] space-y-10">
                 <div class="space-y-4">
                     <span class="text-purple-600 font-bold tracking-[0.2em] uppercase text-sm">Welcome to
-                        DIGICLINIXHealth</span>
+                        DIGICLINIX DIAGNOSTICS</span>
                     <h1 class="text-6xl font-black text-slate-900 leading-[1.1]">Prevention is <br> <span
                             class="text-transparent bg-clip-text bg-gradient-to-r from-purple-600 to-indigo-600">better
                             than</span> <br> cure</h1>
@@ -234,7 +328,7 @@
                     </div>
                 </div>
 
-                <div class="flex gap-5">
+                <a href="labtesting.html" class="flex gap-5">
                     <div
                         class="flex-1 bg-gradient-to-br from-orange-400 to-orange-600 p-6 rounded-3xl text-white font-black text-center cursor-pointer shadow-[0_10px_20px_rgba(249,115,22,0.2)] hover:shadow-orange-500/40 hover:-translate-y-1.5 transition-all">
                         Book Lab Tests
@@ -243,7 +337,7 @@
                         class="flex-1 bg-gradient-to-br from-emerald-400 to-emerald-600 p-6 rounded-3xl text-white font-black text-center cursor-pointer shadow-[0_10px_20px_rgba(16,185,129,0.2)] hover:shadow-emerald-500/40 hover:-translate-y-1.5 transition-all">
                         Book Checkups
                     </div>
-                </div>
+                </a>
             </div>
         </div>
 
@@ -276,6 +370,7 @@
                 </div>
             </div>
         </div>
+
         <div class="grid grid-cols-3 gap-4 lg:gap-16 mt-5 py-2 lg:py-0 border-t border-slate-100">
             <div class="flex flex-col items-center lg:flex-row lg:justify-center gap-4 text-center lg:text-left group">
                 <div
@@ -312,6 +407,7 @@
                 </div>
             </div>
         </div>
+
         <!-- <div id="locModal"
             class="fixed inset-0 bg-black/60 backdrop-blur-sm z-[100] hidden items-end lg:items-center lg:justify-center">
             <div
@@ -490,9 +586,6 @@
             </div>
         </section>
 
-    
-
-
         <section class="max-w-7xl mx-auto px-5 lg:px-12 py-16 lg:py-24 bg-white">
             <div class="flex flex-col lg:flex-row items-center gap-12 lg:gap-24">
 
@@ -507,7 +600,7 @@
                         </p>
                     </div>
 
-                    <a href="/all-checkups"
+                    <a href="viewall.html"
                         class="inline-block px-10 py-4 border-2 border-purple-100 text-purple-700 font-bold rounded-2xl hover:bg-purple-600 hover:text-white transition-all duration-300 shadow-sm">
                         View All Checkups
                     </a>
@@ -532,7 +625,7 @@
                             </div>
                         </div>
 
-                        <div
+                        <a href="alergycheckup.html"
                             class="bg-gradient-to-br from-purple-500 to-indigo-600 p-6 lg:p-8 rounded-[2rem] lg:rounded-[2.5rem] shadow-xl shadow-purple-100 h-48 lg:h-[250px] flex flex-col justify-between group cursor-pointer hover:-translate-y-2 transition-transform duration-300">
                             <div class="flex justify-between items-start">
                                 <h3 class="text-white text-lg lg:text-2xl font-bold leading-tight">Allergy <br>Checkup
@@ -545,11 +638,11 @@
                             <div class="text-white/20 text-5xl lg:text-6xl self-end">
                                 <i class="fa-solid fa-virus"></i>
                             </div>
-                        </div>
+                        </a>
                     </div>
 
                     <div class="flex flex-col gap-4 lg:gap-6">
-                        <div
+                        <a href="sexualcheckup.html"
                             class="bg-gradient-to-br from-purple-400 to-purple-500 p-6 lg:p-8 rounded-[2rem] lg:rounded-[2.2rem] shadow-lg shadow-purple-50 h-48 lg:h-[250px] flex flex-col justify-between group cursor-pointer hover:-translate-y-1 transition-all">
                             <div class="flex justify-between items-start">
                                 <h3 class="text-white text-lg lg:text-xl font-bold leading-tight">Sexual <br>Health</h3>
@@ -561,9 +654,9 @@
                             <div class="text-white/10 text-4xl lg:text-5xl self-end">
                                 <i class="fa-solid fa-heart-pulse"></i>
                             </div>
-                        </div>
+                        </a>
 
-                        <div
+                        <a href="Womencare.html"
                             class="bg-gradient-to-br from-indigo-400 to-indigo-500 p-6 lg:p-8 rounded-[2rem] lg:rounded-[2.2rem] shadow-lg shadow-indigo-50 h-48 lg:h-[250px] flex flex-col justify-between group cursor-pointer hover:-translate-y-1 transition-all">
                             <div class="flex justify-between items-start">
                                 <h3 class="text-white text-lg lg:text-xl font-bold leading-tight">Women's <br>Health
@@ -576,7 +669,7 @@
                             <div class="text-white/10 text-4xl lg:text-5xl self-end">
                                 <i class="fa-solid fa-venus"></i>
                             </div>
-                        </div>
+                        </a>
                     </div>
 
                 </div>
@@ -737,7 +830,6 @@
             </div>
         </section>
 
-
         <!-- cartslider -->
         <div id="cartSidebar"
             class="fixed top-0 right-0 h-full w-80 bg-white shadow-2xl z-[100] transform translate-x-full transition-transform duration-300 flex flex-col">
@@ -758,7 +850,195 @@
                 </button>
             </div>
         </div>
+
+        <!-- why choose us  -->
+        <section class="max-w-7xl mx-auto px-5 lg:px-12 py-16 bg-white">
+            <div class="flex flex-col lg:flex-row items-center gap-12">
+                <div class="lg:w-1/2">
+                    <span
+                        class="text-purple-600 font-black uppercase tracking-widest text-xs bg-purple-50 px-4 py-2 rounded-full">Diagnostic
+                        Excellence</span>
+                    <h2 class="text-4xl lg:text-6xl font-black text-slate-900 mt-6 leading-tight">
+                        Healthcare that <br><span class="text-purple-700 italic">comes to you.</span>
+                    </h2>
+                    <p class="mt-6 text-slate-500 text-lg font-medium leading-relaxed">
+                        DIGICLINIX DIAGNOSTICS is dedicated to providing high-quality diagnostic services in the comfort
+                        of your home. No more queues or travel stress—just accurate results.
+                    </p>
+
+                    <div class="mt-8 space-y-4">
+                        <div class="flex items-start gap-4">
+                            <div
+                                class="w-6 h-6 bg-emerald-100 text-emerald-600 rounded-full flex items-center justify-center shrink-0 mt-1">
+                                <i class="fas fa-check text-[10px]"></i>
+                            </div>
+                            <p class="text-slate-700 font-bold">Comprehensive Blood & Health Tests</p>
+                        </div>
+                        <div class="flex items-start gap-4">
+                            <div
+                                class="w-6 h-6 bg-emerald-100 text-emerald-600 rounded-full flex items-center justify-center shrink-0 mt-1">
+                                <i class="fas fa-check text-[10px]"></i>
+                            </div>
+                            <p class="text-slate-700 font-bold">Expert Phlebotomists for Home Collection</p>
+                        </div>
+                        <div class="flex items-start gap-4">
+                            <div
+                                class="w-6 h-6 bg-emerald-100 text-emerald-600 rounded-full flex items-center justify-center shrink-0 mt-1">
+                                <i class="fas fa-check text-[10px]"></i>
+                            </div>
+                            <p class="text-slate-700 font-bold">Digital Reports delivered on WhatsApp</p>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="lg:w-1/2 grid grid-cols-2 gap-4 relative">
+                    <div class="space-y-4">
+                        <img src="https://i.pinimg.com/1200x/4f/6d/32/4f6d32ce967170c547f0df4fde279048.jpg"
+                            class="rounded-[2rem] h-64 w-full object-cover shadow-2xl" alt="Home Collection">
+                        <div class="bg-purple-600 p-6 rounded-[2rem] text-white">
+                            <h4 class="text-2xl font-black italic tracking-tighter">Fast & Accurate</h4>
+                            <p class="text-[10px] uppercase font-bold opacity-70 mt-1">Verified Reports</p>
+                        </div>
+                    </div>
+                    <div class="space-y-4 pt-12">
+                        <div class="bg-orange-400 p-6 rounded-[2rem] text-white">
+                            <h4 class="text-2xl font-black italic tracking-tighter">100% Privacy</h4>
+                            <p class="text-[10px] uppercase font-bold opacity-70 mt-1">Secure Data</p>
+                        </div>
+                        <img src="https://i.pinimg.com/736x/c8/91/8e/c8918e6901c494f44a2984eb9195e19f.jpg"
+                            class="rounded-[2rem] h-64 w-full object-cover shadow-2xl" alt="Testing">
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <!-- how its working -->
+        <section class="max-w-7xl mx-auto px-5 lg:px-12 py-16 bg-slate-50 rounded-[4rem] my-10">
+            <div class="grid grid-cols-1 md:grid-cols-3 gap-8">
+
+                <div class="p-10 bg-white rounded-[3rem] shadow-sm hover:shadow-xl transition-all group">
+                    <div
+                        class="w-14 h-14 bg-purple-100 text-purple-600 rounded-2xl flex items-center justify-center mb-6 group-hover:bg-purple-600 group-hover:text-white transition-all">
+                        <i class="fas fa-microscope text-2xl"></i>
+                    </div>
+                    <h3 class="text-xl font-black text-slate-800 mb-3">Certified Quality</h3>
+                    <p class="text-slate-500 text-sm font-medium">All tests at DIGICLINIX are processed in
+                        NABL-certified labs for 100% accuracy.</p>
+                </div>
+
+                <div class="p-10 bg-white rounded-[3rem] shadow-sm hover:shadow-xl transition-all group">
+                    <div
+                        class="w-14 h-14 bg-blue-100 text-blue-600 rounded-2xl flex items-center justify-center mb-6 group-hover:bg-blue-600 group-hover:text-white transition-all">
+                        <i class="fas fa-bolt text-2xl"></i>
+                    </div>
+                    <h3 class="text-xl font-black text-slate-800 mb-3">6-Hour Reports</h3>
+                    <p class="text-slate-500 text-sm font-medium">We value your time. Get your diagnostic reports
+                        digitally on your phone within 6 hours.</p>
+                </div>
+
+                <div class="p-10 bg-white rounded-[3rem] shadow-sm hover:shadow-xl transition-all group">
+                    <div
+                        class="w-14 h-14 bg-emerald-100 text-emerald-600 rounded-2xl flex items-center justify-center mb-6 group-hover:bg-emerald-600 group-hover:text-white transition-all">
+                        <i class="fas fa-hand-holding-heart text-2xl"></i>
+                    </div>
+                    <h3 class="text-xl font-black text-slate-800 mb-3">Patient First</h3>
+                    <p class="text-slate-500 text-sm font-medium">At DIGICLINIX, patient comfort and privacy are our top
+                        priorities for every home health service.</p>
+                </div>
+
+            </div>
+        </section>
     </main>
+    <footer class="bg-purple-200 backdrop-blur-2xl border-t border-purple-50 pt-20 pb-10 overflow-hidden relative">
+    <div class="absolute top-0 right-0 w-96 h-96 bg-purple-50 rounded-full blur-3xl opacity-50 -translate-y-1/2 translate-x-1/2"></div>
+    
+    <div class="max-w-7xl mx-auto px-6 lg:px-12 relative z-10">
+        <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-12 lg:gap-8 mb-20">
+            
+            <div class="space-y-6">
+                <div class="flex items-center gap-1">
+                    <div class="w-8 h-8 bg-purple-600 rounded-xl flex items-center justify-center shadow-lg shadow-purple-100">
+                        <i class="fas fa-plus text-white text-xs"></i>
+                    </div>
+                    <div class="flex flex-col ml-1">
+                        <span class="text-xl font-black text-slate-800 tracking-tighter leading-none">DIGICLINIX</span>
+                        <span class="text-[9px] font-bold text-purple-600 uppercase tracking-[0.3em] leading-none">Diagnostics</span>
+                    </div>
+                </div>
+                <p class="text-slate-500 text-sm leading-relaxed max-w-xs">
+                    Premium home healthcare and diagnostic services. Certified labs, expert collection, and 100% private digital reports.
+                </p>
+                <div class="flex gap-4">
+                    <a href="#" class="w-10 h-10 rounded-xl bg-slate-50 flex items-center justify-center text-slate-400 hover:bg-purple-600 hover:text-white hover:-translate-y-1 transition-all duration-300 shadow-sm">
+                        <i class="fab fa-facebook-f text-sm"></i>
+                    </a>
+                    <a href="#" class="w-10 h-10 rounded-xl bg-slate-50 flex items-center justify-center text-slate-400 hover:bg-purple-600 hover:text-white hover:-translate-y-1 transition-all duration-300 shadow-sm">
+                        <i class="fab fa-instagram text-sm"></i>
+                    </a>
+                    <a href="#" class="w-10 h-10 rounded-xl bg-slate-50 flex items-center justify-center text-slate-400 hover:bg-purple-600 hover:text-white hover:-translate-y-1 transition-all duration-300 shadow-sm">
+                        <i class="fab fa-linkedin-in text-sm"></i>
+                    </a>
+                </div>
+            </div>
+
+            <div>
+                <h4 class="text-slate-800 font-black text-xs uppercase tracking-[0.2em] mb-8">Quick Access</h4>
+                <ul class="space-y-4">
+                    <li><a href="tests.html" class="text-slate-500 text-sm font-semibold hover:text-purple-600 hover:pl-2 transition-all duration-300">Browse All Tests</a></li>
+                    <li><a href="packages.html" class="text-slate-500 text-sm font-semibold hover:text-purple-600 hover:pl-2 transition-all duration-300">Health Checkups</a></li>
+                    <li><a href="vitamncheckup.html" class="text-slate-500 text-sm font-semibold hover:text-purple-600 hover:pl-2 transition-all duration-300">Vitamin Panels</a></li>
+                    <li><a href="Heart.html" class="text-slate-500 text-sm font-semibold hover:text-purple-600 hover:pl-2 transition-all duration-300">Cardiac Care</a></li>
+                </ul>
+            </div>
+
+            <div>
+                <h4 class="text-slate-800 font-black text-xs uppercase tracking-[0.2em] mb-8">Our Expertise</h4>
+                <ul class="space-y-4">
+                    <li><a href="daibitig.html" class="text-slate-500 text-sm font-semibold hover:text-purple-600 hover:pl-2 transition-all duration-300">Diabetes Management</a></li>
+                    <li><a href="allergy.html" class="text-slate-500 text-sm font-semibold hover:text-purple-600 hover:pl-2 transition-all duration-300">Allergy Profiling</a></li>
+                    <li><a href="womenhealth.html" class="text-slate-500 text-sm font-semibold hover:text-purple-600 hover:pl-2 transition-all duration-300">Women Wellness</a></li>
+                    <li><a href="sexualhealth.html" class="text-slate-500 text-sm font-semibold hover:text-purple-600 hover:pl-2 transition-all duration-300">Private Screenings</a></li>
+                </ul>
+            </div>
+
+            <div class="bg-purple-50 p-8 rounded-[2.5rem] border border-purple-100">
+                <h4 class="text-purple-900 font-black text-xs uppercase tracking-[0.2em] mb-6">Need Help?</h4>
+                <div class="space-y-6">
+                    <a href="https://wa.me/9348148310" class="flex items-center gap-4 group">
+                        <div class="w-12 h-12 rounded-2xl bg-white flex items-center justify-center text-emerald-500 shadow-sm group-hover:scale-110 transition-transform">
+                            <i class="fab fa-whatsapp text-2xl"></i>
+                        </div>
+                        <div>
+                            <p class="text-[10px] font-black text-purple-400 uppercase tracking-widest">WhatsApp Us</p>
+                            <p class="text-sm font-bold text-slate-800">9348148310</p>
+                        </div>
+                    </a>
+                    <div class="flex items-center gap-4">
+                        <div class="w-12 h-12 rounded-2xl bg-white flex items-center justify-center text-purple-600 shadow-sm">
+                            <i class="fas fa-map-marker-alt text-lg"></i>
+                        </div>
+                        <div>
+                            <p class="text-[10px] font-black text-purple-400 uppercase tracking-widest">Location</p>
+                            <p class="text-sm font-bold text-slate-800">Hyderabad</p>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <div class="w-full h-px bg-slate-100 mb-10"></div>
+
+        <div class="flex flex-col md:flex-row justify-between items-center gap-6">
+            <p class="text-slate-400 text-[11px] font-bold uppercase tracking-widest">
+                © 2026 DIGICLINIX Diagnostics. All Rights Reserved.
+            </p>
+            <div class="flex gap-8">
+                <a href="#" class="text-slate-400 text-[10px] font-black uppercase tracking-widest hover:text-purple-600 transition-colors">Privacy Policy</a>
+                <a href="#" class="text-slate-400 text-[10px] font-black uppercase tracking-widest hover:text-purple-600 transition-colors">Terms of Service</a>
+            </div>
+        </div>
+    </div>
+</footer>
 
 
     <script src="https://cdn.jsdelivr.net/npm/swiper@11/swiper-bundle.min.js"></script>

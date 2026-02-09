@@ -1,0 +1,353 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Sexual Health | Premium Packages</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;600;700;900&display=swap" rel="stylesheet">
+    <style>
+        body {
+            font-family: 'Inter', sans-serif;
+            background-color: #fdfcff;
+            overflow-x: hidden;
+        }
+
+        .bg-purple-main {
+            background-color: #6D28D9;
+        }
+
+        /* Deep Purple */
+        .checkup-card {
+            transition: all 0.4s ease;
+            border: 1px solid #f1f5f9;
+        }
+
+        .checkup-card:hover {
+            transform: translateY(-8px);
+            shadow: 0 25px 50px -12px rgba(109, 40, 217, 0.1);
+        }
+
+        .modal-bg {
+            background: rgba(15, 23, 42, 0.6);
+            backdrop-filter: blur(8px);
+        }
+
+        #cartSidebar {
+            transition: transform 0.5s cubic-bezier(0.4, 0, 0.2, 1);
+        }
+
+        .no-scrollbar::-webkit-scrollbar {
+            display: none;
+        }
+    </style>
+</head>
+
+<body class="pb-20">
+
+    <nav class="bg-white/80 backdrop-blur-md border-b sticky top-0 z-40 px-5 py-4 lg:px-12">
+        <div class="max-w-7xl mx-auto flex items-center justify-between">
+            <div class="flex items-center gap-4">
+                <button onclick="window.history.back()"
+                    class="w-10 h-10 rounded-full bg-purple-50 flex items-center justify-center text-purple-600 hover:bg-purple-600 hover:text-white transition-all">
+                    <i class="fas fa-arrow-left"></i>
+                </button>
+                <h1 class="text-xl font-black text-slate-800">DIGICLINIX
+                    <span class="text-purple-600">DIAGNOSTICS </span>
+                </h1>
+            </div>
+
+            <button onclick="toggleCart(true)"
+                class="relative bg-purple-600 text-white px-6 py-2.5 rounded-2xl font-bold flex items-center gap-3 active:scale-95 transition-all shadow-lg shadow-purple-200">
+                <i class="fas fa-shopping-basket"></i>
+                <span class="hidden md:inline">Cart</span>
+                <span id="cart-badge"
+                    class="bg-orange-500 text-white text-[10px] w-5 h-5 rounded-full flex items-center justify-center border-2 border-white absolute -top-2 -right-2">0</span>
+            </button>
+        </div>
+    </nav>
+
+    <header class="max-w-7xl mx-auto px-5 lg:px-12 pt-10">
+        <div
+            class="bg-gradient-to-br from-purple-600 to-indigo-800 rounded-[3rem] p-10 lg:p-16 flex flex-col lg:flex-row items-center justify-between text-white relative overflow-hidden">
+            <div class="z-10 max-w-xl text-center lg:text-left">
+                <span
+                    class="bg-white/20 px-4 py-1 rounded-full text-[10px] font-black uppercase tracking-widest">Confidential
+                    & Private</span>
+                <h2 class="text-4xl lg:text-6xl font-black mt-6 leading-tight">Secure Sexual Health <br>Testing at Home
+                </h2>
+                <p class="mt-6 text-purple-100 text-lg font-medium opacity-90">Choose from essential markers or
+                    comprehensive panels. 100% private home sample collection in 60 mins.</p>
+            </div>
+            <div class="mt-10 lg:mt-0 relative z-10 w-full lg:w-80 aspect-square">
+                <img src="https://i.pinimg.com/736x/98/57/7d/98577dbb60a78c59a49f978f89a004ff.jpg"
+                    class="w-full h-full object-cover rounded-full border-8 border-white/10 shadow-2xl grayscale hover:grayscale-0 transition-all duration-700"
+                    alt="Privacy">
+            </div>
+            <div
+                class="absolute top-0 right-0 w-64 h-64 bg-white/5 rounded-full -translate-y-1/2 translate-x-1/2 blur-3xl">
+            </div>
+        </div>
+    </header>
+
+    <main class="max-w-7xl mx-auto px-5 lg:px-12 py-16">
+        <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8">
+            <div id="package-grid" class="contents"></div>
+        </div>
+    </main>
+
+    <div id="cartOverlay" class="fixed inset-0 bg-black/40 z-[100] hidden backdrop-blur-sm" onclick="toggleCart(false)">
+    </div>
+    <div id="cartSidebar"
+        class="fixed top-0 right-0 h-full w-full max-w-[420px] bg-white z-[110] shadow-2xl translate-x-full flex flex-col">
+        <div class="p-8 bg-purple-700 text-white flex justify-between items-center">
+            <div>
+                <h2 class="text-2xl font-black tracking-tight">Review Order</h2>
+                <p class="text-purple-200 text-xs mt-1 uppercase font-bold tracking-widest">Private Booking</p>
+            </div>
+            <button onclick="toggleCart(false)" class="text-white opacity-70 hover:opacity-100"><i
+                    class="fas fa-times text-2xl"></i></button>
+        </div>
+        <div id="cart-list" class="flex-1 overflow-y-auto p-6 space-y-4 no-scrollbar"></div>
+        <div class="p-8 border-t border-slate-50 bg-slate-50">
+            <div class="flex justify-between items-center mb-8">
+                <span class="font-bold text-slate-400 uppercase tracking-widest text-xs">Total Amount</span>
+                <span id="cart-total" class="font-black text-3xl text-slate-800 tracking-tighter">₹0</span>
+            </div>
+            <button onclick="checkoutWhatsApp()"
+                class="w-full py-5 bg-green-500 text-white rounded-[2rem] font-black uppercase tracking-widest shadow-xl shadow-green-100 flex items-center justify-center gap-3 active:scale-95 transition-all">
+                <i class="fab fa-whatsapp text-2xl"></i> Book via WhatsApp
+            </button>
+        </div>
+    </div>
+
+    <div id="detailsModal" class="fixed inset-0 z-[200] hidden items-center justify-center p-4 modal-bg">
+        <div class="bg-white w-full max-w-lg rounded-[3rem] overflow-hidden shadow-2xl transition-all scale-95"
+            id="modalContent">
+            <div id="m-header" class="p-10 text-white relative">
+                <button onclick="closeModal()" class="absolute top-8 right-8 text-white/80 hover:text-white text-xl"><i
+                        class="fas fa-times-circle"></i></button>
+                <h2 id="m-title" class="text-3xl font-black leading-tight"></h2>
+                <p id="m-price" class="text-xl font-bold mt-2 opacity-90"></p>
+            </div>
+            <div class="p-10">
+                <h4 class="font-black text-slate-800 mb-6 uppercase tracking-widest text-[10px]">What is covered?</h4>
+                <div id="m-list" class="space-y-4 text-sm text-slate-600 mb-10 max-h-48 overflow-y-auto no-scrollbar">
+                </div>
+                <button id="m-add-btn"
+                    class="w-full py-5 bg-orange-400 text-white rounded-[1.5rem] font-black uppercase tracking-widest shadow-lg active:scale-95 transition-all">Add
+                    to Cart</button>
+            </div>
+        </div>
+    </div>
+
+    <section class="max-w-7xl mx-auto px-5 lg:px-12 py-16">
+        <div class="text-center mb-16">
+            <span
+                class="text-purple-600 font-black uppercase tracking-[0.2em] text-[10px] bg-purple-50 px-4 py-1.5 rounded-full">Simple
+                Process</span>
+            <h2 class="text-3xl lg:text-5xl font-black text-slate-800 mt-4">How it <span
+                    class="text-purple-700">Works?</span></h2>
+        </div>
+
+        <div class="grid grid-cols-1 md:grid-cols-3 gap-8 lg:gap-12 relative">
+            <div class="hidden md:block absolute top-1/2 left-0 w-full h-0.5 bg-slate-100 -z-10"></div>
+
+            <div
+                class="bg-white p-8 rounded-[2.5rem] shadow-sm border border-slate-50 text-center group hover:border-purple-200 transition-all">
+                <div
+                    class="w-16 h-16 bg-purple-600 text-white rounded-2xl flex items-center justify-center mx-auto mb-6 text-xl font-black shadow-lg shadow-purple-200 group-hover:scale-110 transition-transform">
+                    1</div>
+                <h4 class="font-black text-slate-800 mb-2">Book Package</h4>
+                <p class="text-slate-500 text-xs font-medium leading-relaxed">Select your required health tests and add
+                    to cart.</p>
+            </div>
+
+            <div
+                class="bg-white p-8 rounded-[2.5rem] shadow-sm border border-slate-50 text-center group hover:border-purple-200 transition-all">
+                <div
+                    class="w-16 h-16 bg-indigo-600 text-white rounded-2xl flex items-center justify-center mx-auto mb-6 text-xl font-black shadow-lg shadow-indigo-200 group-hover:scale-110 transition-transform">
+                    2</div>
+                <h4 class="font-black text-slate-800 mb-2">Home Collection</h4>
+                <p class="text-slate-500 text-xs font-medium leading-relaxed">Certified phlebotomist will arrive within
+                    60 mins for sample collection.</p>
+            </div>
+
+            <div
+                class="bg-white p-8 rounded-[2.5rem] shadow-sm border border-slate-50 text-center group hover:border-purple-200 transition-all">
+                <div
+                    class="w-16 h-16 bg-emerald-500 text-white rounded-2xl flex items-center justify-center mx-auto mb-6 text-xl font-black shadow-lg shadow-emerald-200 group-hover:scale-110 transition-transform">
+                    3</div>
+                <h4 class="font-black text-slate-800 mb-2">Digital Reports</h4>
+                <p class="text-slate-500 text-xs font-medium leading-relaxed">Receive your accurate digital reports on
+                    WhatsApp within 6 hours.</p>
+            </div>
+        </div>
+    </section>
+
+    <section
+        class="max-w-7xl mx-auto px-5 lg:px-12 py-16 bg-white rounded-[4rem] my-10 shadow-sm border border-slate-50">
+        <div class="flex flex-col lg:flex-row items-center gap-12 lg:gap-20">
+            <div class="lg:w-1/2">
+                <h2 class="text-4xl lg:text-6xl font-black text-slate-900 leading-tight">Why people <span
+                        class="text-purple-600 italic">trust us?</span></h2>
+                <p class="text-slate-500 mt-6 text-lg font-medium">We provide premium diagnostic services with a focus
+                    on accuracy, speed, and 100% patient privacy.</p>
+
+                <div class="mt-10 grid grid-cols-1 sm:grid-cols-2 gap-6">
+                    <div class="flex items-center gap-4">
+                        <div
+                            class="w-10 h-10 bg-orange-100 text-orange-500 rounded-xl flex items-center justify-center shrink-0">
+                            <i class="fas fa-microscope"></i></div>
+                        <span class="text-slate-700 font-bold text-sm">NABL Certified Labs</span>
+                    </div>
+                    <div class="flex items-center gap-4">
+                        <div
+                            class="w-10 h-10 bg-blue-100 text-blue-500 rounded-xl flex items-center justify-center shrink-0">
+                            <i class="fas fa-user-shield"></i></div>
+                        <span class="text-slate-700 font-bold text-sm">100% Data Privacy</span>
+                    </div>
+                    <div class="flex items-center gap-4">
+                        <div
+                            class="w-10 h-10 bg-green-100 text-green-500 rounded-xl flex items-center justify-center shrink-0">
+                            <i class="fas fa-truck-loading"></i></div>
+                        <span class="text-slate-700 font-bold text-sm">Free Home Collection</span>
+                    </div>
+                    <div class="flex items-center gap-4">
+                        <div
+                            class="w-10 h-10 bg-purple-100 text-purple-500 rounded-xl flex items-center justify-center shrink-0">
+                            <i class="fas fa-clock"></i></div>
+                        <span class="text-slate-700 font-bold text-sm">6-Hour Fast Turnaround</span>
+                    </div>
+                </div>
+            </div>
+
+            <div class="lg:w-1/2 grid grid-cols-2 gap-4">
+                <div class="space-y-4 pt-10">
+                    <div
+                        class="h-40 bg-purple-600 rounded-[2rem] shadow-xl shadow-purple-200 flex items-center justify-center text-white flex-col">
+                        <span class="text-3xl font-black">1M+</span>
+                        <span class="text-[10px] font-bold uppercase opacity-80">Customers</span>
+                    </div>
+                    <img src="https://img.freepik.com/free-photo/medical-specialist-white-coat-uniform-doctor-working-with-test-tubes_1157-46944.jpg"
+                        class="h-60 w-full object-cover rounded-[2rem]" alt="Lab">
+                </div>
+                <div class="space-y-4">
+                    <img src="https://img.freepik.com/free-photo/nurse-taking-blood-sample-from-patient_23-2148901355.jpg"
+                        class="h-60 w-full object-cover rounded-[2rem]" alt="Sample">
+                    <div
+                        class="h-40 bg-orange-400 rounded-[2rem] shadow-xl shadow-orange-100 flex items-center justify-center text-white flex-col text-center px-4">
+                        <span class="text-3xl font-black">500+</span>
+                        <span class="text-[10px] font-bold uppercase opacity-80">Certified Labs</span>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <script>
+        const WHATSAPP = "9348148310";
+        let cart = [];
+
+        const packages = [
+            { id: 'S1', name: "Sexual Health - Essential", price: 1499, mrp: 3000, off: "50%", params: 4, icon: "fa-shield-heart", color: "from-purple-500 to-indigo-600", tests: ["HIV I & II", "VDRL (Syphilis)", "HBsAg (Hepatitis B)"] },
+            { id: 'S2', name: "Sexual Health - Advanced", price: 3999, mrp: 9100, off: "56%", params: 9, icon: "fa-dna", color: "from-purple-600 to-purple-800", tests: ["HIV", "Syphilis", "Hepatitis B & C", "Herpes Simplex Virus", "Chlamydia"] },
+            { id: 'S3', name: "Sexual Health - Full Panel", price: 7999, mrp: 14000, off: "43%", params: 11, icon: "fa-flask-vial", color: "from-indigo-700 to-purple-900", tests: ["Full STD Panel", "Comprehensive Blood Count", "Liver Markers", "Private Consultation"] }
+        ];
+
+        function init() {
+            const grid = document.getElementById('package-grid');
+            grid.innerHTML = packages.map(pkg => `
+                <div class="checkup-card bg-white rounded-[2.5rem] overflow-hidden flex flex-col h-full shadow-sm">
+                    <div class="bg-gradient-to-br ${pkg.color} p-8 text-white relative">
+                        <div class="absolute top-6 right-6 w-12 h-12 rounded-full bg-white/10 flex items-center justify-center backdrop-blur-md">
+                            <i class="fas ${pkg.icon} text-xl"></i>
+                        </div>
+                        <h3 class="text-xl lg:text-2xl font-black pr-12 leading-tight mb-6 h-16">${pkg.name}</h3>
+                        <div class="flex items-end gap-3">
+                            <div><span class="text-[11px] line-through opacity-50 block mb-0.5">₹${pkg.mrp}</span><span class="text-3xl font-black tracking-tight">₹${pkg.price}</span></div>
+                            <span class="bg-white/20 backdrop-blur-md text-white text-[10px] font-black px-3 py-1.5 rounded-xl border border-white/20">${pkg.off} OFF</span>
+                        </div>
+                    </div>
+                    <div class="p-8 flex flex-col flex-1">
+                        <div class="flex items-center gap-3 text-slate-400 font-bold text-[10px] mb-8 uppercase tracking-widest">
+                            <i class="fas fa-user-shield text-purple-600 text-sm"></i> 100% Secure & Private
+                        </div>
+                        <div class="flex gap-3 mt-auto">
+                            <button onclick="openDetails('${pkg.id}')" class="flex-1 py-4 border-2 border-slate-100 rounded-2xl text-[10px] font-black uppercase text-slate-400 hover:border-purple-600 hover:text-purple-600 transition-all">Details</button>
+                            <button onclick="addToCart('${pkg.id}')" class="flex-[1.8] py-4 bg-orange-400 text-white rounded-2xl font-black text-[10px] uppercase shadow-lg shadow-orange-100 active:scale-95 transition-all">Add to Cart</button>
+                        </div>
+                    </div>
+                </div>
+            `).join('');
+        }
+
+        function addToCart(id) {
+            const pkg = packages.find(p => p.id === id);
+            cart.push(pkg);
+            updateUI();
+            toggleCart(true);
+        }
+
+        function removeFromCart(index) {
+            cart.splice(index, 1);
+            updateUI();
+        }
+
+        function updateUI() {
+            document.getElementById('cart-badge').innerText = cart.length;
+            const list = document.getElementById('cart-list');
+            const totalDisplay = document.getElementById('cart-total');
+
+            if (cart.length === 0) {
+                list.innerHTML = `<div class="h-full flex flex-col items-center justify-center text-center py-20"><i class="fas fa-shopping-basket text-6xl text-slate-200 mb-4"></i><p class="text-slate-400 font-bold uppercase tracking-widest text-[10px]">No tests selected</p></div>`;
+            } else {
+                list.innerHTML = cart.map((item, index) => `
+                    <div class="bg-slate-50 p-5 rounded-[1.5rem] flex justify-between items-center border border-slate-100">
+                        <div><h4 class="font-bold text-slate-800 text-xs">${item.name}</h4><p class="text-purple-600 font-black text-sm">₹${item.price}</p></div>
+                        <button onclick="removeFromCart(${index})" class="w-10 h-10 rounded-full bg-red-50 text-red-500 flex items-center justify-center hover:bg-red-500 hover:text-white transition-all"><i class="fas fa-trash-alt text-sm"></i></button>
+                    </div>
+                `).join('');
+            }
+            const total = cart.reduce((sum, item) => sum + item.price, 0);
+            totalDisplay.innerText = `₹${total}`;
+        }
+
+        function toggleCart(show) {
+            const sidebar = document.getElementById('cartSidebar');
+            const overlay = document.getElementById('cartOverlay');
+            if (show) { sidebar.classList.remove('translate-x-full'); overlay.classList.remove('hidden'); }
+            else { sidebar.classList.add('translate-x-full'); overlay.classList.add('hidden'); }
+        }
+
+        function openDetails(id) {
+            const pkg = packages.find(p => p.id === id);
+            document.getElementById('m-header').className = `p-10 text-white relative bg-gradient-to-br ${pkg.color}`;
+            document.getElementById('m-title').innerText = pkg.name;
+            document.getElementById('m-price').innerText = `Amount: ₹${pkg.price}`;
+            document.getElementById('m-list').innerHTML = pkg.tests.map(t => `<li class="flex items-center gap-3"><i class="fas fa-check-circle text-emerald-500"></i> ${t}</li>`).join('');
+            document.getElementById('m-add-btn').onclick = () => { addToCart(pkg.id); closeModal(); };
+            document.getElementById('detailsModal').classList.remove('hidden');
+            document.getElementById('detailsModal').classList.add('flex');
+            setTimeout(() => document.getElementById('modalContent').classList.remove('scale-95'), 10);
+        }
+
+        function closeModal() {
+            document.getElementById('detailsModal').classList.add('hidden');
+        }
+
+        function checkoutWhatsApp() {
+            if (cart.length === 0) return;
+            const items = cart.map((p, i) => `${i + 1}. ${p.name} (₹${p.price})`).join('%0A');
+            const total = cart.reduce((sum, item) => sum + item.price, 0);
+            const msg = `*New Sexual Health Booking*%0A%0A*Packages Selected:*%0A${items}%0A%0A*Total: ₹${total}*%0A_Please contact me for private home collection._`;
+            window.open(`https://wa.me/${WHATSAPP}?text=${msg}`);
+        }
+
+        init();
+    </script>
+</body>
+
+</html>

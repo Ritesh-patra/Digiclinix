@@ -1,0 +1,249 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Diabetes Care | DIGICLINIX Purple Edition</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;600;800;900&display=swap" rel="stylesheet">
+    <style>
+        :root { --deep-purple: #4c1d95; --light-purple: #f5f3ff; }
+        body { font-family: 'Inter', sans-serif; background-color: #fdfcff; overflow-x: hidden; }
+        .service-card { transition: all 0.4s cubic-bezier(0.175, 0.885, 0.32, 1.275); }
+        .service-card:hover { transform: translateY(-12px); box-shadow: 0 25px 50px -12px rgba(76, 29, 149, 0.15); }
+        #cartSidebar { transition: transform 0.5s cubic-bezier(0.4, 0, 0.2, 1); }
+        .no-scrollbar::-webkit-scrollbar { display: none; }
+        .purple-gradient { background: linear-gradient(135deg, #6d28d9 0%, #4c1d95 100%); }
+        .modal-bg { background: rgba(15, 23, 42, 0.6); backdrop-filter: blur(8px); }
+    </style>
+</head>
+<body class="pb-20">
+
+    <header class="bg-white/90 backdrop-blur-md sticky top-0 z-50 border-b border-purple-50 px-6 py-4">
+        <div class="max-w-7xl mx-auto flex justify-between items-center">
+            <div class="flex items-center gap-4">
+                <button onclick="window.history.back()" class="w-10 h-10 rounded-full bg-purple-50 flex items-center justify-center text-purple-600 hover:bg-purple-600 hover:text-white transition-all">
+                    <i class="fas fa-arrow-left text-sm"></i>
+                </button>
+                <div class="flex flex-col">
+                    <span class="text-xl font-black text-slate-800 tracking-tighter leading-none">DIGICLINIX</span>
+                    <span class="text-[10px] font-bold text-purple-600 uppercase tracking-[0.2em]">Diagnostics</span>
+                </div>
+            </div>
+            <button onclick="toggleCart(true)" class="relative bg-purple-600 text-white px-6 py-2.5 rounded-2xl font-bold flex items-center gap-3 active:scale-95 transition-all shadow-lg shadow-purple-200">
+                <i class="fas fa-shopping-basket"></i>
+                <span id="cart-badge" class="bg-orange-500 text-white text-[10px] w-5 h-5 rounded-full flex items-center justify-center border-2 border-white absolute -top-2 -right-2 font-black">0</span>
+            </button>
+        </div>
+    </header>
+
+    <div class="max-w-7xl mx-auto px-6 pt-10">
+        <div class="purple-gradient rounded-[3rem] p-10 lg:p-20 text-white relative overflow-hidden shadow-2xl">
+            <div class="relative z-10 max-w-2xl text-center lg:text-left">
+                <div class="inline-flex items-center gap-2 bg-white/10 px-4 py-1.5 rounded-full mb-6 border border-white/20">
+                    <i class="fas fa-star text-yellow-400 text-[10px]"></i>
+                    <span class="text-[10px] font-black uppercase tracking-widest">Trusted by 1M+ customers</span>
+                </div>
+                <h1 class="text-4xl lg:text-7xl font-black leading-tight tracking-tighter">
+                    Monitor your <br><span class="text-transparent bg-clip-text bg-gradient-to-r from-purple-200 to-white italic">heart & sugar</span>
+                </h1>
+                <p class="mt-6 text-purple-100 text-lg font-medium opacity-80 max-w-lg">
+                    Test silent issues with advanced cardiac tests and cut medical bills with home diagnostics.
+                </p>
+            </div>
+            <div class="absolute -right-20 -bottom-20 text-[20rem] text-white/5 rotate-12 pointer-events-none">
+                <i class="fas fa-heart-pulse"></i>
+            </div>
+        </div>
+    </div>
+
+    <main class="max-w-7xl mx-auto px-6 py-16">
+        <div class="mb-10 flex items-center justify-between">
+            <h2 class="text-2xl font-black text-slate-800 tracking-tight">Available Care Checkups</h2>
+        </div>
+
+        <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-10">
+            
+            <div class="service-card bg-white rounded-[3rem] overflow-hidden flex flex-col h-full shadow-sm border border-purple-50">
+                <div class="bg-gradient-to-br from-purple-600 to-indigo-800 p-10 text-white relative">
+                    <span class="absolute top-6 right-6 bg-white/20 text-[9px] px-3 py-1 rounded-full font-black uppercase tracking-widest backdrop-blur-md">Checkup</span>
+                    <h3 class="text-2xl font-black pr-10 leading-tight mb-8">Full Body Checkup - Essential</h3>
+                    <div class="flex items-end gap-3">
+                        <div>
+                            <span class="text-[11px] line-through opacity-50 block mb-0.5 font-medium italic">₹2,029</span>
+                            <span class="text-4xl font-black tracking-tighter">₹999</span>
+                        </div>
+                        <span class="bg-emerald-400 text-purple-900 text-[10px] font-black px-3 py-1.5 rounded-xl shadow-lg">51% OFF</span>
+                    </div>
+                </div>
+                <div class="p-10 flex flex-col flex-1 bg-white">
+                    <div class="grid grid-cols-2 gap-6 mb-10">
+                        <div class="flex items-center gap-3">
+                            <div class="w-10 h-10 rounded-xl bg-purple-50 flex items-center justify-center text-purple-600"><i class="fas fa-flask"></i></div>
+                            <div>
+                                <p class="text-[10px] font-black text-slate-400 uppercase tracking-widest">Parameters</p>
+                                <p class="text-sm font-bold text-slate-800">42 Tests</p>
+                            </div>
+                        </div>
+                        <div class="flex items-center gap-3">
+                            <div class="w-10 h-10 rounded-xl bg-purple-50 flex items-center justify-center text-purple-600"><i class="fas fa-clock"></i></div>
+                            <div>
+                                <p class="text-[10px] font-black text-slate-400 uppercase tracking-widest">Reports</p>
+                                <p class="text-sm font-bold text-slate-800">6 Hours</p>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="flex gap-4 mt-auto">
+                        <button onclick="openDetails('D1')" class="flex-1 py-4 border-2 border-purple-100 rounded-2xl text-[10px] font-black uppercase text-purple-600 hover:bg-purple-50 transition-all">Details</button>
+                        <button onclick="addToCart({id: 'D1', name: 'Diabetes Essential', price: 999})" class="flex-[1.5] py-4 bg-orange-400 text-white rounded-2xl font-black text-[10px] uppercase shadow-xl shadow-orange-100 active:scale-95 transition-all">Add to Cart</button>
+                    </div>
+                </div>
+            </div>
+
+            <div class="service-card bg-white rounded-[3rem] overflow-hidden flex flex-col h-full shadow-sm border border-purple-50">
+                <div class="bg-gradient-to-br from-indigo-700 to-purple-900 p-10 text-white relative">
+                    <span class="absolute top-6 right-6 bg-white/20 text-[9px] px-3 py-1 rounded-full font-black uppercase tracking-widest backdrop-blur-md">Checkup</span>
+                    <h3 class="text-2xl font-black pr-10 leading-tight mb-8">Diabetes Care - Advanced</h3>
+                    <div class="flex items-end gap-3">
+                        <div><span class="text-[11px] line-through opacity-50 block mb-0.5 font-medium italic">₹3,369</span><span class="text-4xl font-black tracking-tighter">₹1,599</span></div>
+                        <span class="bg-emerald-400 text-purple-900 text-[10px] font-black px-3 py-1.5 rounded-xl shadow-lg">53% OFF</span>
+                    </div>
+                </div>
+                <div class="p-10 flex flex-col flex-1 bg-white">
+                    <div class="grid grid-cols-2 gap-6 mb-10">
+                        <div class="flex items-center gap-3">
+                            <div class="w-10 h-10 rounded-xl bg-purple-50 flex items-center justify-center text-purple-600"><i class="fas fa-flask"></i></div>
+                            <div>
+                                <p class="text-[10px] font-black text-slate-400 uppercase tracking-widest">Parameters</p>
+                                <p class="text-sm font-bold text-slate-800">66 Tests</p>
+                            </div>
+                        </div>
+                        <div class="flex items-center gap-3">
+                            <div class="w-10 h-10 rounded-xl bg-purple-50 flex items-center justify-center text-purple-600"><i class="fas fa-clock"></i></div>
+                            <div>
+                                <p class="text-[10px] font-black text-slate-400 uppercase tracking-widest">Reports</p>
+                                <p class="text-sm font-bold text-slate-800">6 Hours</p>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="flex gap-4 mt-auto">
+                        <button onclick="openDetails('D2')" class="flex-1 py-4 border-2 border-purple-100 rounded-2xl text-[10px] font-black uppercase text-purple-600 hover:bg-purple-50 transition-all">Details</button>
+                        <button onclick="addToCart({id: 'D2', name: 'Diabetes Advanced', price: 1599})" class="flex-[1.5] py-4 bg-orange-400 text-white rounded-2xl font-black text-[10px] uppercase shadow-xl shadow-orange-100 active:scale-95 transition-all">Add to Cart</button>
+                    </div>
+                </div>
+            </div>
+
+        </div>
+    </main>
+
+    <div id="cartOverlay" class="fixed inset-0 bg-black/40 z-[100] hidden backdrop-blur-sm" onclick="toggleCart(false)"></div>
+    <div id="cartSidebar" class="fixed top-0 right-0 h-full w-full max-w-[420px] bg-white z-[110] shadow-2xl translate-x-full flex flex-col">
+        <div class="p-8 bg-purple-800 text-white flex justify-between items-center">
+            <h2 class="text-2xl font-black tracking-tight">Review Order</h2>
+            <button onclick="toggleCart(false)" class="text-white/70 hover:text-white transition-colors"><i class="fas fa-times text-2xl"></i></button>
+        </div>
+        <div id="cart-list" class="flex-1 overflow-y-auto p-6 space-y-4 no-scrollbar"></div>
+        <div class="p-8 border-t bg-slate-50">
+            <div class="flex justify-between items-center mb-8">
+                <span class="font-bold text-slate-400 uppercase tracking-widest text-[10px]">Amount to Pay</span>
+                <span id="cart-total" class="font-black text-3xl text-slate-900 tracking-tighter">₹0</span>
+            </div>
+            <button onclick="checkoutWhatsApp()" class="w-full py-5 bg-green-500 text-white rounded-[2rem] font-black uppercase tracking-widest shadow-xl shadow-green-100 flex items-center justify-center gap-3 active:scale-95 transition-all">
+                <i class="fab fa-whatsapp text-2xl"></i> Confirm via WhatsApp
+            </button>
+        </div>
+    </div>
+
+    <div id="detailsModal" class="fixed inset-0 z-[200] hidden items-center justify-center p-4 modal-bg">
+        <div id="modalContent" class="bg-white w-full max-w-lg rounded-[3rem] overflow-hidden shadow-2xl scale-95 transition-transform duration-300">
+            <div id="m-header" class="p-10 text-white relative purple-gradient">
+                <button onclick="closeModal()" class="absolute top-8 right-8 text-white/70 hover:text-white transition-colors"><i class="fas fa-times-circle text-2xl"></i></button>
+                <span class="bg-white/20 text-[10px] px-3 py-1 rounded-full font-black uppercase tracking-widest mb-3 inline-block">Test Details</span>
+                <h2 id="m-title" class="text-2xl lg:text-3xl font-black leading-tight"></h2>
+            </div>
+            <div class="p-10">
+                <div class="grid grid-cols-2 gap-4 mb-8">
+                    <div class="bg-slate-50 p-4 rounded-2xl border border-slate-100 shadow-sm text-center">
+                        <p class="text-[9px] font-black text-slate-400 uppercase mb-1">Pre-test Info</p>
+                        <p class="text-xs font-bold text-slate-700 flex items-center justify-center gap-2"><i class="fas fa-utensils text-orange-400"></i> Fasting Required</p>
+                    </div>
+                    <div class="bg-slate-50 p-4 rounded-2xl border border-slate-100 shadow-sm text-center">
+                        <p class="text-[9px] font-black text-slate-400 uppercase mb-1">Sample Type</p>
+                        <p class="text-xs font-bold text-slate-700 flex items-center justify-center gap-2"><i class="fas fa-vial text-purple-500"></i> Blood (Home)</p>
+                    </div>
+                </div>
+                <h4 class="font-black text-slate-800 mb-4 uppercase tracking-widest text-[10px]">Key Parameters:</h4>
+                <div id="m-list" class="space-y-3 text-sm text-slate-600 mb-10 max-h-40 overflow-y-auto no-scrollbar pr-2"></div>
+                <button id="m-add-btn" class="w-full py-5 bg-purple-700 text-white rounded-[1.5rem] font-black uppercase tracking-widest shadow-xl active:scale-95 transition-all">Add to Booking</button>
+            </div>
+        </div>
+    </div>
+
+    <script>
+        const WHATSAPP = "9348148310";
+        let cart = [];
+
+        const pkgDetails = {
+            'D1': { title: "Diabetes Essential", price: 999, parameters: ["HbA1c (Average Sugar)", "Fasting Blood Sugar", "Urine Glucose", "Estimated Average Glucose", "Kidney Health Marker"] },
+            'D2': { title: "Diabetes Advanced", price: 1599, parameters: ["All Essential Tests", "Lipid Profile (Heart)", "C-Reactive Protein", "Electrolytes Panel", "Full Blood Count", "Liver Markers"] }
+        };
+
+        function addToCart(pkg) {
+            cart.push(pkg);
+            updateCartUI();
+            toggleCart(true);
+        }
+
+        function updateCartUI() {
+            document.getElementById('cart-badge').innerText = cart.length;
+            const list = document.getElementById('cart-list');
+            const total = cart.reduce((sum, s) => sum + s.price, 0);
+            
+            if(cart.length === 0) {
+                list.innerHTML = `<div class="h-full flex flex-col items-center justify-center py-20 opacity-30 text-center"><i class="fas fa-shopping-basket text-6xl mb-4"></i><p class="font-black text-xs uppercase tracking-widest">Cart is empty</p></div>`;
+            } else {
+                list.innerHTML = cart.map((s, i) => `
+                    <div class="bg-white p-5 rounded-[2rem] flex justify-between items-center border border-purple-50 shadow-sm">
+                        <div><h4 class="font-bold text-slate-800 text-xs">${s.name}</h4><p class="text-purple-600 font-black text-sm">₹${s.price}</p></div>
+                        <button onclick="removeFromCart(${i})" class="w-10 h-10 rounded-full bg-red-50 text-red-400 flex items-center justify-center hover:bg-red-500 hover:text-white transition-all"><i class="fas fa-trash-alt text-xs"></i></button>
+                    </div>
+                `).join('');
+            }
+            document.getElementById('cart-total').innerText = `₹${total}`;
+            document.getElementById('cart-badge').classList.toggle('hidden', cart.length === 0);
+        }
+
+        function removeFromCart(i) { cart.splice(i, 1); updateCartUI(); }
+        function toggleCart(show) { 
+            const s = document.getElementById('cartSidebar');
+            const o = document.getElementById('cartOverlay');
+            if(show) { s.classList.remove('translate-x-full'); o.classList.remove('hidden'); }
+            else { s.classList.add('translate-x-full'); o.classList.add('hidden'); }
+        }
+
+        function openDetails(id) {
+            const data = pkgDetails[id];
+            const modal = document.getElementById('detailsModal');
+            document.getElementById('m-title').innerText = data.title;
+            document.getElementById('m-list').innerHTML = data.parameters.map(item => `<div class="flex items-center gap-3 bg-slate-50 p-3 rounded-xl border border-slate-100"><i class="fas fa-check-circle text-emerald-500"></i><span class="text-slate-700 font-semibold text-xs">${item}</span></div>`).join('');
+            document.getElementById('m-add-btn').onclick = function() { addToCart({id: id, name: data.title, price: data.price}); closeModal(); };
+            modal.classList.remove('hidden');
+            modal.classList.add('flex');
+            setTimeout(() => document.getElementById('modalContent').classList.remove('scale-95'), 10);
+            document.body.style.overflow = 'hidden';
+        }
+
+        function closeModal() {
+            document.getElementById('modalContent').classList.add('scale-95');
+            setTimeout(() => { document.getElementById('detailsModal').classList.add('hidden'); document.body.style.overflow = 'auto'; }, 200);
+        }
+
+        function checkoutWhatsApp() {
+            if(cart.length === 0) return;
+            const msg = `*Diabetes Care Booking - DIGICLINIX*%0A%0A*Selected Packages:*%0A${cart.map((s,i) => `${i+1}. ${s.name} (₹${s.price})`).join('%0A')}%0A%0A*Total Bill: ₹${cart.reduce((sum, s) => sum + s.price, 0)}*%0A_Please contact me for home collection._`;
+            window.open(`https://wa.me/${WHATSAPP}?text=${msg}`);
+        }
+    </script>
+</body>
+</html>

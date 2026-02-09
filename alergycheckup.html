@@ -1,0 +1,232 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Allergy Testing | DIGICLINIX Diagnostics</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;600;700;900&display=swap" rel="stylesheet">
+    <style>
+        body { font-family: 'Inter', sans-serif; background-color: #f8fafc; overflow-x: hidden; }
+        .allergy-card { transition: all 0.4s cubic-bezier(0.175, 0.885, 0.32, 1.275); border: 1px solid #f1f5f9; }
+        .allergy-card:hover { transform: translateY(-10px); box-shadow: 0 25px 50px -12px rgba(109, 40, 217, 0.15); }
+        #cartSidebar { transition: transform 0.5s cubic-bezier(0.4, 0, 0.2, 1); }
+        .no-scrollbar::-webkit-scrollbar { display: none; }
+        .modal-bg { background: rgba(15, 23, 42, 0.6); backdrop-filter: blur(8px); }
+    </style>
+</head>
+<body class="pb-20">
+
+    <nav class="bg-white/90 backdrop-blur-md border-b sticky top-0 z-40 px-5 py-4 lg:px-12">
+        <div class="max-w-7xl mx-auto flex items-center justify-between">
+            <div class="flex items-center gap-4">
+                <button onclick="window.history.back()" class="w-10 h-10 rounded-full bg-purple-50 flex items-center justify-center text-purple-600 hover:bg-purple-600 hover:text-white transition-all">
+                    <i class="fas fa-arrow-left"></i>
+                </button>
+                <div class="flex flex-col">
+                    <span class="text-xl font-black text-slate-800 tracking-tighter leading-none">DIGICLINIX</span>
+                    <span class="text-[10px] font-bold text-purple-600 uppercase tracking-[0.2em]">Allergy Lab</span>
+                </div>
+            </div>
+            <button onclick="toggleCart(true)" class="relative bg-purple-600 text-white px-6 py-2.5 rounded-2xl font-bold flex items-center gap-3 active:scale-95 transition-all shadow-lg shadow-purple-200">
+                <i class="fas fa-shopping-basket"></i>
+                <span id="cart-badge" class="bg-orange-500 text-white text-[10px] w-5 h-5 rounded-full flex items-center justify-center border-2 border-white absolute -top-2 -right-2">0</span>
+            </button>
+        </div>
+    </nav>
+
+    <header class="max-w-7xl mx-auto px-5 lg:px-12 pt-10">
+        <div class="bg-gradient-to-br from-indigo-900 via-purple-800 to-indigo-900 rounded-[3rem] p-10 lg:p-20 text-white relative overflow-hidden shadow-2xl">
+            <div class="relative z-10 max-w-2xl text-center lg:text-left">
+                <span class="bg-white/10 px-4 py-1 rounded-full text-[10px] font-black uppercase tracking-widest border border-white/20">Advanced ImmunoCAP Testing</span>
+                <h1 class="text-4xl lg:text-7xl font-black mt-6 leading-tight tracking-tighter">
+                    Identify Your <br><span class="text-transparent bg-clip-text bg-gradient-to-r from-emerald-400 to-cyan-300">Allergy Triggers</span>
+                </h1>
+                <p class="mt-6 text-purple-100 text-lg font-medium opacity-80 leading-relaxed">
+                    Book precise allergy panels at home. From food intolerance to environmental triggers, get certified reports within 24 hours.
+                </p>
+                <div class="mt-10 flex flex-wrap gap-4 justify-center lg:justify-start">
+                    <div class="bg-white/10 backdrop-blur-md px-6 py-3 rounded-2xl border border-white/10 flex items-center gap-3">
+                        <i class="fas fa-microscope text-emerald-400"></i>
+                        <span class="text-[10px] font-black uppercase tracking-widest">NABL Certified Labs</span>
+                    </div>
+                </div>
+            </div>
+            <div class="absolute -right-20 -bottom-20 text-[20rem] text-white/5 rotate-12 pointer-events-none">
+                <i class="fas fa-shield-virus"></i>
+            </div>
+        </div>
+    </header>
+
+    <main class="max-w-7xl mx-auto px-5 lg:px-12 py-16">
+        <div class="mb-12 flex items-center justify-between">
+            <h2 class="text-2xl font-black text-slate-800 tracking-tight">Showing 22 tests/checkups</h2>
+        </div>
+
+        <div id="allergy-grid" class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-8">
+            </div>
+    </main>
+
+    <div id="cartOverlay" class="fixed inset-0 bg-black/40 z-[100] hidden backdrop-blur-sm" onclick="toggleCart(false)"></div>
+    <div id="cartSidebar" class="fixed top-0 right-0 h-full w-full max-w-[420px] bg-white z-[110] shadow-2xl translate-x-full flex flex-col">
+        <div class="p-8 bg-purple-700 text-white flex justify-between items-center">
+            <h2 class="text-2xl font-black tracking-tight">My Bookings</h2>
+            <button onclick="toggleCart(false)" class="text-white/70 hover:text-white transition-colors"><i class="fas fa-times text-2xl"></i></button>
+        </div>
+        <div id="cart-list" class="flex-1 overflow-y-auto p-6 space-y-4 no-scrollbar"></div>
+        <div class="p-8 border-t border-slate-50 bg-slate-50 shadow-[0_-10px_40px_rgba(0,0,0,0.03)]">
+            <div class="flex justify-between items-center mb-8">
+                <span class="font-bold text-slate-400 uppercase tracking-widest text-xs">Total Bill</span>
+                <span id="cart-total" class="font-black text-3xl text-slate-900">₹0</span>
+            </div>
+            <button onclick="checkoutWhatsApp()" class="w-full py-5 bg-emerald-500 text-white rounded-[2rem] font-black uppercase tracking-widest shadow-xl shadow-emerald-100 flex items-center justify-center gap-3 active:scale-95 transition-all">
+                <i class="fab fa-whatsapp text-2xl"></i> Finalize Booking
+            </button>
+        </div>
+    </div>
+
+    <div id="detailsModal" class="fixed inset-0 z-[200] hidden items-center justify-center p-4 modal-bg">
+        <div class="bg-white w-full max-w-lg rounded-[3rem] overflow-hidden shadow-2xl transition-all scale-95" id="modalContent">
+            <div id="m-header" class="p-10 text-white relative">
+                <button onclick="closeModal()" class="absolute top-8 right-8 text-white/80 hover:text-white text-xl"><i class="fas fa-times-circle"></i></button>
+                <h2 id="m-title" class="text-2xl font-black leading-tight"></h2>
+                <p id="m-price" class="text-xl font-bold mt-2 opacity-90"></p>
+            </div>
+            <div class="p-10">
+                <h4 class="font-black text-slate-800 mb-6 uppercase tracking-widest text-[10px] flex items-center gap-2">
+                    <i class="fas fa-info-circle text-purple-600"></i> Why this test?
+                </h4>
+                <p id="m-info" class="text-sm text-slate-500 leading-relaxed mb-10"></p>
+                <button id="m-add-btn" class="w-full py-5 bg-orange-400 text-white rounded-[1.5rem] font-black uppercase tracking-widest active:scale-95 transition-all shadow-lg shadow-orange-100">Add to Cart</button>
+            </div>
+        </div>
+    </div>
+
+    <script>
+        const WHATSAPP = "9348148310";
+        let cart = [];
+
+        // 22 Colorful tests from image_3fc7b6.png
+        const tests = [
+            { id: 1, name: "Complete Food Allergy (ImmunoCAP)", price: 25900, mrp: 27550, params: 44, color: "from-rose-500 to-pink-700", info: "Covers 44 major food allergens including milk, eggs, and nuts." },
+            { id: 2, name: "Food Intolerance Checkup", price: 14999, mrp: 30000, params: 188, color: "from-purple-600 to-indigo-800", info: "Detailed screening for 188 parameters to identify food sensitivities." },
+            { id: 3, name: "Comprehensive Allergy Panel", price: 17900, mrp: 18900, params: 29, color: "from-emerald-600 to-teal-800", info: "All-in-one panel for respiratory and food triggers." },
+            { id: 4, name: "Veg Food Allergy Panel", price: 6500, mrp: 6855, params: 9, color: "from-green-500 to-emerald-700", info: "Specifically designed for vegetarian food allergens." },
+            { id: 5, name: "Dust Allergy Panel", price: 3900, mrp: 4350, params: 5, color: "from-amber-500 to-orange-700", info: "Identifies sensitivity to house dust and mites." },
+            { id: 6, name: "Dairy Allergy Panel", price: 3900, mrp: 4550, params: 6, color: "from-blue-500 to-cyan-600", info: "Tests for milk, cheese, and casein allergies." },
+            { id: 7, name: "Fungus/Mold Allergy Panel", price: 4400, mrp: 4955, params: 4, color: "from-slate-600 to-slate-800", info: "Identifies triggers related to indoor and outdoor molds." },
+            { id: 8, name: "Nuts Allergy Panel", price: 6100, mrp: 6800, params: 6, color: "from-orange-700 to-red-800", info: "Critical screening for peanuts, almonds, and walnuts." },
+            { id: 9, name: "Fruits Allergy Panel", price: 6100, mrp: 6855, params: 10, color: "from-pink-500 to-rose-600", info: "Tests for citrus, apple, and tropical fruit allergies." },
+            { id: 10, name: "Non-Veg Food Allergy Panel", price: 7000, mrp: 7755, params: 14, color: "from-red-600 to-rose-800", info: "Tests for meat and seafood allergies." },
+            { id: 11, name: "Infant Allergy Panel", price: 5200, mrp: 5345, params: 7, color: "from-sky-400 to-blue-500", info: "Safe screening specifically for toddlers and infants." },
+            { id: 12, name: "Child Allergy Panel", price: 12900, mrp: 13450, params: 19, color: "from-indigo-500 to-purple-600", info: "Comprehensive panel for pediatric allergy needs." },
+            { id: 13, name: "Spices Allergy Panel", price: 5900, mrp: 6105, params: 8, color: "from-orange-600 to-red-700", info: "Identifies triggers in common kitchen spices." },
+            { id: 14, name: "Grass Pollen Allergy", price: 3600, mrp: 3815, params: 5, color: "from-lime-500 to-green-600", info: "Seasonal allergy testing for environmental grass." },
+            { id: 15, name: "Tree Pollen Allergy", price: 3900, mrp: 4145, params: 5, color: "from-emerald-500 to-teal-700", info: "Tests for seasonal pollen from common trees." },
+            { id: 16, name: "Weed Pollen Allergy", price: 4900, mrp: 5150, params: 5, color: "from-yellow-600 to-amber-700", info: "Testing for weed-based environmental allergens." },
+            { id: 17, name: "Environmental Allergy", price: 15900, mrp: 17005, params: 25, color: "from-cyan-700 to-blue-900", info: "Wide panel covering dust, pollen, and pets." },
+            { id: 18, name: "Common Allergens & Eczema", price: 8800, mrp: 8800, params: 10, color: "from-violet-600 to-purple-800", info: "Tests triggers specifically linked to skin eczema." },
+            { id: 19, name: "Asthma/Rhinitis Comprehensive", price: 11500, mrp: 12535, params: 20, color: "from-blue-800 to-indigo-900", info: "Critical panel for respiratory allergy management." },
+            { id: 20, name: "Sea Food Allergy Panel", price: 6000, mrp: 6000, params: 12, color: "from-teal-400 to-cyan-600", info: "Tests for fish, prawns, and shellfish." },
+            { id: 22, name: "House Dust Panel", price: 3500, mrp: 3800, params: 4, color: "from-slate-400 to-slate-600", info: "Focused screening for indoor dust mite sensitivity." }
+        ];
+
+        function init() {
+            const grid = document.getElementById('allergy-grid');
+            grid.innerHTML = tests.map(t => `
+                <div class="allergy-card bg-white rounded-[2.5rem] overflow-hidden flex flex-col h-full shadow-sm">
+                    <div class="bg-gradient-to-br ${t.color} p-8 text-white relative">
+                        <span class="absolute top-4 right-4 bg-white/20 text-[9px] px-2 py-0.5 rounded font-black uppercase tracking-widest">ImmunoCAP Test</span>
+                        <h3 class="text-xl font-black pr-12 leading-tight mb-6 h-12">${t.name}</h3>
+                        <div class="flex items-end gap-3">
+                            <div>
+                                <span class="text-[11px] line-through opacity-50 block mb-0.5 font-medium italic">₹${t.mrp}</span>
+                                <span class="text-3xl font-black tracking-tight">₹${t.price}</span>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="p-8 flex flex-col flex-1">
+                        <div class="flex flex-col gap-4 mb-8">
+                            <div class="flex items-center justify-between text-[11px] font-black uppercase text-slate-400">
+                                <span><i class="fas fa-flask text-purple-600 mr-2"></i> ${t.params} Parameters</span>
+                            </div>
+                            <div class="flex items-center justify-between text-[11px] font-black uppercase text-slate-400">
+                                <span><i class="fas fa-clock text-purple-600 mr-2"></i> Reports in 24h</span>
+                            </div>
+                        </div>
+                        <div class="flex gap-3 mt-auto">
+                            <button onclick="openDetails(${t.id})" class="flex-1 py-4 border-2 border-slate-100 rounded-2xl text-[10px] font-black uppercase text-slate-400 hover:border-purple-600 hover:text-purple-600 transition-all">Details</button>
+                            <button onclick="addToCart(${t.id})" class="flex-[1.8] py-4 bg-orange-400 text-white rounded-2xl font-black text-[10px] uppercase shadow-lg shadow-orange-100 active:scale-95 transition-all">Add to Cart</button>
+                        </div>
+                    </div>
+                </div>
+            `).join('');
+        }
+
+        function addToCart(id) {
+            const test = tests.find(p => p.id === id);
+            cart.push(test);
+            updateUI();
+            toggleCart(true);
+        }
+
+        function removeFromCart(index) {
+            cart.splice(index, 1);
+            updateUI();
+        }
+
+        function updateUI() {
+            document.getElementById('cart-badge').innerText = cart.length;
+            const list = document.getElementById('cart-list');
+            const totalDisplay = document.getElementById('cart-total');
+            
+            if(cart.length === 0) {
+                list.innerHTML = `<div class="h-full flex flex-col items-center justify-center text-center py-20 opacity-30"><i class="fas fa-shopping-basket text-6xl mb-4"></i><p class="font-black uppercase tracking-widest text-[10px]">No allergies selected</p></div>`;
+            } else {
+                list.innerHTML = cart.map((item, index) => `
+                    <div class="bg-slate-50 p-5 rounded-[1.5rem] flex justify-between items-center border border-slate-100">
+                        <div><h4 class="font-bold text-slate-800 text-xs">${item.name}</h4><p class="text-purple-600 font-black text-sm">₹${item.price}</p></div>
+                        <button onclick="removeFromCart(${index})" class="text-red-400 hover:text-red-600 transition-colors"><i class="fas fa-trash-alt"></i></button>
+                    </div>
+                `).join('');
+            }
+            const total = cart.reduce((sum, item) => sum + item.price, 0);
+            totalDisplay.innerText = `₹${total.toLocaleString('en-IN')}`;
+        }
+
+        function toggleCart(show) {
+            const sidebar = document.getElementById('cartSidebar');
+            const overlay = document.getElementById('cartOverlay');
+            if(show) { sidebar.classList.remove('translate-x-full'); overlay.classList.remove('hidden'); }
+            else { sidebar.classList.add('translate-x-full'); overlay.classList.add('hidden'); }
+        }
+
+        function openDetails(id) {
+            const t = tests.find(p => p.id === id);
+            document.getElementById('m-header').className = `p-10 text-white relative bg-gradient-to-br ${t.color}`;
+            document.getElementById('m-title').innerText = t.name;
+            document.getElementById('m-price').innerText = `Amount: ₹${t.price.toLocaleString('en-IN')}`;
+            document.getElementById('m-info').innerText = t.info;
+            document.getElementById('m-add-btn').onclick = () => { addToCart(t.id); closeModal(); };
+            document.getElementById('detailsModal').classList.remove('hidden');
+            document.getElementById('detailsModal').classList.add('flex');
+            setTimeout(() => document.getElementById('modalContent').classList.remove('scale-95'), 10);
+        }
+
+        function closeModal() {
+            document.getElementById('detailsModal').classList.add('hidden');
+        }
+
+        function checkoutWhatsApp() {
+            if(cart.length === 0) return;
+            const items = cart.map((p, i) => `${i+1}. ${p.name} (₹${p.price})`).join('%0A');
+            const total = cart.reduce((sum, item) => sum + item.price, 0);
+            const msg = `*Allergy Checkup Booking - DIGICLINIX*%0A%0A*Selected Allergy Tests:*%0A${items}%0A%0A*Total Payable: ₹${total.toLocaleString('en-IN')}*%0A_Please contact me for home collection._`;
+            window.open(`https://wa.me/${WHATSAPP}?text=${msg}`);
+        }
+
+        init();
+    </script>
+</body>
+</html>

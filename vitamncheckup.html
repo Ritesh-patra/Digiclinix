@@ -1,0 +1,220 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Vitamin Labs | DIGICLINIX Colorful</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;600;700;900&display=swap" rel="stylesheet">
+    <style>
+        body { font-family: 'Inter', sans-serif; background-color: #fdfcff; overflow-x: hidden; }
+        .service-card { transition: all 0.4s cubic-bezier(0.175, 0.885, 0.32, 1.275); border: 1px solid #f1f5f9; }
+        .service-card:hover { transform: translateY(-12px); shadow: 0 25px 50px -12px rgba(0,0,0,0.1); }
+        .modal-bg { background: rgba(0, 0, 0, 0.4); backdrop-filter: blur(8px); }
+        #cartSidebar { transition: transform 0.5s cubic-bezier(0.4, 0, 0.2, 1); }
+        .no-scrollbar::-webkit-scrollbar { display: none; }
+    </style>
+</head>
+<body class="pb-20">
+
+    <nav class="bg-white/80 backdrop-blur-md border-b sticky top-0 z-40 px-5 py-4 lg:px-12">
+        <div class="max-w-7xl mx-auto flex items-center justify-between">
+            <div class="flex items-center gap-4">
+                <button onclick="window.history.back()" class="w-10 h-10 rounded-full bg-purple-50 flex items-center justify-center text-purple-600 hover:bg-purple-600 hover:text-white transition-all">
+                    <i class="fas fa-arrow-left"></i>
+                </button>
+                <h1 class="text-xl font-black text-slate-800 tracking-tight">DIGICLINIX <span class="text-purple-600">VITAMINS</span></h1>
+            </div>
+            <button onclick="toggleCart(true)" class="relative bg-purple-600 text-white px-6 py-2.5 rounded-2xl font-bold flex items-center gap-3 active:scale-95 transition-all shadow-lg shadow-purple-200">
+                <i class="fas fa-shopping-basket"></i>
+                <span id="cart-badge" class="bg-orange-500 text-white text-[10px] w-5 h-5 rounded-full flex items-center justify-center border-2 border-white absolute -top-2 -right-2">0</span>
+            </button>
+        </div>
+    </nav>
+
+    <header class="max-w-7xl mx-auto px-5 lg:px-12 pt-10">
+        <div class="bg-gradient-to-r from-slate-50 to-purple-50 rounded-[3rem] p-8 lg:p-16 flex flex-col lg:flex-row items-center justify-between gap-10 border border-purple-100/50">
+            <div class="max-w-xl text-center lg:text-left">
+                <h2 class="text-4xl lg:text-6xl font-black text-slate-800 leading-tight">
+                    Comprehensive <br><span class="text-purple-600 italic font-serif">Vitamin Tests</span>
+                </h2>
+                <p class="text-slate-500 font-medium mt-6 text-lg leading-relaxed">
+                    Stay on top of your health with our comprehensive and individual vitamin test options. Get tested at home in 60 minutes.
+                </p>
+                <div class="flex flex-wrap gap-4 mt-10 justify-center lg:justify-start">
+                    <div class="flex items-center gap-3 bg-white px-5 py-3 rounded-2xl shadow-sm border border-slate-100">
+                        <i class="fas fa-certificate text-orange-400"></i>
+                        <span class="text-[10px] font-black uppercase tracking-widest text-slate-600">In-house Certified Labs</span>
+                    </div>
+                </div>
+            </div>
+            <div class="relative w-full lg:w-[380px] aspect-square">
+                <img src="https://i.pinimg.com/1200x/c0/14/1b/c0141bd9c2ebad19456add24de9b0cb8.jpg" class="w-full h-full object-cover rounded-[3rem] shadow-2xl" alt="Vitamin Care">
+            </div>
+        </div>
+    </header>
+
+    <main class="max-w-7xl mx-auto px-5 lg:px-12 pt-10">
+        <div class="mb-10 text-center lg:text-left">
+            <h2 class="text-4xl lg:text-6xl font-black text-slate-900 leading-tight mb-2 tracking-tighter">Premium <span class="text-purple-600">Nutrition Labs</span></h2>
+            <p class="text-slate-500 font-medium">12 specialized vitamin tests with 6-hour report delivery.</p>
+        </div>
+
+        <div id="service-container" class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-8"></div>
+    </main>
+
+    <div id="cartOverlay" class="fixed inset-0 bg-black/40 z-[100] hidden" onclick="toggleCart(false)"></div>
+    <div id="cartSidebar" class="fixed top-0 right-0 h-full w-full max-w-[400px] bg-white z-[110] shadow-2xl translate-x-full flex flex-col">
+        <div class="p-6 bg-purple-700 text-white flex justify-between items-center">
+            <h2 class="text-xl font-bold">Booking Summary</h2>
+            <button onclick="toggleCart(false)" class="w-10 h-10 rounded-full bg-white/10 flex items-center justify-center hover:bg-white/20"><i class="fas fa-times"></i></button>
+        </div>
+        <div id="cart-items-list" class="flex-1 overflow-y-auto p-6 space-y-4 no-scrollbar"></div>
+        <div class="p-6 border-t border-slate-100 bg-slate-50">
+            <div class="flex justify-between items-center mb-6">
+                <span class="font-bold text-slate-500">Subtotal</span>
+                <span id="total-price" class="font-black text-2xl text-slate-800">₹0</span>
+            </div>
+            <button onclick="checkoutWhatsApp()" class="w-full py-5 bg-green-500 text-white rounded-[2rem] font-black uppercase tracking-widest shadow-xl flex items-center justify-center gap-3 active:scale-95 transition-all">
+                <i class="fab fa-whatsapp text-2xl"></i> Finalize Booking
+            </button>
+        </div>
+    </div>
+
+    <div id="detailsModal" class="fixed inset-0 z-[50] hidden items-center justify-center p-4 modal-bg">
+        <div class="bg-white w-full max-w-lg rounded-[3rem] overflow-hidden shadow-2xl transition-all scale-95" id="modalContent">
+            <div id="m-header" class="p-10 text-white relative">
+                <button onclick="closeModal()" class="absolute top-6 right-6 text-white/80 hover:text-white text-xl"><i class="fas fa-times-circle"></i></button>
+                <h2 id="m-title" class="text-3xl font-black leading-tight"></h2>
+                <p id="m-price" class="text-xl font-bold mt-2 opacity-90"></p>
+            </div>
+            <div class="p-10">
+                <h4 class="font-bold text-slate-800 mb-6 uppercase tracking-widest text-xs">Test Coverage:</h4>
+                <div id="m-list" class="space-y-4 text-sm text-slate-600 mb-10 max-h-40 overflow-y-auto no-scrollbar"></div>
+                <button id="m-add-btn" class="w-full py-5 bg-orange-400 text-white rounded-[1.5rem] font-black uppercase tracking-widest shadow-lg active:scale-95 transition-all">Add to Cart</button>
+            </div>
+        </div>
+    </div>
+
+    <script>
+        const WHATSAPP = "9348148310";
+        let cart = [];
+
+        // Exact 12 Vitamin tests with unique colorful gradients
+        const services = [
+            { id: 1, name: "Vitamin D, Total", price: 990, mrp: 1500, off: "34%", icon: "fa-sun", color: "from-amber-500 to-orange-700", info: "Essential for bone health and immunity." },
+            { id: 2, name: "Vitamin B12", price: 790, mrp: 1400, off: "44%", icon: "fa-bolt", color: "from-blue-600 to-indigo-700", info: "Crucial for nerve function and energy levels." },
+            { id: 3, name: "Vitamin D Gold Panel", price: 2725, mrp: 3634, off: "25%", icon: "fa-crown", color: "from-yellow-400 to-amber-600", info: "Includes Vit D2, Vit D3 & Vit D Total." },
+            { id: 4, name: "Folic Acid (Vit B9)", price: 1200, mrp: 1765, off: "32%", icon: "fa-vial-circle-check", color: "from-emerald-600 to-teal-800", info: "Important for red blood cell formation." },
+            { id: 5, name: "Vitamin C (Ascorbic Acid)", price: 3750, mrp: 7000, off: "53%", icon: "fa-lemon", color: "from-orange-500 to-red-600", info: "Powerful antioxidant for skin and immunity." },
+            { id: 6, name: "Vitamin B Complex", price: 8470, mrp: 8760, off: "3%", icon: "fa-capsules", color: "from-purple-600 to-violet-800", info: "Comprehensive panel for all B Vitamins." },
+            { id: 7, name: "Vitamin A (Retinol)", price: 4795, mrp: 8880, off: "46%", icon: "fa-eye", color: "from-rose-600 to-pink-800", info: "Essential for vision and immune health." },
+            { id: 8, name: "Vitamin B6 (Pyridoxal)", price: 3500, mrp: 5650, off: "38%", icon: "fa-brain", color: "from-cyan-600 to-blue-800", info: "Supports brain development and function." },
+            { id: 9, name: "Vitamin E (Tocopherol)", price: 4540, mrp: 10000, off: "55%", icon: "fa-spa", color: "from-emerald-700 to-green-900", info: "Key for skin, hair and eye health." },
+            { id: 10, name: "Vitamin B1 (Thiamine)", price: 3870, mrp: 5035, off: "23%", icon: "fa-dumbbell", color: "from-lime-600 to-green-700", info: "Helps convert food into energy." },
+            { id: 11, name: "Vitamin K1", price: 4950, mrp: 5550, off: "11%", icon: "fa-droplet", color: "from-red-600 to-rose-900", info: "Vital for blood clotting and bone health." },
+            { id: 12, name: "Vitamin B2 (Riboflavin)", price: 3815, mrp: 4102, off: "7%", icon: "fa-notes-medical", color: "from-sky-600 to-indigo-800", info: "Essential for growth and overall health." }
+        ];
+
+        function init() {
+            const container = document.getElementById('service-container');
+            container.innerHTML = services.map(s => `
+                <div class="service-card bg-white rounded-[2.5rem] overflow-hidden flex flex-col h-full shadow-[0_8px_30px_rgb(0,0,0,0.04)]">
+                    <div class="bg-gradient-to-br ${s.color} p-8 text-white relative">
+                        <div class="absolute top-6 right-6 w-12 h-12 rounded-full bg-white/10 flex items-center justify-center backdrop-blur-md">
+                            <i class="fas ${s.icon} text-xl"></i>
+                        </div>
+                        <h3 class="text-xl font-black pr-12 leading-tight mb-6 h-12">${s.name}</h3>
+                        <div class="flex items-end gap-3">
+                            <div>
+                                <span class="text-[11px] line-through opacity-50 block mb-0.5">₹${s.mrp}</span>
+                                <span class="text-3xl font-black tracking-tight">₹${s.price}</span>
+                            </div>
+                            <span class="bg-white/20 backdrop-blur-md text-white text-[10px] font-black px-3 py-1.5 rounded-xl border border-white/20">${s.off} OFF</span>
+                        </div>
+                    </div>
+                    <div class="p-8 flex flex-col flex-1">
+                        <div class="flex items-center gap-3 text-slate-400 font-bold text-[11px] mb-8 uppercase tracking-widest">
+                            <i class="fas fa-file-medical text-purple-600 text-sm"></i> 6 Hours Report
+                        </div>
+                        <div class="flex gap-3 mt-auto">
+                            <button onclick="openDetails(${s.id})" class="flex-1 py-4 border-2 border-slate-100 rounded-2xl text-[10px] font-black uppercase text-slate-400 hover:border-purple-600 hover:text-purple-600 transition-all">Details</button>
+                            <button onclick="addToCart(${s.id})" class="flex-[1.8] py-4 bg-orange-400 text-white rounded-2xl font-black text-[10px] uppercase shadow-lg active:scale-95 transition-all">Add to Cart</button>
+                        </div>
+                    </div>
+                </div>
+            `).join('');
+            updateCartUI();
+        }
+
+        function addToCart(id) {
+            const s = services.find(x => x.id === id);
+            cart.push(s);
+            updateCartUI();
+            toggleCart(true);
+        }
+
+        function removeFromCart(index) {
+            cart.splice(index, 1);
+            updateUI();
+        }
+
+        function updateCartUI() {
+            document.getElementById('cart-badge').innerText = cart.length;
+            const list = document.getElementById('cart-items-list');
+            const totalDisplay = document.getElementById('total-price');
+            
+            if(cart.length === 0) {
+                list.innerHTML = `<div class="h-full flex flex-col items-center justify-center text-slate-300 opacity-50 py-10"><i class="fas fa-shopping-basket text-6xl mb-4"></i><p class="font-bold">Cart is empty</p></div>`;
+            } else {
+                list.innerHTML = cart.map((item, index) => `
+                    <div class="bg-slate-50 p-5 rounded-[1.5rem] flex justify-between items-center border border-slate-100">
+                        <div>
+                            <h4 class="font-bold text-slate-800 text-xs">${item.name}</h4>
+                            <p class="text-purple-600 font-black">₹${item.price}</p>
+                        </div>
+                        <button onclick="removeFromCart(${index})" class="w-10 h-10 rounded-full bg-red-50 text-red-500 flex items-center justify-center hover:bg-red-500 hover:text-white transition-all"><i class="fas fa-trash-alt text-sm"></i></button>
+                    </div>
+                `).join('');
+            }
+            const total = cart.reduce((sum, item) => sum + item.price, 0);
+            totalDisplay.innerText = `₹${total}`;
+        }
+
+        function toggleCart(show) {
+            const sidebar = document.getElementById('cartSidebar');
+            const overlay = document.getElementById('cartOverlay');
+            if(show) { sidebar.classList.remove('translate-x-full'); overlay.classList.remove('hidden'); }
+            else { sidebar.classList.add('translate-x-full'); overlay.classList.add('hidden'); }
+        }
+
+        function openDetails(id) {
+            const s = services.find(x => x.id === id);
+            const modal = document.getElementById('detailsModal');
+            document.getElementById('m-header').className = `p-10 text-white relative bg-gradient-to-br ${s.color}`;
+            document.getElementById('m-title').innerText = s.name;
+            document.getElementById('m-price').innerText = `Amount: ₹${s.price}`;
+            document.getElementById('m-list').innerHTML = `<li class="flex items-start gap-3"><i class="fas fa-info-circle text-purple-600 mt-1"></i> <span>${s.info}</span></li>`;
+            document.getElementById('m-add-btn').onclick = () => { addToCart(s.id); closeModal(); };
+            modal.classList.remove('hidden');
+            modal.classList.add('flex');
+            setTimeout(() => document.getElementById('modalContent').classList.remove('scale-95'), 10);
+        }
+
+        function closeModal() {
+            document.getElementById('detailsModal').classList.add('hidden');
+        }
+
+        function checkoutWhatsApp() {
+            if(cart.length === 0) return;
+            const items = cart.map((p, i) => `${i+1}. ${p.name} (₹${p.price})`).join('%0A');
+            const total = cart.reduce((sum, item) => sum + item.price, 0);
+            const msg = `*Vitamin Booking - DIGICLINIX*%0A%0A*Selected Tests:*%0A${items}%0A%0A*Total Payable: ₹${total}*%0A_Please contact me for home collection._`;
+            window.open(`https://wa.me/${WHATSAPP}?text=${msg}`);
+        }
+
+        init();
+    </script>
+</body>
+</html>
