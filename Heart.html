@@ -88,6 +88,7 @@
         <div class="bg-white w-full max-w-lg rounded-[3rem] overflow-hidden shadow-2xl transition-all scale-95" id="modalContent">
             <div id="m-header" class="p-10 text-white relative purple-gradient">
                 <button onclick="closeModal()" class="absolute top-8 right-8 text-white/80 hover:text-white text-xl"><i class="fas fa-times-circle"></i></button>
+                    <button onclick="shareDetails(currentDetailsId)" class="absolute top-8 right-20 text-white/70 hover:text-white transition-colors"><i class="fas fa-share-alt text-2xl"></i></button>
                 <h2 id="m-title" class="text-2xl font-black leading-tight"></h2>
                 <p id="m-price" class="text-xl font-bold mt-2 opacity-90"></p>
             </div>
@@ -105,6 +106,20 @@
     <script>
         const WHATSAPP = "9348148310";
         let cart = [];
+        let currentDetailsId = null;
+
+        function shareDetails(id) {
+            const data = heartTests.find(t => t.id === id);
+            if(!data) return;
+            const title = data.name || data.title || 'Test Details';
+            const text = `${title}\n\n${data.info ? data.info + '\n\n' : ''}Price: ₹${data.price || 'N/A'}\n\nShared via DIGICLINIX`;
+            if (navigator.share) { navigator.share({ title, text, url: window.location.href }).catch(()=>{}); return; }
+            const waMsg = `*${title}*%0A%0A${data.info ? encodeURIComponent(data.info) + '%0A%0A' : ''}*Price: ₹${data.price || 'N/A'}*%0A%0AShared via DIGICLINIX`;
+            window.open(`https://wa.me/?text=${waMsg}`);
+            if (navigator.clipboard && navigator.clipboard.writeText) navigator.clipboard.writeText(text).catch(()=>{});
+            else { const ta = document.createElement('textarea'); ta.value = text; document.body.appendChild(ta); ta.select(); try{ document.execCommand('copy'); }catch(e){} ta.remove(); }
+            try{ alert('Share opened. Details copied to clipboard as fallback.'); }catch(e){}
+        }
 
         // 13 Tests directly from image_594329.png & image_982557.png
         const heartTests = [
@@ -195,7 +210,9 @@
 
         function openDetails(id) {
             const t = heartTests.find(p => p.id === id);
-            document.getElementById('m-header').className = `p-10 text-white relative bg-gradient-to-br ${t.color}`;
+            function openDetails(id) {
+                currentDetailsId = id;
+                document.getElementById('m-header').className = `p-10 text-white relative bg-gradient-to-br ${t.color}`;
             document.getElementById('m-title').innerText = t.name;
             document.getElementById('m-price').innerText = `Special Price: ₹${t.price}`;
             document.getElementById('m-info').innerText = t.info;
@@ -218,6 +235,7 @@
             const msg = `*Heart Care Booking - DIGICLINIX*%0A%0A*Selected Tests:*%0A${items}%0A%0A*Total: ₹${total}*%0A_Please provide home collection details._`;
             window.open(`https://wa.me/${WHATSAPP}?text=${msg}`);
         }
+    }
 
         init();
     </script>

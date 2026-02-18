@@ -158,6 +158,7 @@
     <div id="detailsModal" class="fixed inset-0 z-[200] hidden items-center justify-center p-4 modal-bg">
         <div id="modalContent" class="bg-white w-full max-w-lg rounded-[3rem] overflow-hidden shadow-2xl scale-95 transition-transform duration-300">
             <div id="m-header" class="p-10 text-white relative purple-gradient">
+                <button onclick="shareDetails(currentDetailsId)" class="absolute top-8 right-20 text-white/70 hover:text-white transition-colors"><i class="fas fa-share-alt text-2xl"></i></button>
                 <button onclick="closeModal()" class="absolute top-8 right-8 text-white/70 hover:text-white transition-colors"><i class="fas fa-times-circle text-2xl"></i></button>
                 <span class="bg-white/20 text-[10px] px-3 py-1 rounded-full font-black uppercase tracking-widest mb-3 inline-block">Test Details</span>
                 <h2 id="m-title" class="text-2xl lg:text-3xl font-black leading-tight"></h2>
@@ -181,6 +182,34 @@
     </div>
 
     <script>
+        let currentDetailsId = null;
+
+        function shareDetails(id) {
+            const data = pkgDetails[id];
+            if(!data) return;
+            const text = `${data.title}\n\nKey Parameters:\n${data.parameters.map((p,i)=>`${i+1}. ${p}`).join('\n')}\n\nPrice: ₹${data.price}\n\nShared via DIGICLINIX`;
+
+            if (navigator.share) {
+                navigator.share({ title: data.title, text: text, url: window.location.href }).catch(() => {});
+                return;
+            }
+
+            // WhatsApp fallback (opens share composer) and copy to clipboard fallback
+            const waMsg = `*${data.title}*%0A%0A${data.parameters.map((p,i)=>`${i+1}. ${p}`).join('%0A')}%0A%0A*Price: ₹${data.price}*%0A%0AShared via DIGICLINIX`;
+            window.open(`https://wa.me/?text=${encodeURIComponent(waMsg)}`);
+
+            if (navigator.clipboard && navigator.clipboard.writeText) {
+                navigator.clipboard.writeText(text).catch(() => {});
+            } else {
+                const ta = document.createElement('textarea');
+                ta.value = text;
+                document.body.appendChild(ta);
+                ta.select();
+                try { document.execCommand('copy'); } catch(e) {}
+                ta.remove();
+            }
+            try { alert('Share opened. Details copied to clipboard as fallback.'); } catch(e) {}
+        }
         const WHATSAPP = "9348148310";
         let cart = [];
 
@@ -223,6 +252,7 @@
         }
 
         function openDetails(id) {
+            currentDetailsId = id;
             const data = pkgDetails[id];
             const modal = document.getElementById('detailsModal');
             document.getElementById('m-title').innerText = data.title;

@@ -127,6 +127,7 @@
         <div class="bg-white w-full max-w-lg rounded-[3rem] overflow-hidden shadow-2xl transition-all scale-95"
             id="modalContent">
             <div id="m-header" class="p-10 text-white relative">
+                <button onclick="shareDetails(currentDetailsId)" class="absolute top-8 right-20 text-white/70 hover:text-white transition-colors"><i class="fas fa-share-alt text-2xl"></i></button>
                 <button onclick="closeModal()" class="absolute top-8 right-8 text-white/80 hover:text-white text-xl"><i
                         class="fas fa-times-circle"></i></button>
                 <h2 id="m-title" class="text-3xl font-black leading-tight"></h2>
@@ -251,6 +252,21 @@
         const WHATSAPP = "9348148310";
         let cart = [];
 
+        let currentDetailsId = null;
+
+        function shareDetails(id) {
+            const pkg = packages.find(p => p.id === id);
+            if(!pkg) return;
+            const title = pkg.name || 'Package Details';
+            const text = `${title}\n\nIncluded: ${pkg.tests ? pkg.tests.join(', ') : ''}\n\nPrice: ₹${pkg.price}\n\nShared via DIGICLINIX`;
+            if (navigator.share) { navigator.share({ title, text, url: window.location.href }).catch(()=>{}); return; }
+            const waMsg = `*${title}*%0A%0A${pkg.tests ? encodeURIComponent(pkg.tests.join('\n')) + '%0A%0A' : ''}*Price: ₹${pkg.price}*%0A%0AShared via DIGICLINIX`;
+            window.open(`https://wa.me/?text=${waMsg}`);
+            if (navigator.clipboard && navigator.clipboard.writeText) navigator.clipboard.writeText(text).catch(()=>{});
+            else { const ta = document.createElement('textarea'); ta.value = text; document.body.appendChild(ta); ta.select(); try{ document.execCommand('copy'); }catch(e){} ta.remove(); }
+            try{ alert('Share opened. Details copied to clipboard as fallback.'); }catch(e){}
+        }
+
         const packages = [
             { id: 'S1', name: "Sexual Health - Essential", price: 1499, mrp: 3000, off: "50%", params: 4, icon: "fa-shield-heart", color: "from-purple-500 to-indigo-600", tests: ["HIV I & II", "VDRL (Syphilis)", "HBsAg (Hepatitis B)"] },
             { id: 'S2', name: "Sexual Health - Advanced", price: 3999, mrp: 9100, off: "56%", params: 9, icon: "fa-dna", color: "from-purple-600 to-purple-800", tests: ["HIV", "Syphilis", "Hepatitis B & C", "Herpes Simplex Virus", "Chlamydia"] },
@@ -324,6 +340,7 @@
 
         function openDetails(id) {
             const pkg = packages.find(p => p.id === id);
+            currentDetailsId = id;
             document.getElementById('m-header').className = `p-10 text-white relative bg-gradient-to-br ${pkg.color}`;
             document.getElementById('m-title').innerText = pkg.name;
             document.getElementById('m-price').innerText = `Amount: ₹${pkg.price}`;
