@@ -43,28 +43,52 @@
         </div>
     </nav>
 
-    <main class="max-w-7xl mx-auto px-5 lg:px-12 pt-10">
-        <div class="mb-8 flex flex-col md:flex-row md:items-center md:justify-between gap-4">
-            <div class="flex flex-col sm:flex-row flex-wrap items-center gap-3 w-full md:w-2/3">
-                <input id="filter-search" type="search" placeholder="Search tests or packages" class="w-full sm:flex-1 px-4 py-3 rounded-xl border border-slate-100 shadow-sm" />
-                <select id="filter-category" class="w-full sm:w-auto px-4 py-3 rounded-xl border border-slate-100 shadow-sm">
-                    <option value="">All Categories</option>
-                </select>
-                <select id="filter-price" class="w-full sm:w-auto px-4 py-3 rounded-xl border border-slate-100 shadow-sm">
-                    <option value="">All Prices</option>
-                    <option value="lt500">Under ₹500</option>
-                    <option value="500-1000">₹500 - ₹1000</option>
-                    <option value="gt1000">Above ₹1000</option>
-                </select>
-            </div>
-            <div class="flex items-center gap-3">
-                <button id="filter-reset" class="px-4 py-3 bg-slate-100 rounded-xl">Reset</button>
-            </div>
-        </div>
+<main class="max-w-7xl mx-auto px-5 lg:px-12 pt-12 pb-20 bg-[#FDFBF7]">
+    <div class="mb-10 p-6 bg-white rounded-3xl shadow-[0_10px_40px_-15px_rgba(45,71,57,0.1)] border border-[#E8E2D4]">
+        <div class="flex flex-col lg:flex-row lg:items-center justify-between gap-6">
+            
+            <div class="flex flex-col sm:flex-row flex-wrap items-center gap-4 w-full lg:w-4/5">
+                
+                <div class="relative w-full sm:flex-1">
+                    <span class="absolute left-4 top-1/2 -translate-y-1/2 text-[#2D4739] opacity-40">
+                        <svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M21 21l-6-6m2-5a7 7 0 11-14 0 7 7 0 0114 0z" />
+                        </svg>
+                    </span>
+                    <input id="filter-search" type="search" placeholder="Search tests or packages..." 
+                        class="w-full pl-12 pr-4 py-3.5 rounded-2xl border-2 border-[#F3F0E9] focus:border-[#C5A059] focus:ring-0 transition-all outline-none text-[#2D4739] placeholder:text-slate-400 bg-[#FCFAFA]" />
+                </div>
 
-        <div id="checkup-container" class="flex flex-col space-y-10">
+                <div class="flex gap-3 w-full sm:w-auto">
+                    <select id="filter-category" 
+                        class="w-1/2 sm:w-48 px-4 py-3.5 rounded-2xl border-2 border-[#F3F0E9] bg-white focus:border-[#C5A059] focus:ring-0 transition-all cursor-pointer text-[#2D4739] font-medium appearance-none">
+                        <option value="">All Categories</option>
+                    </select>
+
+                    <select id="filter-price" 
+                        class="w-1/2 sm:w-48 px-4 py-3.5 rounded-2xl border-2 border-[#F3F0E9] bg-white focus:border-[#C5A059] focus:ring-0 transition-all cursor-pointer text-[#2D4739] font-medium appearance-none">
+                        <option value="">All Prices</option>
+                        <option value="lt500">Under ₹500</option>
+                        <option value="500-1000">₹500 - ₹1000</option>
+                        <option value="gt1000">Above ₹1000</option>
+                    </select>
+                </div>
+            </div>
+
+            <div id="filter-reset-wrapper" class="hidden lg:flex items-center">
+                <button id="filter-reset" class="px-6 py-3 bg-[#2D4739] text-[#FDFBF7] hover:bg-[#1B2B22] rounded-2xl font-semibold transition-colors shadow-md flex items-center gap-2">
+                    <svg xmlns="http://www.w3.org/2000/svg" class="h-4 w-4" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 4v5h.582m15.356 2A8.001 8.001 0 004.582 9m0 0H9m11 11v-5h-.581m0 0a8.003 8.003 0 01-15.357-2m15.357 2H15" />
+                    </svg>
+                    Reset
+                </button>
+            </div>
         </div>
-    </main>
+    </div>
+
+    <div id="checkup-container" class="grid grid-cols-1 gap-8">
+        </div>
+</main>
 
     <div id="floating-cart-btn" onclick="toggleCart()" class="fixed bottom-6 right-6 z-40 hidden cursor-pointer group">
         <div class="bg-slate-900 text-white w-16 h-16 rounded-full flex items-center justify-center shadow-2xl shadow-slate-400 relative transition-transform hover:scale-110">
@@ -74,7 +98,7 @@
     </div>
 
     <div id="detailsModal" class="fixed inset-0 z-[100] hidden items-end sm:items-center justify-center sm:p-4 modal-bg transition-all duration-300">
-        <div class="bg-white w-full sm:max-w-2xl rounded-t-[2rem] sm:rounded-[2.5rem] overflow-hidden shadow-2xl transition-transform transform translate-y-full sm:translate-y-0 h-[85vh] sm:h-auto flex flex-col" id="modalContent">
+        <div class="bg-white w-full sm:max-w-3xl lg:max-w-4xl rounded-t-[2rem] sm:rounded-[2.5rem] overflow-hidden shadow-2xl transition-transform transform translate-y-full sm:translate-y-0 h-[85vh] sm:h-auto lg:h-auto flex flex-col" id="modalContent">
             
             <div id="m-header" class="p-6 sm:p-8 text-white relative flex-shrink-0">
                 <button onclick="shareDetails(currentDetailsId)" class="absolute top-4 right-12 text-white/70 hover:text-white transition-colors"><i class="fas fa-share-alt text-sm"></i></button>
@@ -144,13 +168,22 @@
             </div>
 
             <div class="p-6 bg-white border-t border-slate-100 shadow-[0_-4px_20px_rgba(0,0,0,0.05)]">
-                <div class="flex justify-between items-end mb-4">
-                    <span class="text-sm text-slate-500 font-medium">Total Amount</span>
-                    <span id="cart-total" class="text-2xl font-black text-slate-800">₹0</span>
-                </div>
-                <button onclick="checkoutWhatsApp()" class="w-full py-4 bg-green-600 text-white rounded-xl font-bold uppercase tracking-widest shadow-lg shadow-green-100 hover:bg-green-700 transition-all flex items-center justify-center gap-2">
-                    <i class="fab fa-whatsapp text-lg"></i> Checkout
-                </button>
+                    <div class="flex justify-between items-end mb-4">
+                        <span class="text-sm text-slate-500 font-medium">Total Amount</span>
+                        <span id="cart-original-total" class="text-sm text-slate-500 line-through mr-3 hidden"></span>
+                        <span id="cart-total" class="text-2xl font-black text-slate-800">₹0</span>
+                    </div>
+
+                    <div class="flex gap-2 mb-3 items-center">
+                        <input id="coupon-code" type="text" placeholder="Apply coupon code" class="flex-1 px-4 py-2 rounded-xl border border-slate-100 shadow-sm" />
+                        <button id="apply-coupon-btn" class="px-4 py-2 bg-purple-600 text-white rounded-xl font-bold">Apply</button>
+                        <button id="remove-coupon-btn" class="px-3 py-2 bg-slate-100 text-slate-700 rounded-xl font-bold hidden">Remove</button>
+                    </div>
+                    <p id="coupon-feedback" class="text-sm text-green-600 mb-3 hidden"></p>
+
+                    <button onclick="checkoutWhatsApp()" class="w-full py-4 bg-green-600 text-white rounded-xl font-bold uppercase tracking-widest shadow-lg shadow-green-100 hover:bg-green-700 transition-all flex items-center justify-center gap-2">
+                        <i class="fab fa-whatsapp text-lg"></i> Checkout
+                    </button>
             </div>
         </div>
     </div>
@@ -276,7 +309,7 @@
                         <h3 class="text-2xl font-extrabold text-slate-800">${cat}</h3>
                         <span class="text-sm text-slate-500">${items.length} items</span>
                     </div>
-                    <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-6">
+                    <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 xl:grid-cols-5 gap-6">
                 `;
 
                 items.forEach(pkg => {
@@ -284,7 +317,7 @@
                         <div class="checkup-card bg-white rounded-[2rem] lg:rounded-[2.5rem] overflow-hidden flex flex-col h-full shadow-sm border border-slate-50">
                             <div class="bg-gradient-to-br ${pkg.color} p-5 lg:p-6 text-white relative">
                                 <span class="absolute top-4 left-4 bg-white/20 text-[9px] lg:text-[10px] px-2 py-0.5 rounded font-black uppercase tracking-wider">${pkg.category || ''}</span>
-                                <h3 class="text-lg lg:text-xl font-bold pr-8 leading-tight mb-3 lg:mb-4 h-12 lg:h-auto line-clamp-2">${pkg.name}</h3>
+                                <h3 class="text-lg lg:text-xl font-bold pr-8 leading-tight mb-3 mt-5 h-12 lg:h-auto line-clamp-2">${pkg.name}</h3>
                                 <div class="flex items-end gap-2">
                                     <div>
                                         <span class="text-xl lg:text-2xl font-black">₹${pkg.price}</span>
@@ -310,38 +343,54 @@
             // uncategorized
             const uncategorized = packagesList.filter(p => !p.category || !order.includes(p.category));
             if (uncategorized.length) {
-                html += `
-                    <section class="mb-10 w-full">
-                        <div class="flex items-center justify-between mb-4">
-                            <h3 class="text-2xl font-extrabold text-slate-800">Other</h3>
-                            <span class="text-sm text-slate-500">${uncategorized.length} items</span>
-                        </div>
-                        <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-6">
-                `;
-                uncategorized.forEach(pkg => {
-                    html += `
-                        <div class="checkup-card bg-white rounded-[2rem] lg:rounded-[2.5rem] overflow-hidden flex flex-col h-full shadow-sm border border-slate-50">
-                            <div class="bg-gradient-to-br ${pkg.color} p-5 lg:p-6 text-white relative">
-                                <h3 class="text-lg lg:text-xl font-bold pr-8 leading-tight mb-3 lg:mb-4 h-12 lg:h-auto line-clamp-2">${pkg.name}</h3>
-                                <div class="flex items-end gap-2">
-                                    <div>
-                                        <span class="text-xl lg:text-2xl font-black">₹${pkg.price}</span>
-                                    </div>
-                                </div>
-                            </div>
-                            <div class="p-5 lg:p-6 flex flex-col flex-1">
-                                <div class="text-slate-500 mb-3 text-sm">
-                                    ${pkg.features ? `<ul class="list-disc pl-4 text-sm">${pkg.features.map(f=>`<li>${f}</li>`).join('')}</ul>` : ''}
-                                </div>
-                                <div class="flex gap-2 mt-auto">
-                                    <button onclick="openDetails('${pkg.id}')" class="flex-1 py-2.5 lg:py-3 border border-purple-100 text-purple-700 rounded-xl font-bold text-[9px] lg:text-[10px] uppercase tracking-widest hover:bg-purple-50 transition-all">Details</button>
-                                    <button onclick="addToCart('${pkg.id}')" id="btn-${pkg.id}" class="flex-[1.5] py-2.5 lg:py-3 bg-orange-400 text-white rounded-xl font-bold text-[9px] lg:text-[10px] uppercase tracking-widest shadow-lg shadow-orange-100 hover:bg-orange-500 active:scale-95 transition-all">Add to Cart</button>
-                                </div>
-                            </div>
-                        </div>
-                    `;
-                });
-                html += `</div></section>`;
+               html += `
+<section class="mb-8 w-full">
+    <div class="flex items-center justify-between mb-3">
+        <h3 class="text-xl font-bold text-slate-800">Other</h3>
+        <span class="text-xs text-slate-500">${uncategorized.length} items</span>
+    </div>
+    <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 xl:grid-cols-5 gap-5">
+`;
+
+uncategorized.forEach(pkg => {
+    html += `
+        <div class="checkup-card bg-white rounded-[2rem] lg:rounded-[2.5rem] overflow-hidden flex flex-col h-full shadow-sm border border-slate-50">
+            
+            <div class="bg-gradient-to-br ${pkg.color} p-4 lg:p-5 text-white relative">
+                <h3 class="text-base lg:text-lg font-semibold pr-6 leading-snug mb-3 line-clamp-2">
+                    ${pkg.name}
+                </h3>
+                <div>
+                    <span class="text-lg lg:text-xl font-bold">₹${pkg.price}</span>
+                </div>
+            </div>
+
+            <div class="p-4 lg:p-5 flex flex-col flex-1">
+                <div class="text-slate-500 mb-3 text-xs leading-relaxed">
+                    ${pkg.features 
+                        ? `<ul class="list-disc pl-4 space-y-1">${pkg.features.map(f=>`<li>${f}</li>`).join('')}</ul>` 
+                        : ''}
+                </div>
+
+                <div class="flex gap-2 mt-auto">
+                    <button onclick="openDetails('${pkg.id}')" 
+                        class="flex-1 py-2 border border-purple-100 text-purple-700 rounded-xl font-semibold text-[10px] uppercase tracking-wide hover:bg-purple-50 transition-all">
+                        Details
+                    </button>
+
+                    <button onclick="addToCart('${pkg.id}')" 
+                        id="btn-${pkg.id}" 
+                        class="flex-[1.5] py-2 bg-orange-400 text-white rounded-xl font-semibold text-[10px] uppercase tracking-wide shadow-lg shadow-orange-100 hover:bg-orange-500 active:scale-95 transition-all">
+                        Add to Cart
+                    </button>
+                </div>
+            </div>
+
+        </div>
+    `;
+});
+
+html += `</div></section>`;
             }
 
             container.innerHTML = html;
@@ -509,7 +558,7 @@
 
             // Update Total
             const total = cart.reduce((sum, item) => sum + item.price, 0);
-            document.getElementById('cart-total').innerText = `₹${total}`;
+            updateCartTotalWithCoupon(total);
         }
 
         function toggleCart() {
@@ -538,10 +587,76 @@
             });
             
             const total = cart.reduce((sum, item) => sum + item.price, 0);
-            msg += `\n*Total Amount: ₹${total}*\n\nPlease confirm my appointment.`;
+            const city = localStorage.getItem('selectedCity') || (document.getElementById('city-text-pc') && document.getElementById('city-text-pc').innerText) || (document.getElementById('city-text-mob') && document.getElementById('city-text-mob').innerText) || 'Not specified';
+            msg += `\n*Total Amount: ₹${total}*\nBooking City: ${city}\n\nPlease confirm my appointment.`;
 
             window.open(`https://wa.me/${WHATSAPP}?text=${encodeURIComponent(msg)}`);
         }
+
+        // --- Coupon logic ---
+        const COUPONS = {
+            'DIGI50': { type: 'percent', value: 10, label: '10% off' },
+            'FLAT100': { type: 'flat', value: 100, label: '₹100 off' },
+            'SAVE50': { type: 'flat', value: 50, label: '₹50 off' }
+        };
+        let appliedCoupon = null;
+
+        function computeDiscount(total) {
+            if (!appliedCoupon) return { discount: 0, finalTotal: total };
+            const c = COUPONS[appliedCoupon];
+            if (!c) return { discount: 0, finalTotal: total };
+            let discount = 0;
+            if (c.type === 'percent') discount = Math.round((c.value / 100) * total);
+            else discount = c.value;
+            const finalTotal = Math.max(0, total - discount);
+            return { discount, finalTotal };
+        }
+
+        function updateCartTotalWithCoupon(total) {
+            const originalEl = document.getElementById('cart-original-total');
+            const totalEl = document.getElementById('cart-total');
+            const feedback = document.getElementById('coupon-feedback');
+            const removeBtn = document.getElementById('remove-coupon-btn');
+            const applyBtn = document.getElementById('apply-coupon-btn');
+            const codeInput = document.getElementById('coupon-code');
+
+            if (appliedCoupon) {
+                const { discount, finalTotal } = computeDiscount(total);
+                originalEl.innerText = `₹${total}`;
+                originalEl.classList.remove('hidden');
+                totalEl.innerText = `₹${finalTotal}`;
+                feedback.classList.remove('hidden');
+                feedback.classList.add('text-green-600');
+                feedback.innerText = `${COUPONS[appliedCoupon].label} applied — saved ₹${discount}`;
+                removeBtn.classList.remove('hidden');
+                applyBtn.disabled = true;
+                codeInput.disabled = true;
+            } else {
+                originalEl.classList.add('hidden');
+                totalEl.innerText = `₹${total}`;
+                feedback.classList.add('hidden');
+                removeBtn.classList.add('hidden');
+                applyBtn.disabled = false;
+                codeInput.disabled = false;
+            }
+        }
+
+        document.addEventListener('DOMContentLoaded', () => {
+            const applyBtn = document.getElementById('apply-coupon-btn');
+            const removeBtn = document.getElementById('remove-coupon-btn');
+            if (applyBtn) applyBtn.addEventListener('click', () => {
+                const code = (document.getElementById('coupon-code').value || '').trim().toUpperCase();
+                if (!code) return alert('Enter coupon code');
+                if (!COUPONS[code]) return alert('Invalid coupon');
+                appliedCoupon = code;
+                updateCartUI();
+            });
+            if (removeBtn) removeBtn.addEventListener('click', () => {
+                appliedCoupon = null;
+                document.getElementById('coupon-code').value = '';
+                updateCartUI();
+            });
+        });
 
         init();
     </script>

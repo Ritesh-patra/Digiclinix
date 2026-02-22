@@ -119,6 +119,68 @@
 </head>
 
 <body class="bg-slate-50 lg:bg-white">
+    <!-- Paper/confetti animation container -->
+    <div id="paper-container" aria-hidden="true"></div>
+    <style>
+        /* Page-load colorful paper animation */
+        #paper-container { position: fixed; inset: 0; pointer-events: none; overflow: visible; z-index: 9999; }
+        #paper-container .paper { position: absolute; top: -10vh; width: 12px; height: 18px; border-radius: 2px; opacity: 0.95; transform-origin: center; }
+        @keyframes paperFall {
+            0% { transform: translateY(-20vh) translateX(0) rotate(0deg); opacity: 1; }
+            100% { transform: translateY(120vh) translateX(var(--tx, 0px)) rotate(var(--rot, 720deg)); opacity: 0.95; }
+        }
+        /* small variety tweaks */
+        #paper-container .paper { animation-name: paperFall; animation-timing-function: linear; animation-fill-mode: forwards; }
+    </style>
+
+    <div id="offerPopup hidden"
+        class="fixed inset-0 z-[300] hidden items-center justify-center p-4 bg-slate-900/70 backdrop-blur-md opacity-0 transition-opacity duration-500">
+
+        <div id="popupContent"
+            class="relative bg-white w-full max-w-md rounded-[3rem] overflow-hidden shadow-[0_30px_60px_-15px_rgba(76,29,149,0.3)] transform scale-90 transition-transform duration-500">
+
+            <button onclick="closeOfferPopup()"
+                class="absolute top-6 right-6 w-10 h-10 flex items-center justify-center rounded-full bg-black/10 text-slate-800 hover:bg-red-500 hover:text-white transition-all z-20">
+                <i class="fas fa-times"></i>
+            </button>
+
+            <div class="p-10 text-center bg-gradient-to-br from-[#6d28d9] to-[#4c1d95] text-white relative">
+                <div class="absolute top-0 left-0 w-full h-full opacity-10 pointer-events-none">
+                    <svg class="w-full h-full" fill="currentColor" viewBox="0 0 100 100">
+                        <circle cx="50" cy="50" r="40" stroke="white" stroke-width="1" fill="none" />
+                        <circle cx="50" cy="50" r="30" stroke="white" stroke-width="0.5" fill="none" />
+                    </svg>
+                </div>
+
+                <div class="relative z-10">
+                    <span
+                        class="bg-orange-400 text-white text-[10px] px-4 py-1.5 rounded-full font-black uppercase tracking-widest mb-4 inline-block shadow-lg">Limited
+                        Time Offer</span>
+                    <h2 class="text-4xl lg:text-5xl font-black italic leading-none mb-2">FLAT 10% <span
+                            class="text-purple-200 uppercase text-2xl block not-italic mt-2">Cashback</span></h2>
+                </div>
+            </div>
+
+            <div class="p-10 text-center bg-[#fcfaff]">
+                <p class="text-slate-600 font-medium mb-8 leading-relaxed">
+                    Get 10% OFF on every individual health checkup booking. Use the code below to avail the discount.
+                </p>
+                <div class="bg-white border-2 border-dashed border-purple-200 p-4 rounded-2xl mb-8 group cursor-pointer active:scale-95 transition-transform"
+                    onclick="copyCoupon()">
+                    <p class="text-[10px] font-black text-slate-400 uppercase tracking-widest mb-1">Click to copy code
+                    </p>
+                    <h3 id="promoCode" class="text-2xl font-black text-purple-700 tracking-widest">DIGI10</h3>
+                </div>
+
+                <button onclick="closeOfferPopup()"
+                    class="w-full py-5 bg-purple-600 hover:bg-purple-700 text-white rounded-[2rem] font-black uppercase tracking-widest shadow-xl shadow-purple-100 transition-all">
+                    Claim Offer Now
+                </button>
+
+                <p class="text-[10px] text-slate-400 mt-4">*Terms and conditions apply. Valid for new users only.</p>
+            </div>
+        </div>
+    </div>
 
     <header
         class="bg-deep-purple lg:bg-white text-white lg:text-slate-800 sticky top-0 z-50 rounded-b-[2.5rem] lg:rounded-none shadow-lg lg:shadow-sm transition-all duration-300">
@@ -255,55 +317,239 @@
     <main class="max-w-7xl mx-auto px-5 lg:px-12 py-8">
         <div class="lg:flex lg:flex-row-reverse lg:items-center lg:gap-16 lg:py-12">
             <div
-                class="relative overflow-hidden rounded-[2.5rem] h-64 lg:h-[450px] lg:flex-1 shadow-[0_20px_50px_rgba(139,92,246,0.15)] mt-5 lg:mt-0 group border border-purple-100">
+                class="relative overflow-hidden rounded-[2.5rem] h-[400px] lg:h-[550px] lg:flex-1 shadow-[0_20px_50px_rgba(76,29,149,0.2)] mt-5 lg:mt-0 group border border-purple-200/30">
+
                 <div id="slider" class="flex transition-transform duration-1000 cubic-bezier(0.23, 1, 0.32, 1) h-full">
-                    <div class="min-w-full promo-gradient p-8 lg:p-20 flex flex-col justify-center text-white relative">
+
+                    <div
+                        class="min-w-full relative overflow-hidden group bg-gradient-to-br from-[#2e1065] via-[#4c1d95] to-[#1e0b4b] flex flex-col items-center justify-center p-6 lg:p-8 border-y-2 border-purple-500/30">
+
                         <div
-                            class="hidden lg:block absolute right-10 top-1/2 -translate-y-1/2 opacity-10 rotate-12 transition-transform group-hover:scale-110 duration-700">
-                            <i class="fas fa-dna text-[250px]"></i>
+                            class="absolute top-0 right-0 bg-rose-500 text-white px-4 py-1.5 rounded-bl-2xl font-black text-xs lg:text-sm shadow-[0_0_20px_rgba(244,63,94,0.5)] animate-pulse z-20 flex items-center gap-1.5">
+                            <i class="fas fa-fire text-yellow-300"></i> 10% OFF
                         </div>
-                        <div class="relative z-10">
+
+                        <div
+                            class="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 w-[300px] h-[300px] sm:w-[500px] sm:h-[500px] bg-fuchsia-600/30 rounded-full mix-blend-screen filter blur-[80px] animate-pulse pointer-events-none">
+                        </div>
+
+                        <svg class="absolute -left-10 bottom-0 w-64 h-64 text-purple-400 opacity-10 -rotate-12 group-hover:scale-110 group-hover:rotate-0 transition-transform duration-1000 pointer-events-none"
+                            fill="currentColor" viewBox="0 0 24 24">
+                            <path
+                                d="M11 2v4c0 1.1-.9 2-2 2H5v4h4c1.1 0 2 .9 2 2v4h2v-4c0-1.1.9-2 2-2h4v-4h-4c-1.1 0-2-.9-2-2V2h-2z" />
+                        </svg>
+
+                        <div class="relative z-10 text-center flex flex-col items-center w-full max-w-xl">
+
                             <span
-                                class="bg-white/20 backdrop-blur-md px-4 py-1 rounded-full text-[10px] lg:text-xs font-bold tracking-widest uppercase mb-4 inline-block">Premium
-                                Pass</span>
-                            <h2 class="text-4xl lg:text-6xl font-black italic leading-none">DIGICLINIX <br><span
-                                    class="text-5xl lg:text-8xl text-purple-900/20">one</span></h2>
-                            <p class="mt-4 lg:mt-6 text-sm lg:text-xl font-medium opacity-90 max-w-xs">Smart health
-                                management for a smarter you.</p>
-                            <div class="mt-6 lg:mt-10 flex items-center gap-4">
-                                <div class="flex flex-col">
-                                    <span class="text-xs lg:text-sm line-through opacity-50">₹14,999</span>
-                                    <span class="text-3xl lg:text-5xl font-black">₹2,999</span>
+                                class="bg-amber-400/10 text-amber-400 border border-amber-400/50 px-3 py-1 rounded-full text-[9px] sm:text-[10px] font-black tracking-[0.1em] uppercase mb-3 shadow-[0_0_15px_rgba(251,191,36,0.2)] backdrop-blur-sm flex items-center justify-center gap-1.5">
+                                <i class="fas fa-hourglass-half"></i> Limited Time Offer
+                            </span>
+
+                            <h2
+                                class="text-3xl lg:text-5xl font-black italic text-white leading-tight mb-2 drop-shadow-lg">
+                                DIGICLINIX <span
+                                    class="text-transparent bg-clip-text bg-gradient-to-r from-amber-300 to-orange-500">ONE</span>
+                            </h2>
+
+                            <p class="text-purple-200 text-xs lg:text-sm mb-5 font-medium leading-snug">
+                                Unlock 1 Year of Premium Health Benefits.<br>
+                                <span
+                                    class="text-rose-400 font-bold bg-rose-500/10 px-2 py-0.5 rounded inline-flex items-center gap-1 mt-1.5 text-[10px] sm:text-xs">
+                                    <i class="fas fa-bolt"></i> Hurry, valid for first 100 users!
+                                </span>
+                            </p>
+
+                            <div
+                                class="bg-white/10 backdrop-blur-md border border-white/20 p-4 sm:p-5 rounded-2xl w-full max-w-xs mb-6 shadow-2xl transform transition-transform duration-500 group-hover:scale-105">
+                                <p
+                                    class="text-purple-300 text-[9px] font-black uppercase tracking-[0.1em] mb-1.5 flex items-center justify-center gap-1">
+                                    <i class="fas fa-star text-amber-400"></i> Flash Sale Price
+                                </p>
+                                <div class="flex items-center justify-center gap-3 mb-2">
+                                    <span
+                                        class="text-xl sm:text-2xl line-through text-white/50 font-bold">₹14,999</span>
+                                    <span
+                                        class="text-4xl sm:text-5xl font-black text-white drop-shadow-[0_0_10px_rgba(255,255,255,0.3)]">₹2,999</span>
                                 </div>
-                                <button
-                                    class="bg-white text-purple-700 px-6 py-2 lg:px-8 lg:py-3 rounded-xl font-bold text-sm lg:text-base shadow-xl hover:bg-purple-50 transition-all">Explore</button>
+
+                                <p
+                                    class="text-emerald-400 font-black text-[9px] sm:text-[10px] uppercase tracking-widest bg-emerald-400/10 py-1.5 rounded-lg border border-emerald-400/20 flex items-center justify-center gap-1.5">
+                                    <i class="fas fa-tags text-emerald-400 text-xs"></i> You Save ₹12,000!
+                                </p>
                             </div>
+
+                            <button
+                                class="relative overflow-hidden bg-gradient-to-r from-orange-500 to-rose-600 text-white px-8 py-3 sm:px-10 sm:py-3.5 rounded-full font-black text-xs sm:text-sm shadow-[0_15px_30px_rgba(244,63,94,0.4)] hover:scale-105 transition-all uppercase tracking-widest group/btn flex items-center gap-2">
+                                <span class="relative z-10 flex items-center gap-2">
+                                    Grab The Deal <i class="fas fa-arrow-right"></i>
+                                </span>
+                                <div
+                                    class="absolute inset-0 bg-white/20 -translate-x-full group-hover/btn:translate-x-full transition-transform duration-700 skew-x-12">
+                                </div>
+                            </button>
                         </div>
                     </div>
-                    <div class="min-w-full bg-deep-purple p-8 lg:p-20 flex flex-col justify-center text-white">
-                        <h2 class="text-3xl lg:text-5xl font-extrabold leading-tight">Full Body Checkups <br> <span
-                                class="text-accent-purple italic">start @ ₹1599</span></h2>
-                        <p class="text-accent-purple/80 text-sm lg:text-xl font-medium mt-4 flex items-center gap-2">
-                            <i class="fas fa-bolt"></i> Reports in 6 hours
-                        </p>
-                        <button
-                            class="mt-8 lg:mt-12 bg-accent-purple text-white py-4 px-10 lg:px-14 rounded-2xl w-max font-extrabold shadow-[0_10px_30px_rgba(139,92,246,0.4)] hover:scale-105 hover:shadow-purple-500/50 transition-all">Book
-                            Now</button>
+                    <div
+                        class="min-w-full relative overflow-hidden group bg-gradient-to-tr from-[#1e0b4b] to-[#2e1065] flex flex-col items-center justify-center p-6 sm:p-8 lg:p-12 w-full box-border">
+
+                        <div
+                            class="absolute bottom-0 left-0 w-48 h-48 sm:w-96 sm:h-96 bg-[#c4b5fd] rounded-full mix-blend-overlay filter blur-[80px] sm:blur-[120px] opacity-10 pointer-events-none">
+                        </div>
+
+                        <svg class="absolute -right-5 sm:right-0 top-1/2 -translate-y-1/2 w-48 h-48 sm:w-80 sm:h-80 text-[#c4b5fd] opacity-[0.03] sm:opacity-5 group-hover:rotate-6 transition-transform duration-1000 pointer-events-none"
+                            fill="currentColor" viewBox="0 0 24 24">
+                            <path
+                                d="M12 21.35l-1.45-1.32C5.4 15.36 2 12.28 2 8.5 2 5.42 4.42 3 7.5 3c1.74 0 3.41.81 4.5 2.09C13.09 3.81 14.76 3 16.5 3 19.58 3 22 5.42 22 8.5c0 3.78-3.4 6.86-8.55 11.54L12 21.35z" />
+                        </svg>
+
+                        <div class="relative z-10 text-center flex flex-col items-center max-w-full sm:max-w-2xl px-2">
+
+                            <span
+                                class="bg-[#faf5ff]/10 text-[#faf5ff] px-4 py-1.5 sm:px-5 sm:py-2 rounded-full text-[9px] sm:text-xs font-black tracking-[0.15em] uppercase mb-4 sm:mb-6 border border-[#faf5ff]/20 flex items-center justify-center gap-1.5 sm:gap-2 backdrop-blur-sm max-w-full overflow-hidden text-ellipsis whitespace-nowrap">
+                                <i class="fas fa-handshake text-orange-400 text-xs sm:text-sm"></i> Powered by Orange
+                                Health
+                            </span>
+
+                            <h2
+                                class="text-3xl sm:text-4xl lg:text-5xl font-black text-[#faf5ff] leading-tight mb-3 sm:mb-4 drop-shadow-md">
+                                Full Body Checkups
+                            </h2>
+
+                            <p
+                                class="text-purple-200 font-medium text-xs sm:text-sm lg:text-base mb-5 sm:mb-6 max-w-lg leading-relaxed px-2">
+                                DIGICLINIX has partnered with <span class="text-orange-400 font-bold">Orange
+                                    Health</span> to bring you lightning-fast 60-min home collection & NABL-certified
+                                accuracy.
+                            </p>
+
+                            <p
+                                class="text-[#a78bfa] font-bold text-[10px] sm:text-xs lg:text-sm mb-6 sm:mb-8 flex items-center gap-2 bg-purple-900/40 px-3 sm:px-4 py-2 sm:py-2.5 rounded-xl border border-purple-500/30">
+                                <i class="fas fa-stopwatch text-orange-400"></i>
+                                Reports ready in just 6 hours
+                            </p>
+
+                            <div class="flex items-baseline gap-2 sm:gap-3 mb-6 sm:mb-8">
+                                <span class="text-sm sm:text-lg text-[#faf5ff]/70 font-bold">Starts @</span>
+                                <span
+                                    class="text-4xl sm:text-5xl font-black text-[#a78bfa] drop-shadow-lg">₹1,599</span>
+                            </div>
+
+                            <button
+                                class="bg-[#faf5ff] text-[#2e1065] px-8 py-3.5 sm:px-10 sm:py-4 rounded-full font-black text-xs sm:text-sm lg:text-base shadow-[0_10px_30px_rgba(250,245,255,0.2)] hover:bg-[#f3e8ff] hover:scale-105 active:scale-95 transition-all uppercase tracking-widest flex items-center gap-2">
+                                Explore Tests <i class="fas fa-arrow-right"></i>
+                            </button>
+                        </div>
+                    </div>
+
+                    <div
+                        class="min-w-full relative overflow-hidden group bg-gradient-to-bl from-[#2e1065] via-[#240a4a] to-[#1e0b4b] flex flex-col items-center justify-center p-5 lg:p-10">
+
+                        <div
+                            class="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 w-[250px] h-[250px] sm:w-[500px] sm:h-[500px] bg-[#7c3aed] rounded-full mix-blend-overlay filter blur-[100px] opacity-20 pointer-events-none">
+                        </div>
+
+                        <svg class="absolute -right-5 -bottom-5 w-48 h-48 sm:w-96 sm:h-96 text-[#7c3aed] opacity-[0.05] group-hover:scale-105 transition-transform duration-1000 pointer-events-none"
+                            fill="currentColor" viewBox="0 0 24 24">
+                            <path
+                                d="M12 1L3 5v6c0 5.55 3.84 10.74 9 12 5.16-1.26 9-6.45 9-12V5l-9-4zm0 10.99h7c-.53 4.12-3.28 7.79-7 8.94V12H5V6.3l7-3.11v8.8z" />
+                        </svg>
+
+                        <div class="relative z-10 text-center flex flex-col items-center w-full max-w-2xl">
+
+                            <span
+                                class="bg-[#7c3aed]/20 text-[#a78bfa] px-3 py-1.5 sm:px-5 sm:py-2 rounded-full text-[9px] sm:text-xs font-black tracking-widest uppercase mb-4 sm:mb-6 border border-[#7c3aed]/30 flex items-center gap-1.5 backdrop-blur-sm">
+                                <i class="fas fa-shield-check"></i> Family Protection
+                            </span>
+
+                            <h2
+                                class="text-4xl sm:text-5xl lg:text-7xl font-black text-[#faf5ff] leading-none mb-1 sm:mb-2 drop-shadow-xl tracking-tight">
+                                AHA
+                            </h2>
+                            <h3
+                                class="text-xs sm:text-xl lg:text-2xl text-emerald-400 font-bold mb-4 sm:mb-6 tracking-wide uppercase">
+                                Annual Health Assurance
+                            </h3>
+
+                            <p
+                                class="text-[#faf5ff]/90 text-xs sm:text-base lg:text-lg mb-6 sm:mb-8 max-w-md leading-relaxed font-medium px-2">
+                                Premium family diagnostics at <span class="text-amber-400 font-bold">unbeatable
+                                    prices</span> & <span class="text-amber-400 font-bold">lightning-fast
+                                    reports</span>.
+                            </p>
+
+                            <div class="flex flex-col sm:flex-row w-full justify-center gap-2 sm:gap-4 mb-8">
+                                <div
+                                    class="bg-white/10 backdrop-blur-md border border-white/20 px-4 py-2.5 rounded-xl flex items-center justify-center gap-2 text-white text-[11px] sm:text-sm font-bold shadow-lg">
+                                    <i class="fas fa-bolt text-yellow-400 text-sm"></i>
+                                    <span>Reports in <span class="text-yellow-400">6 Hrs</span></span>
+                                </div>
+
+                                <div
+                                    class="bg-white/10 backdrop-blur-md border border-white/20 px-4 py-2.5 rounded-xl flex items-center justify-center gap-2 text-white text-[11px] sm:text-sm font-bold shadow-lg">
+                                    <i class="fas fa-piggy-bank text-emerald-400 text-sm"></i>
+                                    <span>Save <span class="text-emerald-400">Up To 50%</span></span>
+                                </div>
+
+                                <div
+                                    class="bg-white/10 backdrop-blur-md border border-white/20 px-4 py-2.5 rounded-xl flex items-center justify-center gap-2 text-white text-[11px] sm:text-sm font-bold shadow-lg">
+                                    <i class="fas fa-users text-purple-400 text-sm"></i>
+                                    <span>Covers <span class="text-purple-400">4 Members</span></span>
+                                </div>
+                            </div>
+
+                            <button
+                                class="bg-[#7c3aed] text-white px-8 py-3.5 sm:px-12 sm:py-5 rounded-full font-black text-[10px] sm:text-base shadow-[0_10px_20px_rgba(124,58,237,0.3)] hover:bg-[#6d28d9] hover:scale-105 transition-all uppercase tracking-widest flex items-center gap-2">
+                                Secure Family <i class="fas fa-arrow-right"></i>
+                            </button>
+                        </div>
+                    </div>
+
+                    <div
+                        class="min-w-full relative overflow-hidden group bg-[#2e1065] flex flex-col items-center justify-center p-8">
+                        <div class="absolute inset-0 opacity-10"
+                            style="background-image: radial-gradient(#a78bfa 1px, transparent 1px); background-size: 30px 30px;">
+                        </div>
+
+                        <div class="relative z-10 text-center flex flex-col items-center">
+                            <span
+                                class="bg-[#faf5ff]/10 text-[#faf5ff] px-5 py-1.5 rounded-full text-xs font-bold tracking-widest uppercase mb-6 border border-[#faf5ff]/20">Elderly
+                                Care</span>
+                            <h2 class="text-3xl lg:text-5xl font-black text-[#faf5ff] leading-tight mb-4">Senior
+                                Citizen<br>Packages</h2>
+                            <p class="text-[#a78bfa] font-medium text-lg lg:text-xl mb-8">Specialized home collection
+                                available</p>
+                            <div class="flex items-baseline gap-3 mb-8">
+                                <span class="text-lg line-through text-[#faf5ff]/50">₹4,999</span>
+                                <span class="text-5xl font-black text-[#a78bfa]">₹1,299</span>
+                            </div>
+                            <button
+                                class="bg-[#faf5ff] text-[#2e1065] px-10 py-4 rounded-2xl font-black text-lg shadow-[0_10px_30px_rgba(250,245,255,0.2)] hover:bg-[#f3e8ff] hover:-translate-y-1 transition-all uppercase tracking-widest">
+                                Book Now
+                            </button>
+                        </div>
                     </div>
                 </div>
 
-                <div class="absolute bottom-6 left-1/2 -translate-x-1/2 flex items-center gap-4 z-20">
-                    <div
-                        class="bg-black/40 backdrop-blur-xl px-4 py-1.5 rounded-full text-[10px] text-white font-black tracking-widest border border-white/10">
-                        <span id="slide-count">1</span> / 2
+                <div hidden class="absolute bottom-6 left-1/2 -translate-x-1/2 flex flex-col items-center gap-4 z-20">
+                    <div class="flex gap-3 hidden">
+                        <div
+                            class="slider-dot active-dot w-2 h-2 rounded-full bg-[#7c3aed] cursor-pointer transition-all duration-300 transform scale-125 shadow-[0_0_10px_rgba(124,58,237,0.5)]">
+                        </div>
+                        <div
+                            class="slider-dot w-2 h-2 rounded-full bg-[#faf5ff]/30 hover:bg-[#faf5ff]/60 cursor-pointer transition-all duration-300">
+                        </div>
+                        <div
+                            class="slider-dot w-2 h-2 rounded-full bg-[#faf5ff]/30 hover:bg-[#faf5ff]/60 cursor-pointer transition-all duration-300">
+                        </div>
+                        <div
+                            class="slider-dot w-2 h-2 rounded-full bg-[#faf5ff]/30 hover:bg-[#faf5ff]/60 cursor-pointer transition-all duration-300">
+                        </div>
                     </div>
-                    <div class="flex gap-2.5">
-                        <div
-                            class="slider-dot active-dot w-2 h-2 rounded-full bg-white/40 cursor-pointer transition-all duration-300">
-                        </div>
-                        <div
-                            class="slider-dot w-2 h-2 rounded-full bg-white/40 cursor-pointer transition-all duration-300">
-                        </div>
+
+                    <div
+                        class="bg-[#1e0b4b]/40 backdrop-blur-md px-4 py-1.5 rounded-full text-[10px] text-[#faf5ff] font-black tracking-widest border border-[#faf5ff]/10">
+                        <span id="slide-count">1</span> / 4
                     </div>
                 </div>
             </div>
@@ -328,7 +574,7 @@
                     </div>
                 </div>
 
-                <a href="labtesting.html" class="flex gap-5">
+                <a href="viewall.html" class="flex gap-5">
                     <div
                         class="flex-1 bg-gradient-to-br from-orange-400 to-orange-600 p-6 rounded-3xl text-white font-black text-center cursor-pointer shadow-[0_10px_20px_rgba(249,115,22,0.2)] hover:shadow-orange-500/40 hover:-translate-y-1.5 transition-all">
                         Book Lab Tests
@@ -344,7 +590,7 @@
 
 
         <div class="grid grid-cols-2 gap-5 mt-12 lg:hidden">
-            <a href="labtesting.html"
+            <a href="viewall.html"
                 class="bg-gradient-to-br from-purple-50 to-white p-6 rounded-[2.5rem] flex flex-col items-center justify-between h-52 border border-purple-100 shadow-[0_10px_25px_rgba(139,92,246,0.08)] active:scale-95 transition-all cursor-pointer group">
 
                 <span class="font-black text-purple-900 text-xl leading-tight text-center">
@@ -410,24 +656,30 @@
             </div>
         </div>
 
-        <!-- <div id="locModal"
+        <div id="locModal"
             class="fixed inset-0 bg-black/60 backdrop-blur-sm z-[100] hidden items-end lg:items-center lg:justify-center">
             <div
-                class="bg-white w-full lg:max-w-md rounded-t-[3rem] lg:rounded-[2rem] p-10 animate-slide-up shadow-2xl">
-                <div class="w-12 h-1.5 bg-slate-200 rounded-full mx-auto mb-6 lg:hidden"></div>
-                <h3 class="text-2xl font-extrabold text-deep-purple mb-6">Select City</h3>
+                class="bg-white w-full lg:max-w-md rounded-t-[3rem] lg:rounded-[2rem] p-6 lg:p-10 animate-slide-up shadow-2xl">
+                <div class="w-12 h-1.5 bg-slate-200 rounded-full mx-auto mb-4 lg:hidden"></div>
+                <h3 class="text-2xl font-extrabold text-deep-purple mb-4">Select City</h3>
                 <div class="space-y-3">
                     <button onclick="updateCity('Hyderabad')"
-                        class="w-full text-left p-5 bg-purple-50 rounded-2xl font-bold text-deep-purple border-2 border-purple-200 flex justify-between items-center">
+                        class="w-full text-left p-4 bg-purple-50 rounded-2xl font-bold text-deep-purple border-2 border-purple-200 flex justify-between items-center">
                         Hyderabad <i class="fas fa-check-circle text-purple-600"></i>
                     </button>
-                    <button onclick="updateCity('Bhubaneswar')"
-                        class="w-full text-left p-5 border border-slate-100 rounded-2xl font-bold hover:bg-slate-50">Bhubaneswar</button>
                     <button onclick="updateCity('Bangalore')"
-                        class="w-full text-left p-5 border border-slate-100 rounded-2xl font-bold hover:bg-slate-50">Bangalore</button>
+                        class="w-full text-left p-4 border border-slate-100 rounded-2xl font-bold hover:bg-slate-50">Bangalore</button>
+                    <button onclick="updateCity('Mumbai')"
+                        class="w-full text-left p-4 border border-slate-100 rounded-2xl font-bold hover:bg-slate-50">Mumbai</button>
+                    <button onclick="updateCity('Delhi')"
+                        class="w-full text-left p-4 border border-slate-100 rounded-2xl font-bold hover:bg-slate-50">Delhi</button>
+                    <button onclick="updateCity('Noida')"
+                        class="w-full text-left p-4 border border-slate-100 rounded-2xl font-bold hover:bg-slate-50">Noida</button>
+                    <button onclick="updateCity('Gurugram')"
+                        class="w-full text-left p-4 border border-slate-100 rounded-2xl font-bold hover:bg-slate-50">Gurugram</button>
                 </div>
             </div>
-        </div> -->
+        </div>
 
         <!-- Process of testing card -->
         <section class="max-w-7xl mx-auto px-4 py-12 lg:py-20 relative overflow-hidden">
@@ -903,9 +1155,122 @@
             </div>
         </section>
 
+        <section class="max-w-7xl mx-auto px-5 lg:px-12 py-16 relative overflow-hidden">
+            <div
+                class="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 w-[800px] h-[800px] bg-purple-100/50 rounded-full blur-[120px] pointer-events-none -z-10">
+            </div>
+
+            <div
+                class="bg-white rounded-[2.5rem] lg:rounded-[3.5rem] overflow-hidden shadow-[0_20px_50px_rgba(0,0,0,0.05)] border border-purple-50 flex flex-col lg:flex-row">
+
+                <div
+                    class="lg:w-5/12 bg-gradient-to-br from-purple-700 via-indigo-800 to-slate-900 p-10 lg:p-14 text-white relative flex flex-col justify-center">
+                    <i
+                        class="fas fa-users-medical absolute -bottom-10 -right-10 text-[12rem] text-white opacity-5 rotate-12 pointer-events-none"></i>
+
+                    <span
+                        class="bg-white/20 backdrop-blur-md text-white text-[10px] font-black uppercase tracking-widest px-3 py-1.5 rounded-xl inline-block w-max mb-6 border border-white/20">
+                        Partner With Us
+                    </span>
+
+                    <h2 class="text-3xl lg:text-5xl font-black leading-tight mb-6">
+                        Organize a <br> <span class="text-orange-400 italic">Health Camp</span>
+                    </h2>
+
+                    <p class="text-purple-100/80 font-medium text-sm lg:text-base leading-relaxed mb-8">
+                        Exclusive bulk diagnostic packages designed for corporate offices, residential societies, and
+                        NGOs. Experience seamless on-site sample collection with our expert phlebotomist team.
+                    </p>
+
+                    <div
+                        class="flex items-center gap-4 bg-white/10 p-4 rounded-2xl border border-white/10 backdrop-blur-sm">
+                        <div
+                            class="w-12 h-12 bg-orange-400 rounded-xl flex items-center justify-center text-xl font-black shadow-lg">
+                            <i class="fas fa-percent"></i>
+                        </div>
+                        <div>
+                            <p class="text-[10px] font-black uppercase tracking-widest text-orange-300">Bulk Offer</p>
+                            <p class="font-bold text-sm">Up to 40% Extra Discount</p>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="lg:w-7/12 p-10 lg:p-14 bg-white flex flex-col justify-center">
+                    <h3 class="text-xl font-black text-slate-800 mb-8">Why Choose Our Bulk Services?</h3>
+
+                    <div class="grid grid-cols-1 sm:grid-cols-2 gap-6 mb-10">
+                        <div class="flex items-start gap-4">
+                            <div
+                                class="w-10 h-10 rounded-xl bg-purple-50 text-purple-600 flex items-center justify-center flex-shrink-0 text-lg">
+                                <i class="fas fa-building"></i>
+                            </div>
+                            <div>
+                                <h4 class="font-bold text-slate-700 text-sm">On-Site Collection</h4>
+                                <p class="text-xs text-slate-500 mt-1">Hassle-free setup at your office or society
+                                    campus.</p>
+                            </div>
+                        </div>
+                        <div class="flex items-start gap-4">
+                            <div
+                                class="w-10 h-10 rounded-xl bg-emerald-50 text-emerald-600 flex items-center justify-center flex-shrink-0 text-lg">
+                                <i class="fas fa-file-medical-alt"></i>
+                            </div>
+                            <div>
+                                <h4 class="font-bold text-slate-700 text-sm">Smart Corporate Reports</h4>
+                                <p class="text-xs text-slate-500 mt-1">Detailed health analytics for HRs & Society
+                                    Admins.</p>
+                            </div>
+                        </div>
+                        <div class="flex items-start gap-4">
+                            <div
+                                class="w-10 h-10 rounded-xl bg-orange-50 text-orange-500 flex items-center justify-center flex-shrink-0 text-lg">
+                                <i class="fas fa-user-md"></i>
+                            </div>
+                            <div>
+                                <h4 class="font-bold text-slate-700 text-sm">Free Doctor Consult</h4>
+                                <p class="text-xs text-slate-500 mt-1">Post-report tele-consultation for all attendees.
+                                </p>
+                            </div>
+                        </div>
+                        <div class="flex items-start gap-4">
+                            <div
+                                class="w-10 h-10 rounded-xl bg-blue-50 text-blue-500 flex items-center justify-center flex-shrink-0 text-lg">
+                                <i class="fas fa-boxes"></i>
+                            </div>
+                            <div>
+                                <h4 class="font-bold text-slate-700 text-sm">Custom Packages</h4>
+                                <p class="text-xs text-slate-500 mt-1">Tailor-made tests starting from just ₹299/person.
+                                </p>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="mt-auto border-t border-slate-100 pt-8 flex flex-col sm:flex-row items-center gap-4">
+                        <button onclick="bookCampWA()"
+                            class="w-full sm:w-auto px-8 py-4 bg-slate-900 text-white rounded-2xl font-black text-xs uppercase tracking-widest shadow-xl shadow-slate-200 hover:bg-purple-700 transition-all flex items-center justify-center gap-3">
+                            <i class="fab fa-whatsapp text-emerald-400 text-lg"></i> Get a Custom Quote
+                        </button>
+                        <p
+                            class="text-[10px] font-bold text-slate-400 uppercase tracking-widest text-center sm:text-left">
+                            *Minimum 15 persons required
+                        </p>
+                    </div>
+                </div>
+
+            </div>
+        </section>
+
+        <script>
+            function bookCampWA() {
+                const WHATSAPP = "9348148310";
+                const msg = "Hello DIGICLINIXHealth! 🏢🏥\n\nI want to organize a Bulk Health Checkup Camp for my Society/Office.\n\nPlease share the custom package details and bulk discount pricing.";
+                window.open(`https://wa.me/${WHATSAPP}?text=${encodeURIComponent(msg)}`);
+            }
+        </script>
+
         <!-- cartslider -->
         <div id="cartSidebar"
-            class="fixed top-0 right-0 h-full w-80 bg-white shadow-2xl z-[100] transform translate-x-full transition-transform duration-300 flex flex-col">
+            class="fixed top-0 right-0 h-full w-full bg-white shadow-2xl z-[100] transform translate-x-full transition-transform duration-300 flex flex-col">
             <div class="p-6 bg-deep-purple text-white flex justify-between items-center">
                 <h3 class="font-black">Your Cart</h3>
                 <button onclick="toggleCart()" class="text-white"><i class="fas fa-times"></i></button>
@@ -915,8 +1280,22 @@
             <div class="p-6 border-t">
                 <div class="flex justify-between font-bold mb-4">
                     <span>Total:</span>
-                    <span id="cartTotal">₹0</span>
+                    <div class="text-right">
+                        <div id="cart-original-total" class="text-sm text-slate-500 line-through mr-2 hidden"></div>
+                        <span id="cartTotal">₹0</span>
+                    </div>
                 </div>
+                <div class="flex gap-2 mb-3 items-center">
+                    <input id="coupon-code" type="text" placeholder="Apply coupon code"
+                        class="flex-1 px-3 py-2 rounded-xl border border-slate-100" />
+                    <button id="apply-coupon-btn"
+                        class="px-3 py-2 bg-purple-600 text-white rounded-xl font-bold">Apply</button>
+                    <button id="remove-coupon-btn"
+                        class="px-2 py-2 bg-slate-100 rounded-xl hidden flex items-center justify-center">
+                        <i class="fa-solid fa-xmark text-red-500"></i>
+                    </button>
+                </div>
+                <p id="coupon-feedback" class="text-sm text-green-600 mb-3 hidden"></p>
                 <button onclick="checkoutWhatsApp()"
                     class="w-full py-4 bg-green-500 text-white rounded-xl font-bold flex items-center justify-center gap-2">
                     <i class="fab fa-whatsapp"></i> Book via WhatsApp
@@ -1022,6 +1401,8 @@
             </div>
         </section>
     </main>
+
+
     <footer class="bg-purple-200 backdrop-blur-2xl border-t border-purple-50 pt-20 pb-10 overflow-hidden relative">
         <div
             class="absolute top-0 right-0 w-96 h-96 bg-purple-50 rounded-full blur-3xl opacity-50 -translate-y-1/2 translate-x-1/2">
@@ -1145,6 +1526,155 @@
         </div>
     </footer>
 
+
+    <!-- Details Modal -->
+    <div id="detailsModal"
+        class="fixed inset-0 z-[200] hidden items-center justify-center p-4 bg-slate-900/60 backdrop-blur-sm">
+        <div id="modalContent"
+            class="bg-[#fcfaff] w-full max-w-lg rounded-[2.5rem] overflow-hidden shadow-[0_20px_50px_rgba(76,29,149,0.2)] transition-transform scale-95 border border-purple-100">
+
+            <div id="m-header" class="p-8 lg:p-10 text-white relative bg-gradient-to-br from-[#6d28d9] to-[#4c1d95]">
+                <div
+                    class="absolute top-0 right-0 w-32 h-32 bg-purple-400 rounded-full mix-blend-overlay filter blur-[40px] opacity-30">
+                </div>
+
+                <button onclick="closeDetailsModal()"
+                    class="absolute top-6 right-6 w-8 h-8 flex items-center justify-center rounded-full bg-white/10 text-white/80 hover:bg-white/20 hover:text-white transition-all">
+                    <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M6 18L18 6M6 6l12 12">
+                        </path>
+                    </svg>
+                </button>
+
+                <span
+                    class="inline-block bg-white/20 text-white border border-white/30 text-[10px] px-4 py-1.5 rounded-full font-black uppercase tracking-widest mb-4 backdrop-blur-md">Service
+                    Details</span>
+                <h3 id="m-title" class="text-2xl lg:text-3xl font-black leading-tight tracking-tight">Service Title</h3>
+            </div>
+
+            <div class="p-8 lg:p-10">
+                <p id="m-desc" class="text-sm text-slate-600 mb-8 leading-relaxed font-medium">Service description goes
+                    here. It provides a brief overview of what the checkup includes.</p>
+
+                <div
+                    class="flex items-center justify-between mb-8 p-5 bg-white rounded-3xl border border-purple-100 shadow-sm">
+                    <div class="flex items-center gap-4">
+                        <div
+                            class="w-12 h-12 rounded-2xl bg-purple-50 border border-purple-100 flex items-center justify-center text-purple-600 shrink-0">
+                            <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
+                                    d="M9 5H7a2 2 0 00-2 2v12a2 2 0 002 2h10a2 2 0 002-2V7a2 2 0 00-2-2h-2M9 5a2 2 0 002 2h2a2 2 0 002-2M9 5a2 2 0 012-2h2a2 2 0 012 2">
+                                </path>
+                            </svg>
+                        </div>
+                        <div>
+                            <p class="text-[10px] font-black text-slate-400 uppercase tracking-widest mb-0.5">Parameters
+                            </p>
+                            <p id="m-params" class="font-bold text-slate-800 text-lg leading-none">--</p>
+                        </div>
+                    </div>
+                    <div class="text-right border-l border-slate-100 pl-5">
+                        <p class="text-[10px] font-black text-slate-400 uppercase tracking-widest mb-0.5">Total Price
+                        </p>
+                        <p id="m-price" class="font-black text-3xl text-purple-700 leading-none tracking-tighter">₹0</p>
+                    </div>
+                </div>
+
+                <div class="flex gap-4 mt-4">
+                    <button onclick="closeDetailsModal()"
+                        class="px-6 py-4 border-2 border-slate-100 text-slate-500 rounded-2xl font-bold text-[11px] uppercase tracking-widest hover:bg-slate-50 hover:text-purple-600 transition-all">
+                        Cancel
+                    </button>
+                    <button id="m-add-btn"
+                        class="flex-1 py-4 bg-purple-600 hover:bg-purple-700 text-white rounded-2xl font-black text-[11px] uppercase tracking-widest shadow-[0_10px_25px_rgba(109,40,217,0.3)] active:scale-95 transition-all flex items-center justify-center gap-3">
+                        <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
+                                d="M3 3h2l.4 2M7 13h10l4-8H5.4M7 13L5.4 5M7 13l-2.293 2.293c-.63.63-.184 1.707.707 1.707H17m0 0a2 2 0 100 4 2 2 0 000-4zm-8 0a2 2 0 100 4 2 2 0 000-4z">
+                            </path>
+                        </svg>
+                        Add to Cart
+                    </button>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <script>
+        // Minimal services data used on the homepage
+        const homepageServices = [
+            { id: 1, name: 'Essential Checkup', price: 1599, params: 91, desc: 'Basic full body panel suitable for routine screening.' },
+            { id: 2, name: 'Advanced Checkup', price: 2799, params: 100, desc: 'Expanded panel with metabolic and cardiac markers.' },
+            { id: 3, name: 'Ultra Male Checkup', price: 11999, params: 129, desc: 'Comprehensive male-specific full body panel.' },
+            { id: 4, name: 'Ultra Female Checkup', price: 11999, params: 136, desc: 'Comprehensive female-specific full body panel.' }
+        ];
+
+        function openDetails(id) {
+            const s = homepageServices.find(x => x.id === id);
+            if (!s) return;
+            document.getElementById('m-title').innerText = s.name;
+            document.getElementById('m-desc').innerText = s.desc;
+            document.getElementById('m-params').innerText = s.params + ' params';
+            document.getElementById('m-price').innerText = '₹' + s.price;
+            document.getElementById('m-add-btn').onclick = () => { addToCart({ id: s.id, name: s.name, price: s.price }); closeDetailsModal(); };
+            const modal = document.getElementById('detailsModal');
+            modal.classList.remove('hidden');
+            modal.classList.add('flex');
+            setTimeout(() => document.getElementById('modalContent').classList.remove('scale-95'), 10);
+            document.body.style.overflow = 'hidden';
+        }
+
+        function closeDetailsModal() {
+            document.getElementById('modalContent').classList.add('scale-95');
+            setTimeout(() => { document.getElementById('detailsModal').classList.add('hidden'); document.body.style.overflow = 'auto'; }, 180);
+        }
+    </script>
+    <script>
+        // Paper/confetti animation: spawn colorful paper bits on page load
+        (function() {
+            function rand(min, max) { return Math.random() * (max - min) + min; }
+            function createPaper(color) {
+                const el = document.createElement('div');
+                el.className = 'paper';
+                const sizeW = Math.round(rand(8, 18));
+                const sizeH = Math.round(rand(10, 26));
+                el.style.width = sizeW + 'px';
+                el.style.height = sizeH + 'px';
+                el.style.background = color;
+                el.style.left = (rand(2, 98)) + '%';
+                el.style.setProperty('--tx', Math.round(rand(-140, 140)) + 'px');
+                el.style.setProperty('--rot', Math.round(rand(200, 1200)) + 'deg');
+                el.style.setProperty('--dur', Math.round(rand(2600, 5200)) + 'ms');
+                el.style.animationDuration = el.style.getPropertyValue('--dur');
+                el.style.animationDelay = Math.round(rand(0, 400)) + 'ms';
+                el.style.opacity = rand(0.85, 1);
+                return el;
+            }
+
+            function spawnBurst(count) {
+                const colors = ['#FF4D4F','#FF9248','#FFD24D','#6CE6B6','#6EC8FF','#C48BFF','#FF8ACB'];
+                const container = document.getElementById('paper-container');
+                if (!container) return;
+                for (let i = 0; i < count; i++) {
+                    const color = colors[Math.floor(Math.random() * colors.length)];
+                    const p = createPaper(color);
+                    p.style.left = Math.round(rand(0, 100)) + '%';
+                    p.style.transform = 'rotate(' + Math.round(rand(-30,30)) + 'deg)';
+                    container.appendChild(p);
+                    p.addEventListener('animationend', () => p.remove());
+                }
+            }
+
+            document.addEventListener('DOMContentLoaded', function() {
+                spawnBurst(36);
+                let ticks = 0;
+                const interval = setInterval(() => {
+                    spawnBurst(Math.round(rand(2,6)));
+                    ticks++;
+                    if (ticks > 6) clearInterval(interval);
+                }, 700);
+            });
+        })();
+    </script>
 
     <script src="https://cdn.jsdelivr.net/npm/swiper@11/swiper-bundle.min.js"></script>
     <script src="script.js"></script>

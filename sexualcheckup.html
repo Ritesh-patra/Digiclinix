@@ -112,10 +112,22 @@
         </div>
         <div id="cart-list" class="flex-1 overflow-y-auto p-6 space-y-4 no-scrollbar"></div>
         <div class="p-8 border-t border-slate-50 bg-slate-50">
-            <div class="flex justify-between items-center mb-8">
+            <div class="flex justify-between items-center mb-4">
                 <span class="font-bold text-slate-400 uppercase tracking-widest text-xs">Total Amount</span>
-                <span id="cart-total" class="font-black text-3xl text-slate-800 tracking-tighter">₹0</span>
+                <div class="text-right">
+                    <div id="cart-original-total" class="text-sm text-slate-500 line-through mr-2 hidden"></div>
+                    <span id="cart-total" class="font-black text-3xl text-slate-800 tracking-tighter">₹0</span>
+                </div>
             </div>
+            <div class="flex gap-2 mb-3 items-center">
+                <input id="coupon-code" type="text" placeholder="Apply coupon code"
+                    class="flex-1 px-4 py-2 rounded-xl border border-slate-100 shadow-sm" />
+                <button id="apply-coupon-btn"
+                    class="px-4 py-2 bg-purple-600 text-white rounded-xl font-bold">Apply</button>
+                <button id="remove-coupon-btn"
+                    class="px-3 py-2 bg-slate-100 text-slate-700 rounded-xl font-bold hidden">Remove</button>
+            </div>
+            <p id="coupon-feedback" class="text-sm text-green-600 mb-3 hidden"></p>
             <button onclick="checkoutWhatsApp()"
                 class="w-full py-5 bg-green-500 text-white rounded-[2rem] font-black uppercase tracking-widest shadow-xl shadow-green-100 flex items-center justify-center gap-3 active:scale-95 transition-all">
                 <i class="fab fa-whatsapp text-2xl"></i> Book via WhatsApp
@@ -127,7 +139,9 @@
         <div class="bg-white w-full max-w-lg rounded-[3rem] overflow-hidden shadow-2xl transition-all scale-95"
             id="modalContent">
             <div id="m-header" class="p-10 text-white relative">
-                <button onclick="shareDetails(currentDetailsId)" class="absolute top-8 right-20 text-white/70 hover:text-white transition-colors"><i class="fas fa-share-alt text-2xl"></i></button>
+                <button onclick="shareDetails(currentDetailsId)"
+                    class="absolute top-8 right-20 text-white/70 hover:text-white transition-colors"><i
+                        class="fas fa-share-alt text-2xl"></i></button>
                 <button onclick="closeModal()" class="absolute top-8 right-8 text-white/80 hover:text-white text-xl"><i
                         class="fas fa-times-circle"></i></button>
                 <h2 id="m-title" class="text-3xl font-black leading-tight"></h2>
@@ -201,25 +215,29 @@
                     <div class="flex items-center gap-4">
                         <div
                             class="w-10 h-10 bg-orange-100 text-orange-500 rounded-xl flex items-center justify-center shrink-0">
-                            <i class="fas fa-microscope"></i></div>
+                            <i class="fas fa-microscope"></i>
+                        </div>
                         <span class="text-slate-700 font-bold text-sm">NABL Certified Labs</span>
                     </div>
                     <div class="flex items-center gap-4">
                         <div
                             class="w-10 h-10 bg-blue-100 text-blue-500 rounded-xl flex items-center justify-center shrink-0">
-                            <i class="fas fa-user-shield"></i></div>
+                            <i class="fas fa-user-shield"></i>
+                        </div>
                         <span class="text-slate-700 font-bold text-sm">100% Data Privacy</span>
                     </div>
                     <div class="flex items-center gap-4">
                         <div
                             class="w-10 h-10 bg-green-100 text-green-500 rounded-xl flex items-center justify-center shrink-0">
-                            <i class="fas fa-truck-loading"></i></div>
+                            <i class="fas fa-truck-loading"></i>
+                        </div>
                         <span class="text-slate-700 font-bold text-sm">Free Home Collection</span>
                     </div>
                     <div class="flex items-center gap-4">
                         <div
                             class="w-10 h-10 bg-purple-100 text-purple-500 rounded-xl flex items-center justify-center shrink-0">
-                            <i class="fas fa-clock"></i></div>
+                            <i class="fas fa-clock"></i>
+                        </div>
                         <span class="text-slate-700 font-bold text-sm">6-Hour Fast Turnaround</span>
                     </div>
                 </div>
@@ -256,15 +274,15 @@
 
         function shareDetails(id) {
             const pkg = packages.find(p => p.id === id);
-            if(!pkg) return;
+            if (!pkg) return;
             const title = pkg.name || 'Package Details';
             const text = `${title}\n\nIncluded: ${pkg.tests ? pkg.tests.join(', ') : ''}\n\nPrice: ₹${pkg.price}\n\nShared via DIGICLINIX`;
-            if (navigator.share) { navigator.share({ title, text, url: window.location.href }).catch(()=>{}); return; }
+            if (navigator.share) { navigator.share({ title, text, url: window.location.href }).catch(() => { }); return; }
             const waMsg = `*${title}*%0A%0A${pkg.tests ? encodeURIComponent(pkg.tests.join('\n')) + '%0A%0A' : ''}*Price: ₹${pkg.price}*%0A%0AShared via DIGICLINIX`;
             window.open(`https://wa.me/?text=${waMsg}`);
-            if (navigator.clipboard && navigator.clipboard.writeText) navigator.clipboard.writeText(text).catch(()=>{});
-            else { const ta = document.createElement('textarea'); ta.value = text; document.body.appendChild(ta); ta.select(); try{ document.execCommand('copy'); }catch(e){} ta.remove(); }
-            try{ alert('Share opened. Details copied to clipboard as fallback.'); }catch(e){}
+            if (navigator.clipboard && navigator.clipboard.writeText) navigator.clipboard.writeText(text).catch(() => { });
+            else { const ta = document.createElement('textarea'); ta.value = text; document.body.appendChild(ta); ta.select(); try { document.execCommand('copy'); } catch (e) { } ta.remove(); }
+            try { alert('Share opened. Details copied to clipboard as fallback.'); } catch (e) { }
         }
 
         const packages = [
@@ -328,7 +346,7 @@
                 `).join('');
             }
             const total = cart.reduce((sum, item) => sum + item.price, 0);
-            totalDisplay.innerText = `₹${total}`;
+            updateCartTotalWithCoupon(total);
         }
 
         function toggleCart(show) {
@@ -357,11 +375,51 @@
 
         function checkoutWhatsApp() {
             if (cart.length === 0) return;
-            const items = cart.map((p, i) => `${i + 1}. ${p.name} (₹${p.price})`).join('%0A');
+            const itemsArr = cart.map((p, i) => `${i + 1}. ${p.name} (₹${p.price})`);
+            const items = itemsArr.join('\n');
             const total = cart.reduce((sum, item) => sum + item.price, 0);
-            const msg = `*New Sexual Health Booking*%0A%0A*Packages Selected:*%0A${items}%0A%0A*Total: ₹${total}*%0A_Please contact me for private home collection._`;
-            window.open(`https://wa.me/${WHATSAPP}?text=${msg}`);
+            const city = localStorage.getItem('selectedCity') || (document.getElementById('city-text-pc') && document.getElementById('city-text-pc').innerText) || (document.getElementById('city-text-mob') && document.getElementById('city-text-mob').innerText) || 'Not specified';
+            const msgPlain = `*New Sexual Health Booking*\n\n*Packages Selected:*\n${items}\n\n*Total: ₹${total}*\nBooking City: ${city}\n\nPlease contact me for private home collection.`;
+            window.open(`https://wa.me/${WHATSAPP}?text=${encodeURIComponent(msgPlain)}`);
         }
+
+        // Coupon logic
+        const COUPONS = { 'DIGI10': { type: 'percent', value: 10, label: '10% off' }, 'FLAT100': { type: 'flat', value: 100, label: '₹100 off' }, 'SAVE50': { type: 'flat', value: 50, label: '₹50 off' } };
+        let appliedCoupon = null;
+
+        function computeDiscount(total) {
+            if (!appliedCoupon) return { discount: 0, finalTotal: total };
+            const c = COUPONS[appliedCoupon]; if (!c) return { discount: 0, finalTotal: total };
+            const discount = c.type === 'percent' ? Math.round((c.value / 100) * total) : c.value;
+            return { discount, finalTotal: Math.max(0, total - discount) };
+        }
+
+        function updateCartTotalWithCoupon(total) {
+            const originalEl = document.getElementById('cart-original-total');
+            const totalEl = document.getElementById('cart-total');
+            const feedback = document.getElementById('coupon-feedback');
+            const removeBtn = document.getElementById('remove-coupon-btn');
+            const applyBtn = document.getElementById('apply-coupon-btn');
+            const codeInput = document.getElementById('coupon-code');
+            if (appliedCoupon) {
+                const { discount, finalTotal } = computeDiscount(total);
+                originalEl.innerText = `₹${total}`; originalEl.classList.remove('hidden');
+                totalEl.innerText = `₹${finalTotal}`;
+                feedback.classList.remove('hidden'); feedback.innerText = `${COUPONS[appliedCoupon].label} applied — saved ₹${discount}`;
+                removeBtn.classList.remove('hidden'); applyBtn.disabled = true; codeInput.disabled = true;
+            } else {
+                originalEl.classList.add('hidden'); totalEl.innerText = `₹${total}`; feedback.classList.add('hidden'); removeBtn.classList.add('hidden'); applyBtn.disabled = false; codeInput.disabled = false;
+            }
+        }
+
+        document.addEventListener('DOMContentLoaded', () => {
+            const applyBtn = document.getElementById('apply-coupon-btn');
+            const removeBtn = document.getElementById('remove-coupon-btn');
+            if (applyBtn) applyBtn.addEventListener('click', () => {
+                const code = (document.getElementById('coupon-code').value || '').trim().toUpperCase(); if (!code) return alert('Enter coupon code'); if (!COUPONS[code]) return alert('Invalid coupon'); appliedCoupon = code; updateUI();
+            });
+            if (removeBtn) removeBtn.addEventListener('click', () => { appliedCoupon = null; document.getElementById('coupon-code').value = ''; updateUI(); });
+        });
 
         init();
     </script>

@@ -51,10 +51,19 @@
         </div>
         <div id="cart-items-list" class="flex-1 overflow-y-auto p-6 space-y-4 no-scrollbar"></div>
         <div class="p-6 border-t border-slate-100 bg-slate-50">
-            <div class="flex justify-between items-center mb-6">
+            <div class="flex justify-between items-center mb-4">
                 <span class="font-bold text-slate-500">Total Bill</span>
-                <span id="total-price" class="font-black text-2xl text-slate-800">₹0</span>
+                <div class="text-right">
+                    <div id="cart-original-total" class="text-sm text-slate-500 line-through mr-2 hidden"></div>
+                    <span id="total-price" class="font-black text-2xl text-slate-800">₹0</span>
+                </div>
             </div>
+            <div class="flex gap-2 mb-3 items-center">
+                <input id="coupon-code" type="text" placeholder="Apply coupon code" class="flex-1 px-4 py-2 rounded-xl border border-slate-100 shadow-sm" />
+                <button id="apply-coupon-btn" class="px-4 py-2 bg-purple-600 text-white rounded-xl font-bold">Apply</button>
+                <button id="remove-coupon-btn" class="px-3 py-2 bg-slate-100 text-slate-700 rounded-xl font-bold hidden">Remove</button>
+            </div>
+            <p id="coupon-feedback" class="text-sm text-green-600 mb-3 hidden"></p>
             <button onclick="checkoutWhatsApp()" class="w-full py-5 bg-green-500 text-white rounded-[2rem] font-black uppercase tracking-widest shadow-xl shadow-green-100 flex items-center justify-center gap-3 active:scale-95 transition-all">
                 <i class="fab fa-whatsapp text-2xl"></i> Finalize Booking
             </button>
@@ -183,7 +192,7 @@
                 `).join('');
             }
             const total = cart.reduce((sum, item) => sum + item.price, 0);
-            totalDisplay.innerText = `₹${total}`;
+            updateCartTotalWithCoupon(total);
         }
 
         function toggleCart(show) {
@@ -223,11 +232,51 @@
 
         function checkoutWhatsApp() {
             if(cart.length === 0) return;
-            const items = cart.map((p, i) => `${i+1}. ${p.name} (₹${p.price})`).join('%0A');
+            const itemsArr = cart.map((p, i) => `${i+1}. ${p.name} (₹${p.price})`);
+            const items = itemsArr.join('\n');
             const total = cart.reduce((sum, item) => sum + item.price, 0);
-            const msg = `*Booking Request via DIGICLINIXHealth*%0A%0A*Selected Tests:*%0A${items}%0A%0A*Total Payable: ₹${total}*%0A_Please contact me for home sample collection._`;
-            window.open(`https://wa.me/${WHATSAPP}?text=${msg}`);
+            const city = localStorage.getItem('selectedCity') || (document.getElementById('city-text-pc') && document.getElementById('city-text-pc').innerText) || (document.getElementById('city-text-mob') && document.getElementById('city-text-mob').innerText) || 'Not specified';
+            const msgPlain = `*Booking Request via DIGICLINIXHealth*\n\n*Selected Tests:*\n${items}\n\n*Total Payable: ₹${total}*\nBooking City: ${city}\n\nPlease contact me for home sample collection.`;
+            window.open(`https://wa.me/${WHATSAPP}?text=${encodeURIComponent(msgPlain)}`);
         }
+
+        // Coupon logic
+        const COUPONS = { 'DIGI50': { type: 'percent', value: 10, label: '10% off' }, 'FLAT100': { type: 'flat', value: 100, label: '₹100 off' }, 'SAVE50': { type: 'flat', value: 50, label: '₹50 off' } };
+        let appliedCoupon = null;
+
+        function computeDiscount(total) {
+            if (!appliedCoupon) return { discount: 0, finalTotal: total };
+            const c = COUPONS[appliedCoupon]; if(!c) return { discount:0, finalTotal: total };
+            const discount = c.type === 'percent' ? Math.round((c.value/100)*total) : c.value;
+            return { discount, finalTotal: Math.max(0, total - discount) };
+        }
+
+        function updateCartTotalWithCoupon(total) {
+            const originalEl = document.getElementById('cart-original-total');
+            const totalEl = document.getElementById('total-price');
+            const feedback = document.getElementById('coupon-feedback');
+            const removeBtn = document.getElementById('remove-coupon-btn');
+            const applyBtn = document.getElementById('apply-coupon-btn');
+            const codeInput = document.getElementById('coupon-code');
+            if (appliedCoupon) {
+                const { discount, finalTotal } = computeDiscount(total);
+                originalEl.innerText = `₹${total}`; originalEl.classList.remove('hidden');
+                totalEl.innerText = `₹${finalTotal}`;
+                feedback.classList.remove('hidden'); feedback.innerText = `${COUPONS[appliedCoupon].label} applied — saved ₹${discount}`;
+                removeBtn.classList.remove('hidden'); applyBtn.disabled = true; codeInput.disabled = true;
+            } else {
+                originalEl.classList.add('hidden'); totalEl.innerText = `₹${total}`; feedback.classList.add('hidden'); removeBtn.classList.add('hidden'); applyBtn.disabled = false; codeInput.disabled = false;
+            }
+        }
+
+        document.addEventListener('DOMContentLoaded', () => {
+            const applyBtn = document.getElementById('apply-coupon-btn');
+            const removeBtn = document.getElementById('remove-coupon-btn');
+            if (applyBtn) applyBtn.addEventListener('click', () => {
+                const code = (document.getElementById('coupon-code').value||'').trim().toUpperCase(); if(!code) return alert('Enter coupon code'); if(!COUPONS[code]) return alert('Invalid coupon'); appliedCoupon = code; updateCartUI();
+            });
+            if (removeBtn) removeBtn.addEventListener('click', () => { appliedCoupon = null; document.getElementById('coupon-code').value=''; updateCartUI(); });
+        });
 
         init();
     </script>
