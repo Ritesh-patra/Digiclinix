@@ -1,0 +1,389 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>All Tests | DIGICLINIXHealth Colorful</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;600;700;900&display=swap" rel="stylesheet">
+    <style>
+        body { font-family: 'Inter', sans-serif; background-color: #fdfcff; overflow-x: hidden; }
+        .service-card { transition: all 0.4s cubic-bezier(0.175, 0.885, 0.32, 1.275); border: 1px solid #f1f5f9; }
+        .service-card:hover { transform: translateY(-12px); shadow: 0 25px 50px -12px rgba(0,0,0,0.1); }
+        .modal-bg { background: rgba(0, 0, 0, 0.4); backdrop-filter: blur(8px); }
+        #cartSidebar { transition: transform 0.5s cubic-bezier(0.4, 0, 0.2, 1); }
+        .no-scrollbar::-webkit-scrollbar { display: none; }
+    </style>
+</head>
+<body class="pb-20">
+
+    <nav class="bg-white/80 backdrop-blur-md border-b border-slate-100 sticky top-0 z-40 px-5 py-4 lg:px-12 shadow-sm">
+        <div class="max-w-7xl mx-auto flex items-center justify-between">
+            <div class="flex items-center gap-4">
+                <button onclick="window.history.back()" class="w-10 h-10 rounded-full bg-slate-50 flex items-center justify-center text-slate-400 hover:bg-purple-600 hover:text-white transition-all">
+                    <i class="fas fa-arrow-left"></i>
+                </button>
+                <h1 class="text-sm font-black text-slate-800 tracking-tight">DIGICLINIX<span class="text-purple-600">DIAGNOSTICS</span></h1>
+            </div>
+            <button onclick="toggleCart(true)" class="relative bg-purple-600 text-white px-6 py-2.5 rounded-2xl font-bold flex items-center gap-3 active:scale-95 transition-all shadow-lg shadow-purple-200">
+                <i class="fas fa-shopping-basket"></i>
+                <span class="hidden md:inline">Cart</span>
+                <span id="cart-badge" class="bg-orange-500 text-white text-[10px] w-5 h-5 rounded-full flex items-center justify-center border-2 border-white absolute -top-2 -right-2">0</span>
+            </button>
+        </div>
+    </nav>
+
+    <main class="max-w-7xl mx-auto px-5 lg:px-12 pt-10">
+        <div class="mb-6 text-center lg:text-left">
+            <h2 class="text-4xl lg:text-6xl font-black text-slate-900 leading-tight mb-2 tracking-tighter">INDIVIDUAL TESTS  <span class="text-purple-600">Diagnostics</span></h2>
+            <p class="text-slate-500 font-medium">Select from 20 certified tests with free home collection.</p>
+        </div>
+
+        <div class="mb-8">
+            <div class="max-w-md mx-auto lg:mx-0">
+                <input id="test-search" data-site-search type="search" placeholder="Search for tests" class="w-full px-4 py-3 rounded-2xl border border-slate-100 shadow-sm" />
+            </div>
+        </div>
+
+        <div id="service-container" class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-8"></div>
+    </main>
+
+    <div id="cartOverlay" class="fixed inset-0 bg-black/40 z-[100] hidden" onclick="toggleCart(false)"></div>
+    <div id="cartSidebar" class="fixed top-0 right-0 h-full w-full max-w-[400px] bg-white z-[110] shadow-2xl translate-x-full flex flex-col">
+        <div class="p-6 bg-purple-700 text-white flex justify-between items-center">
+            <h2 class="text-xl font-bold">Your Selection</h2>
+            <button onclick="toggleCart(false)" class="w-10 h-10 rounded-full bg-white/10 flex items-center justify-center hover:bg-white/20"><i class="fas fa-times"></i></button>
+        </div>
+        <div id="cart-items-list" class="flex-1 overflow-y-auto p-6 space-y-4 no-scrollbar"></div>
+        <div class="p-6 border-t border-slate-100 bg-slate-50">
+            <div class="flex justify-between items-center mb-4">
+                <span class="font-bold text-slate-500">Total Bill</span>
+                <div class="text-right">
+                    <div id="cart-original-total" class="text-sm text-slate-500 line-through mr-2 hidden"></div>
+                    <span id="total-price" class="font-black text-2xl text-slate-800">₹0</span>
+                </div>
+            </div>
+            <div class="flex gap-2 mb-3 items-center">
+                <input id="coupon-code" type="text" placeholder="Apply coupon code" class="flex-1 px-4 py-2 rounded-xl border border-slate-100 shadow-sm" />
+                <button id="apply-coupon-btn" class="px-4 py-2 bg-purple-600 text-white rounded-xl font-bold">Apply</button>
+                <button id="remove-coupon-btn" class="px-3 py-2 bg-slate-100 text-slate-700 rounded-xl font-bold hidden">Remove</button>
+            </div>
+            <p id="coupon-feedback" class="text-sm text-green-600 mb-3 hidden"></p>
+            <button onclick="checkoutWhatsApp()" class="w-full py-5 bg-green-500 text-white rounded-[2rem] font-black uppercase tracking-widest shadow-xl shadow-green-100 flex items-center justify-center gap-3 active:scale-95 transition-all">
+                <i class="fab fa-whatsapp text-2xl"></i> Finalize Booking
+            </button>
+        </div>
+    </div>
+
+    <div id="detailsModal" class="fixed inset-0 z-[50] hidden items-center justify-center p-4 modal-bg">
+        <div class="bg-white w-full max-w-lg rounded-[3rem] overflow-hidden shadow-2xl transition-all scale-95" id="modalContent">
+            <div id="m-header" class="p-10 text-white relative">
+                <button onclick="shareDetails(currentDetailsId)" class="absolute top-8 right-20 text-white/70 hover:text-white transition-colors"><i class="fas fa-share-alt text-2xl"></i></button>
+                <button onclick="closeModal()" class="absolute top-6 right-6 text-white/80 hover:text-white text-xl"><i class="fas fa-times-circle"></i></button>
+                <div class="mb-4">
+                    <img id="m-image" src="images/placeholder.svg" alt="test image" class="w-28 h-28 rounded-full object-cover border-4 border-white/30 shadow-lg" />
+                </div>
+                <h2 id="m-title" class="text-3xl font-black leading-tight"></h2>
+                <p id="m-price" class="text-xl font-bold mt-2 opacity-90"></p>
+            </div>
+            <div class="p-10">
+                <h4 class="font-bold text-slate-800 mb-6 uppercase tracking-widest text-xs flex items-center gap-2">
+                    <i class="fas fa-microscope text-purple-600"></i> What's Included:
+                </h4>
+                <div id="m-list" class="space-y-4 text-sm text-slate-600 mb-10 max-h-40 overflow-y-auto no-scrollbar"></div>
+                <button id="m-add-btn" class="w-full py-5 bg-orange-400 text-white rounded-[1.5rem] font-black uppercase tracking-widest shadow-lg shadow-orange-100 active:scale-95 transition-all">Add to Cart</button>
+            </div>
+        </div>
+    </div>
+
+    <script>
+        const WHATSAPP = "9676138576";
+        let cart = [];
+        let currentDetailsId = null;
+
+        function shareDetails(id) {
+            const s = services.find(x => x.id === id);
+            if(!s) return;
+            const title = s.name || 'Test Details';
+            const text = `${title}\n\nIncluded: ${s.tests ? s.tests.join(', ') : ''}\n\nPrice: ₹${s.price}\n\nShared via DIGICLINIX`;
+            if (navigator.share) { navigator.share({ title, text, url: window.location.href }).catch(()=>{}); return; }
+            const waMsg = `*${title}*%0A%0A${s.tests ? encodeURIComponent(s.tests.join('\n')) + '%0A%0A' : ''}*Price: ₹${s.price}*%0A%0AShared via DIGICLINIX`;
+            window.open(`https://wa.me/?text=${waMsg}`);
+            if (navigator.clipboard && navigator.clipboard.writeText) navigator.clipboard.writeText(text).catch(()=>{});
+            else { const ta = document.createElement('textarea'); ta.value = text; document.body.appendChild(ta); ta.select(); try{ document.execCommand('copy'); }catch(e){} ta.remove(); }
+            try{ alert('Share opened. Details copied to clipboard as fallback.'); }catch(e){}
+        }
+
+        // Imported tests from provided attachments. Images default to images/placeholder.svg.
+        const services = [
+            { id: 140, name: "Thyroid Stimulating Hormone (TSH)", price: 320, mrp: 400, off: "20%", params: 1, icon: "fa-dna", color: "from-violet-500 to-indigo-700", image: "images/placeholder.svg", tests: ["TSH"] },
+            { id: 69, name: "Fasting Blood Sugar (FBS)", price: 120, mrp: 150, off: "20%", params: 1, icon: "fa-cube", color: "from-orange-500 to-red-600", image: "images/placeholder.svg", tests: ["Glucose - Fasting"] },
+            { id: 108, name: "Post Prandial Blood Sugar (PPBS)", price: 120, mrp: 150, off: "20%", params: 1, icon: "fa-cookie", color: "from-lime-600 to-green-700", image: "images/placeholder.svg", tests: ["Blood Glucose - After Meal"] },
+            { id: 537, name: "Kidney Function Test with Electrolytes", price: 850, mrp: 1000, off: "15%", params: 11, icon: "fa-user-nurse", color: "from-sky-600 to-indigo-800", image: "images/placeholder.svg", tests: ["Urea", "Creatinine", "Electrolytes"] },
+            { id: 123, name: "Blood Sugar", price: 99, mrp: 130, off: "24%", params: 1, icon: "fa-syringe", color: "from-orange-400 to-orange-600", image: "images/placeholder.svg", tests: ["Glucose"] },
+            { id: 534, name: "HIV 1&2 (ECLIA)", price: 900, mrp: 1100, off: "18%", params: 1, icon: "fa-virus", color: "from-red-600 to-rose-900", image: "images/placeholder.svg", tests: ["HIV 1", "HIV 2"] },
+            { id: 154, name: "Vitamin B12", price: 1100, mrp: 1300, off: "15%", params: 1, icon: "fa-capsules", color: "from-purple-600 to-violet-800", image: "images/placeholder.svg", tests: ["Vitamin B12"] },
+            { id: 139, name: "Thyroid Function Test (TFT)", price: 450, mrp: 550, off: "18%", params: 3, icon: "fa-dna", color: "from-cyan-600 to-blue-800", image: "images/placeholder.svg", tests: ["T3", "T4", "TSH"] },
+            { id: 95, name: "Lipid Profile", price: 650, mrp: 800, off: "19%", params: 9, icon: "fa-heart-pulse", color: "from-rose-600 to-pink-800", image: "images/placeholder.svg", tests: ["Cholesterol", "Triglycerides", "HDL", "LDL"] },
+            { id: 503, name: "Complete Blood Count (CBC) with ESR", price: 400, mrp: 480, off: "17%", params: 25, icon: "fa-microscope", color: "from-indigo-600 to-purple-800", image: "images/placeholder.svg", tests: ["CBC", "ESR"] },
+            { id: 469, name: "Vitamin D, 25-Hydroxy", price: 1500, mrp: 1800, off: "17%", params: 1, icon: "fa-sun", color: "from-amber-500 to-orange-700", image: "images/placeholder.svg", tests: ["25-Hydroxy Vitamin D"] },
+            { id: 40, name: "Complete Blood Count (CBC)", price: 310, mrp: 380, off: "18%", params: 24, icon: "fa-vial", color: "from-blue-600 to-indigo-700", image: "images/placeholder.svg", tests: ["CBC"] },
+            { id: 96, name: "Liver Function Test (LFT)", price: 650, mrp: 780, off: "17%", params: 12, icon: "fa-disease", color: "from-emerald-700 to-green-900", image: "images/placeholder.svg", tests: ["Bilirubin", "SGOT", "SGPT", "Albumin"] },
+            { id: 79, name: "Glycosylated Haemoglobin (HbA1c)", price: 500, mrp: 600, off: "17%", params: 1, icon: "fa-droplet", color: "from-emerald-600 to-teal-800", image: "images/placeholder.svg", tests: ["HbA1c"] },
+            { id: 115, name: "Prostate Specific Antigen (PSA)", price: 800, mrp: 950, off: "16%", params: 1, icon: "fa-notes-medical", color: "from-blue-500 to-indigo-600", image: "images/placeholder.svg", tests: ["PSA"] },
+            { id: 158, name: "Widal Test (Slide Method)", price: 290, mrp: 350, off: "17%", params: 1, icon: "fa-virus", color: "from-red-500 to-rose-600", image: "images/placeholder.svg", tests: ["Widal"] },
+            { id: 236, name: "Cotinine - Qualitative", price: 750, mrp: 900, off: "17%", params: 1, icon: "fa-vials", color: "from-teal-600 to-emerald-800", image: "images/placeholder.svg", tests: ["Cotinine"] },
+            { id: 152, name: "Urine Complete Analysis", price: 270, mrp: 350, off: "23%", params: 27, icon: "fa-flask", color: "from-yellow-500 to-orange-700", image: "images/placeholder.svg", tests: ["Urine Analysis"] },
+            { id: 1, name: "Absolute Eosinophil Count (AEC)", price: 200, mrp: 240, off: "17%", params: 1, icon: "fa-user-graduate", color: "from-sky-500 to-indigo-700", image: "images/placeholder.svg", tests: ["AEC"] },
+            { id: 2, name: "Absolute Lymphocyte Count (ALC)", price: 250, mrp: 300, off: "17%", params: 1, icon: "fa-user-graduate", color: "from-sky-500 to-indigo-700", image: "images/placeholder.svg", tests: ["ALC"] },
+            { id: 3, name: "Absolute Neutrophil Count (ANC)", price: 250, mrp: 300, off: "17%", params: 1, icon: "fa-user-graduate", color: "from-sky-500 to-indigo-700", image: "images/placeholder.svg", tests: ["ANC"] },
+            { id: 4, name: "Acid Phosphatase-Total", price: 530, mrp: 650, off: "18%", params: 1, icon: "fa-vial", color: "from-blue-600 to-indigo-700", image: "images/placeholder.svg", tests: ["Acid Phosphatase"] },
+            { id: 5, name: "Activated Partial Thromboplastin Time (aPTT)", price: 550, mrp: 680, off: "19%", params: 1, icon: "fa-heartbeat", color: "from-rose-500 to-pink-700", image: "images/placeholder.svg", tests: ["aPTT"] },
+            { id: 8, name: "AFB Smear", price: 400, mrp: 480, off: "17%", params: 1, icon: "fa-microscope", color: "from-indigo-600 to-purple-800", image: "images/placeholder.svg", tests: ["AFB Smear"] },
+            { id: 9, name: "Alanine Amino Transferase (ALT/SGPT)", price: 180, mrp: 220, off: "18%", params: 1, icon: "fa-notes-medical", color: "from-blue-500 to-indigo-600", image: "images/placeholder.svg", tests: ["ALT (SGPT)"] },
+            { id: 10, name: "Albumin", price: 150, mrp: 180, off: "17%", params: 1, icon: "fa-vial", color: "from-blue-600 to-indigo-700", image: "images/placeholder.svg", tests: ["Albumin"] },
+            { id: 11, name: "Alkaline Phosphatase (ALP)", price: 180, mrp: 220, off: "18%", params: 1, icon: "fa-vial", color: "from-blue-600 to-indigo-700", image: "images/placeholder.svg", tests: ["ALP"] },
+            { id: 16, name: "Amylase", price: 450, mrp: 550, off: "18%", params: 1, icon: "fa-flask", color: "from-yellow-500 to-orange-700", image: "images/placeholder.svg", tests: ["Amylase"] },
+            { id: 17, name: "Amylase, Urine", price: 530, mrp: 650, off: "18%", params: 1, icon: "fa-flask", color: "from-yellow-500 to-orange-700", image: "images/placeholder.svg", tests: ["Urine Amylase"] },
+            { id: 18, name: "Antistreptolysin O (ASO) Titre", price: 600, mrp: 720, off: "17%", params: 1, icon: "fa-syringe", color: "from-orange-400 to-orange-600", image: "images/placeholder.svg", tests: ["ASO Titre"] },
+            { id: 19, name: "Anti Thyroid Peroxidase (Anti-TPO) antibody", price: 1200, mrp: 1500, off: "20%", params: 1, icon: "fa-dna", color: "from-cyan-600 to-blue-800", image: "images/placeholder.svg", tests: ["Anti-TPO"] },
+            { id: 20, name: "Aspartate Amino Transferase (AST / SGOT)", price: 180, mrp: 220, off: "18%", params: 1, icon: "fa-notes-medical", color: "from-blue-500 to-indigo-600", image: "images/placeholder.svg", tests: ["AST (SGOT)"] },
+            { id: 22, name: "Beta hCG - Pregnancy marker", price: 800, mrp: 950, off: "16%", params: 1, icon: "fa-baby", color: "from-pink-500 to-rose-600", image: "images/placeholder.svg", tests: ["Beta hCG"] },
+            { id: 24, name: "Total Bilirubin", price: 180, mrp: 210, off: "14%", params: 1, icon: "fa-vial", color: "from-blue-600 to-indigo-700", image: "images/placeholder.svg", tests: ["Total Bilirubin"] },
+            { id: 25, name: "Blood Group ABO and RH Factor", price: 190, mrp: 230, off: "17%", params: 1, icon: "fa-user-check", color: "from-emerald-500 to-teal-700", image: "images/placeholder.svg", tests: ["ABO & Rh"] },
+            { id: 26, name: "Peripheral Smear", price: 200, mrp: 240, off: "17%", params: 1, icon: "fa-microscope", color: "from-indigo-600 to-purple-800", image: "images/placeholder.svg", tests: ["Peripheral Smear"] },
+            { id: 27, name: "Blood Urea Nitrogen (BUN)", price: 180, mrp: 220, off: "18%", params: 1, icon: "fa-notes-medical", color: "from-blue-500 to-indigo-600", image: "images/placeholder.svg", tests: ["BUN"] },
+            { id: 29, name: "Calcium, Body fluids", price: 210, mrp: 260, off: "19%", params: 1, icon: "fa-vial", color: "from-blue-600 to-indigo-700", image: "images/placeholder.svg", tests: ["Calcium (body fluids)"] },
+            { id: 31, name: "Calcium", price: 190, mrp: 230, off: "17%", params: 1, icon: "fa-vial", color: "from-blue-600 to-indigo-700", image: "images/placeholder.svg", tests: ["Calcium"] },
+            { id: 33, name: "Cancer Antigen 125 (CA 125)", price: 1600, mrp: 2000, off: "20%", params: 1, icon: "fa-dna", color: "from-violet-500 to-indigo-700", image: "images/placeholder.svg", tests: ["CA 125"] },
+            { id: 34, name: "Chloride - Urine", price: 200, mrp: 240, off: "17%", params: 1, icon: "fa-flask", color: "from-yellow-500 to-orange-700", image: "images/placeholder.svg", tests: ["Chloride (urine)"] },
+            { id: 35, name: "Chloride", price: 220, mrp: 260, off: "15%", params: 1, icon: "fa-vial", color: "from-blue-600 to-indigo-700", image: "images/placeholder.svg", tests: ["Chloride"] },
+            { id: 36, name: "Cholesterol Total", price: 210, mrp: 260, off: "19%", params: 1, icon: "fa-heart-pulse", color: "from-rose-600 to-pink-800", image: "images/placeholder.svg", tests: ["Total Cholesterol"] },
+            { id: 41, name: "Complete Haemogram/ Complete blood picture (CBP)", price: 500, mrp: 600, off: "17%", params: 24, icon: "fa-vial", color: "from-blue-600 to-indigo-700", image: "images/placeholder.svg", tests: ["CBP"] },
+            { id: 42, name: "Cortisol - PM", price: 680, mrp: 800, off: "15%", params: 1, icon: "fa-moon", color: "from-sky-600 to-indigo-800", image: "images/placeholder.svg", tests: ["Cortisol (PM)"] },
+            { id: 43, name: "Cortisol - AM", price: 680, mrp: 800, off: "15%", params: 1, icon: "fa-sun", color: "from-amber-500 to-orange-700", image: "images/placeholder.svg", tests: ["Cortisol (AM)"] },
+            { id: 44, name: "Cortisol (Random)", price: 680, mrp: 800, off: "15%", params: 1, icon: "fa-sun", color: "from-amber-500 to-orange-700", image: "images/placeholder.svg", tests: ["Cortisol (Random)"] },
+            { id: 45, name: "C-peptide- Random", price: 1200, mrp: 1500, off: "20%", params: 1, icon: "fa-vial", color: "from-blue-600 to-indigo-700", image: "images/placeholder.svg", tests: ["C-peptide"] },
+            { id: 46, name: "C-Reactive Protein (CRP)", price: 450, mrp: 550, off: "18%", params: 1, icon: "fa-shield-virus", color: "from-red-600 to-rose-900", image: "images/placeholder.svg", tests: ["CRP"] },
+            { id: 47, name: "High Sensitive C-Reactive Protein (HSCRP)", price: 800, mrp: 950, off: "16%", params: 1, icon: "fa-shield-virus", color: "from-red-700 to-rose-900", image: "images/placeholder.svg", tests: ["hs-CRP"] },
+            { id: 49, name: "Creatinine, 24 hrs Urine", price: 270, mrp: 320, off: "16%", params: 1, icon: "fa-flask", color: "from-yellow-500 to-orange-700", image: "images/placeholder.svg", tests: ["Creatinine (24h urine)"] },
+            { id: 50, name: "Creatinine Clearance, 24 hours Urine", price: 540, mrp: 650, off: "17%", params: 1, icon: "fa-flask", color: "from-yellow-500 to-orange-700", image: "images/placeholder.svg", tests: ["Creatinine Clearance"] },
+            { id: 51, name: "Creatinine, Random Urine", price: 270, mrp: 320, off: "16%", params: 1, icon: "fa-flask", color: "from-yellow-500 to-orange-700", image: "images/placeholder.svg", tests: ["Creatinine (random urine)"] },
+            { id: 52, name: "Creatinine", price: 250, mrp: 300, off: "17%", params: 1, icon: "fa-notes-medical", color: "from-blue-500 to-indigo-600", image: "images/placeholder.svg", tests: ["Creatinine"] },
+            { id: 54, name: "D-dimer", price: 1320, mrp: 1500, off: "12%", params: 1, icon: "fa-heartbeat", color: "from-rose-500 to-pink-700", image: "images/placeholder.svg", tests: ["D-dimer"] },
+            { id: 55, name: "Dengue Profile (ELFA)", price: 3000, mrp: 3500, off: "14%", params: 3, icon: "fa-mosquito", color: "from-red-700 to-slate-900", image: "images/placeholder.svg", tests: ["NS1", "IgG", "IgM"] },
+            { id: 56, name: "Dengue Profile (Rapid)", price: 1100, mrp: 1300, off: "15%", params: 3, icon: "fa-mosquito", color: "from-red-700 to-slate-900", image: "images/placeholder.svg", tests: ["NS1", "IgG", "IgM"] },
+            { id: 61, name: "Dengue NS1 Antigen Rapid", price: 800, mrp: 950, off: "16%", params: 1, icon: "fa-mosquito", color: "from-red-700 to-slate-900", image: "images/placeholder.svg", tests: ["NS1 Antigen"] },
+            { id: 63, name: "Direct Coombs Test (DCT)", price: 800, mrp: 950, off: "16%", params: 1, icon: "fa-vials", color: "from-teal-600 to-emerald-800", image: "images/placeholder.svg", tests: ["Direct Coombs"] },
+            { id: 64, name: "Electrolytes, Random Urine", price: 530, mrp: 650, off: "18%", params: 1, icon: "fa-flask", color: "from-yellow-500 to-orange-700", image: "images/placeholder.svg", tests: ["Electrolytes (urine)"] },
+            { id: 65, name: "Electrolytes", price: 370, mrp: 450, off: "18%", params: 1, icon: "fa-vial", color: "from-blue-600 to-indigo-700", image: "images/placeholder.svg", tests: ["Na", "K", "Cl"] },
+            { id: 66, name: "Erythrocyte Sedimentation Rate (ESR)", price: 130, mrp: 160, off: "19%", params: 1, icon: "fa-microscope", color: "from-indigo-600 to-purple-800", image: "images/placeholder.svg", tests: ["ESR"] },
+            { id: 67, name: "Estradiol (E2)", price: 1000, mrp: 1200, off: "17%", params: 1, icon: "fa-vial", color: "from-purple-600 to-violet-800", image: "images/placeholder.svg", tests: ["Estradiol (E2)"] },
+            { id: 68, name: "Extended Thyroid Profile", price: 1270, mrp: 1500, off: "15%", params: 4, icon: "fa-dna", color: "from-cyan-600 to-blue-800", image: "images/placeholder.svg", tests: ["T3", "T4", "TSH", "Free T4"] },
+            { id: 70, name: "Insulin - Fasting", price: 800, mrp: 950, off: "16%", params: 1, icon: "fa-syringe", color: "from-orange-400 to-orange-600", image: "images/placeholder.svg", tests: ["Fasting Insulin"] },
+            { id: 71, name: "Ferritin", price: 850, mrp: 1000, off: "15%", params: 1, icon: "fa-vial", color: "from-blue-600 to-indigo-700", image: "images/placeholder.svg", tests: ["Ferritin"] },
+            { id: 72, name: "Gamma Glutamyl Transferase (GGT)", price: 230, mrp: 280, off: "18%", params: 1, icon: "fa-notes-medical", color: "from-blue-500 to-indigo-600", image: "images/placeholder.svg", tests: ["GGT"] },
+            { id: 73, name: "Glucose Challenge Test (75 g) - 1 hour", price: 550, mrp: 650, off: "15%", params: 1, icon: "fa-cookie", color: "from-lime-600 to-green-700", image: "images/placeholder.svg", tests: ["GCT 1h"] },
+            { id: 74, name: "Glucose Challenge Test (75 g) - 2 hours", price: 550, mrp: 650, off: "15%", params: 1, icon: "fa-cookie", color: "from-lime-600 to-green-700", image: "images/placeholder.svg", tests: ["GCT 2h"] },
+            { id: 77, name: "Gram Staining", price: 300, mrp: 360, off: "17%", params: 1, icon: "fa-microscope", color: "from-indigo-600 to-purple-800", image: "images/placeholder.svg", tests: ["Gram Stain"] },
+            { id: 78, name: "Hb TC DC", price: 350, mrp: 420, off: "17%", params: 1, icon: "fa-vial", color: "from-blue-600 to-indigo-700", image: "images/placeholder.svg", tests: ["Hb TC DC"] },
+            { id: 80, name: "Haemoglobin (Hb)", price: 180, mrp: 220, off: "18%", params: 1, icon: "fa-vial", color: "from-blue-600 to-indigo-700", image: "images/placeholder.svg", tests: ["Haemoglobin"] },
+            { id: 81, name: "HBsAg (ECLIA)", price: 940, mrp: 1100, off: "15%", params: 1, icon: "fa-virus", color: "from-red-600 to-rose-900", image: "images/placeholder.svg", tests: ["HBsAg"] },
+            { id: 82, name: "HBsAg (Qualitative) (Rapid)", price: 500, mrp: 600, off: "17%", params: 1, icon: "fa-vials", color: "from-teal-600 to-emerald-800", image: "images/placeholder.svg", tests: ["HBsAg (Rapid)"] },
+            { id: 83, name: "HDL Cholesterol", price: 240, mrp: 290, off: "17%", params: 1, icon: "fa-heart-pulse", color: "from-rose-600 to-pink-800", image: "images/placeholder.svg", tests: ["HDL"] },
+            { id: 84, name: "Homocysteine (HCY)", price: 1200, mrp: 1400, off: "14%", params: 1, icon: "fa-vial", color: "from-purple-600 to-violet-800", image: "images/placeholder.svg", tests: ["Homocysteine"] },
+            { id: 85, name: "HIV 1&2 (Qualitative) (Rapid)", price: 550, mrp: 650, off: "15%", params: 1, icon: "fa-virus", color: "from-red-600 to-rose-900", image: "images/placeholder.svg", tests: ["HIV 1&2 Rapid"] },
+            { id: 86, name: "Immunoglobulin E (Total IgE)", price: 850, mrp: 1000, off: "15%", params: 1, icon: "fa-vials", color: "from-teal-600 to-emerald-800", image: "images/placeholder.svg", tests: ["Total IgE"] },
+            { id: 88, name: "Indirect Coombs Test (ICT)", price: 800, mrp: 950, off: "16%", params: 1, icon: "fa-vials", color: "from-teal-600 to-emerald-800", image: "images/placeholder.svg", tests: ["Indirect Coombs"] },
+            { id: 89, name: "Total Iron", price: 500, mrp: 600, off: "17%", params: 1, icon: "fa-vial", color: "from-blue-600 to-indigo-700", image: "images/placeholder.svg", tests: ["Total Iron"] },
+            { id: 90, name: "Iron Profile", price: 1300, mrp: 1600, off: "19%", params: 1, icon: "fa-vial", color: "from-blue-600 to-indigo-700", image: "images/placeholder.svg", tests: ["Iron Profile"] }
+        ];
+
+        // Render services (supports optional filterTerm)
+        function renderServices(filterTerm = '') {
+            const container = document.getElementById('service-container');
+            const q = (filterTerm || '').toLowerCase().trim();
+            const filtered = q ? services.filter(s => {
+                if ((s.name||'').toLowerCase().includes(q)) return true;
+                if ((s.tests||[]).some(t => t.toLowerCase().includes(q))) return true;
+                return false;
+            }) : services;
+
+            if (filtered.length === 0) {
+                container.innerHTML = `<div class="col-span-full text-center text-slate-400 py-20">No tests found for "${filterTerm}"</div>`;
+                return;
+            }
+
+            container.innerHTML = filtered.map(s => `
+                <div class="service-card bg-white rounded-[2.5rem] overflow-hidden flex flex-col h-full shadow-[0_8px_30px_rgb(0,0,0,0.04)]">
+                    <div class="bg-gradient-to-br ${s.color} p-6 text-white relative flex items-center gap-4">
+                        <img src="${s.image}" alt="${s.name}" class="w-16 h-16 rounded-full object-cover border-2 border-white/20 shadow-lg" />
+                        <div class="flex-1">
+                            <h3 class="text-lg font-black pr-6 leading-tight mb-1">${s.name}</h3>
+                            <div class="flex items-end gap-3">
+                                <div>
+                                    <span class="text-[11px] line-through opacity-50 block mb-0.5">₹${s.mrp}</span>
+                                    <span class="text-2xl font-black tracking-tight">₹${s.price}</span>
+                                </div>
+                                <span class="bg-white/20 backdrop-blur-md text-white text-[10px] font-black px-3 py-1.5 rounded-xl border border-white/20">${s.off} OFF</span>
+                            </div>
+                        </div>
+                        <div class="absolute top-6 right-6 w-12 h-12 rounded-full bg-white/10 flex items-center justify-center backdrop-blur-md">
+                            <i class="fas ${s.icon} text-xl"></i>
+                        </div>
+                    </div>
+                    <div class="p-6 flex flex-col flex-1">
+                        <div class="flex items-center gap-3 text-slate-400 font-bold text-[11px] mb-6 uppercase tracking-widest">
+                            <i class="fas fa-file-medical text-purple-600 text-sm"></i> 6 Hours Report
+                        </div>
+                        <div class="mb-4 text-sm text-slate-600">${(s.tests||[]).slice(0,4).join(', ')}</div>
+                        <div class="flex gap-3 mt-auto">
+                            <button onclick="openDetails(${s.id})" class="flex-1 py-3 border-2 border-slate-100 rounded-2xl text-[11px] font-black uppercase text-slate-400 hover:border-purple-600 hover:text-purple-600 transition-all">Details</button>
+                            <button onclick="addToCart(${s.id})" class="flex-[1.3] py-3 bg-orange-400 text-white rounded-2xl font-black text-[11px] uppercase shadow-lg shadow-orange-100 active:scale-95 transition-all">Add to Cart</button>
+                        </div>
+                    </div>
+                </div>
+            `).join('');
+            updateCartUI();
+        }
+
+        function init() {
+            renderServices();
+            // wire search input
+            const search = document.getElementById('test-search');
+            if (search) {
+                search.addEventListener('input', (e) => {
+                    renderServices(e.target.value);
+                });
+            }
+        }
+
+        function addToCart(id) {
+            const s = services.find(x => x.id === id);
+            cart.push(s);
+            updateCartUI();
+            toggleCart(true);
+        }
+
+        function removeFromCart(index) {
+            cart.splice(index, 1);
+            updateCartUI();
+        }
+
+        function updateCartUI() {
+            document.getElementById('cart-badge').innerText = cart.length;
+            const list = document.getElementById('cart-items-list');
+            const totalDisplay = document.getElementById('total-price');
+            
+            if(cart.length === 0) {
+                list.innerHTML = `<div class="h-full flex flex-col items-center justify-center text-slate-300 opacity-50 py-10"><i class="fas fa-shopping-basket text-6xl mb-4"></i><p class="font-bold">Cart is empty</p></div>`;
+            } else {
+                list.innerHTML = cart.map((item, index) => `
+                    <div class="bg-slate-50 p-5 rounded-[1.5rem] flex justify-between items-center border border-slate-100">
+                        <div class="min-w-0">
+                            <h4 class="font-bold text-slate-800 text-sm truncate">${item.name}</h4>
+                            <p class="text-purple-600 font-black">₹${item.price}</p>
+                        </div>
+                        <button onclick="removeFromCart(${index})" class="w-10 h-10 rounded-full bg-red-50 text-red-500 flex items-center justify-center hover:bg-red-500 hover:text-white transition-all flex-shrink-0 z-10"><i class="fas fa-trash-alt text-sm"></i></button>
+                    </div>
+                `).join('');
+            }
+            const total = cart.reduce((sum, item) => sum + item.price, 0);
+            updateCartTotalWithCoupon(total);
+        }
+
+        function toggleCart(show) {
+            const sidebar = document.getElementById('cartSidebar');
+            const overlay = document.getElementById('cartOverlay');
+            if(show) {
+                sidebar.classList.remove('translate-x-full');
+                overlay.classList.remove('hidden');
+            } else {
+                sidebar.classList.add('translate-x-full');
+                overlay.classList.add('hidden');
+            }
+        }
+
+        function openDetails(id) {
+            const s = services.find(x => x.id === id);
+            const modal = document.getElementById('detailsModal');
+            const content = document.getElementById('modalContent');
+            currentDetailsId = id;
+            
+            document.getElementById('m-header').className = `p-10 text-white relative bg-gradient-to-br ${s.color}`;
+            const mImg = document.getElementById('m-image');
+            if (mImg) { mImg.src = s.image || 'images/placeholder.svg'; mImg.alt = s.name || 'test image'; }
+            document.getElementById('m-title').innerText = s.name;
+            document.getElementById('m-price').innerText = `Special Offer: ₹${s.price}`;
+            document.getElementById('m-list').innerHTML = s.tests.map(t => `<li class="flex items-center gap-3"><i class="fas fa-check-circle text-emerald-500"></i> ${t}</li>`).join('');
+            document.getElementById('m-add-btn').onclick = () => { addToCart(s.id); closeModal(); };
+            
+            modal.classList.remove('hidden');
+            modal.classList.add('flex');
+            setTimeout(() => content.classList.remove('scale-95'), 10);
+            document.body.style.overflow = 'hidden';
+        }
+
+        function closeModal() {
+            document.getElementById('detailsModal').classList.add('hidden');
+            document.body.style.overflow = 'auto';
+        }
+
+        function checkoutWhatsApp() {
+            if (cart.length === 0) return;
+            const itemsArr = cart.map((p, i) => `${i + 1}. ${p.name} (₹${p.price})`);
+            const items = itemsArr.join('\n');
+            const subtotal = cart.reduce((sum, item) => sum + item.price, 0);
+            const city = localStorage.getItem('selectedCity') || (document.getElementById('city-text-pc') && document.getElementById('city-text-pc').innerText) || (document.getElementById('city-text-mob') && document.getElementById('city-text-mob').innerText) || 'Not specified';
+            const { discount, finalTotal } = computeDiscount(subtotal);
+            const couponLine = appliedCoupon && COUPONS[appliedCoupon] ? `Coupon: ${appliedCoupon} (${COUPONS[appliedCoupon].label})\nSaved: ₹${discount}\n` : '';
+            const msgPlain = `*DIGICLINIX DIAGNOSTICS*\n\n*Selected Tests:*\n${items}\n\nSubtotal: ₹${subtotal}\n${couponLine}Payable: ₹${finalTotal}\nBooking City: ${city}`;
+            window.open(`https://wa.me/${WHATSAPP}?text=${encodeURIComponent(msgPlain)}`);
+        }
+
+        // Coupon logic
+        const COUPONS = {
+            'DIGI10': { type: 'percent', value: 10, label: '10% off' },
+            'FREECONSULT': { type: 'flat', value: 0, label: 'Free consult' }
+        };
+        let appliedCoupon = null;
+
+        function computeDiscount(total) {
+            if (!appliedCoupon) return { discount: 0, finalTotal: total };
+            const c = COUPONS[appliedCoupon]; if(!c) return { discount:0, finalTotal: total };
+            const discount = c.type === 'percent' ? Math.round((c.value/100)*total) : c.value;
+            return { discount, finalTotal: Math.max(0, total - discount) };
+        }
+
+        function updateCartTotalWithCoupon(total) {
+            const originalEl = document.getElementById('cart-original-total');
+            const totalEl = document.getElementById('total-price');
+            const feedback = document.getElementById('coupon-feedback');
+            const removeBtn = document.getElementById('remove-coupon-btn');
+            const applyBtn = document.getElementById('apply-coupon-btn');
+            const codeInput = document.getElementById('coupon-code');
+            if (appliedCoupon) {
+                const { discount, finalTotal } = computeDiscount(total);
+                originalEl.innerText = `₹${total}`; originalEl.classList.remove('hidden');
+                totalEl.innerText = `₹${finalTotal}`;
+                feedback.classList.remove('hidden'); feedback.innerText = `${COUPONS[appliedCoupon].label} applied — saved ₹${discount}`;
+                removeBtn.classList.remove('hidden'); applyBtn.disabled = true; codeInput.disabled = true;
+            } else {
+                originalEl.classList.add('hidden'); totalEl.innerText = `₹${total}`; feedback.classList.add('hidden'); removeBtn.classList.add('hidden'); applyBtn.disabled = false; codeInput.disabled = false;
+            }
+        }
+
+        document.addEventListener('DOMContentLoaded', () => {
+            const applyBtn = document.getElementById('apply-coupon-btn');
+            const removeBtn = document.getElementById('remove-coupon-btn');
+            if (applyBtn) applyBtn.addEventListener('click', () => {
+                const code = (document.getElementById('coupon-code').value||'').trim().toUpperCase(); if(!code) return alert('Enter coupon code'); if(!COUPONS[code]) return alert('Invalid coupon'); appliedCoupon = code; updateCartUI();
+            });
+            if (removeBtn) removeBtn.addEventListener('click', () => { appliedCoupon = null; document.getElementById('coupon-code').value=''; updateCartUI(); });
+        });
+
+        init();
+    </script>
+</body>
+</html>

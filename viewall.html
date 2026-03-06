@@ -1,0 +1,663 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Package Details | DIGICLINIXHealth</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;600;700;900&display=swap" rel="stylesheet">
+    <style>
+        body { font-family: 'Inter', sans-serif; background-color: #fdfcff; }
+        .bg-deep-purple { background-color: #2e1065; }
+        .modal-bg { background: rgba(0, 0, 0, 0.6); backdrop-filter: blur(4px); }
+        
+        /* Floating Cart Animation */
+        @keyframes bounceIn {
+            0% { transform: scale(0); }
+            50% { transform: scale(1.1); }
+            100% { transform: scale(1); }
+        }
+        .cart-bounce { animation: bounceIn 0.3s ease-out forwards; }
+    </style>
+</head>
+
+<body class="pb-24">
+
+    <nav class="bg-white border-b border-slate-100 sticky top-0 z-50 px-5 py-4 lg:px-12">
+        <div class="max-w-7xl mx-auto flex items-center justify-between">
+            <div class="flex items-center gap-4">
+                <button onclick="window.history.back()" class="w-10 h-10 rounded-full bg-slate-50 flex items-center justify-center text-slate-400">
+                    <i class="fas fa-arrow-left"></i>
+                </button>
+                <h1 class="text-xl font-black text-slate-800">Health Packages</h1>
+            </div>
+            <div class="text-sm font-bold text-green-600 bg-green-50 px-4 py-2 rounded-xl hidden sm:block">
+                <i class="fab fa-whatsapp"></i> Support: 9676138576
+            </div>
+            <div class="relative sm:hidden" onclick="toggleCart()">
+                <i class="fas fa-shopping-cart text-slate-700 text-xl"></i>
+                <span id="nav-cart-count" class="absolute -top-2 -right-2 bg-red-500 text-white text-[10px] w-4 h-4 rounded-full flex items-center justify-center font-bold hidden">0</span>
+            </div>
+        </div>
+    </nav>
+
+<main class="max-w-7xl mx-auto px-5 lg:px-12 pt-12 pb-20 bg-[#FDFBF7]">
+    <div class="mb-10 p-6 bg-white rounded-3xl shadow-[0_10px_40px_-15px_rgba(45,71,57,0.1)] border border-[#E8E2D4]">
+        <div class="flex flex-col lg:flex-row lg:items-center justify-between gap-6">
+            
+            <div class="flex flex-col sm:flex-row flex-wrap items-center gap-4 w-full lg:w-4/5">
+                
+                <div class="relative w-full sm:flex-1">
+                    <span class="absolute left-4 top-1/2 -translate-y-1/2 text-[#2D4739] opacity-40">
+                        <svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M21 21l-6-6m2-5a7 7 0 11-14 0 7 7 0 0114 0z" />
+                        </svg>
+                    </span>
+                    <input id="filter-search" data-site-search type="search" placeholder="Search for tests" 
+                        class="w-full pl-12 pr-4 py-3.5 rounded-2xl border-2 border-[#F3F0E9] focus:border-[#C5A059] focus:ring-0 transition-all outline-none text-[#2D4739] placeholder:text-slate-400 bg-[#FCFAFA]" />
+                </div>
+
+                <div class="flex gap-3 w-full sm:w-auto">
+                    <select id="filter-category" 
+                        class="w-1/2 sm:w-48 px-4 py-3.5 rounded-2xl border-2 border-[#F3F0E9] bg-white focus:border-[#C5A059] focus:ring-0 transition-all cursor-pointer text-[#2D4739] font-medium appearance-none">
+                        <option value="">All Categories</option>
+                    </select>
+
+                    <select id="filter-price" 
+                        class="w-1/2 sm:w-48 px-4 py-3.5 rounded-2xl border-2 border-[#F3F0E9] bg-white focus:border-[#C5A059] focus:ring-0 transition-all cursor-pointer text-[#2D4739] font-medium appearance-none">
+                        <option value="">All Prices</option>
+                        <option value="lt500">Under ₹500</option>
+                        <option value="500-1000">₹500 - ₹1000</option>
+                        <option value="gt1000">Above ₹1000</option>
+                    </select>
+                </div>
+            </div>
+
+            <div id="filter-reset-wrapper" class="hidden lg:flex items-center">
+                <button id="filter-reset" class="px-6 py-3 bg-[#2D4739] text-[#FDFBF7] hover:bg-[#1B2B22] rounded-2xl font-semibold transition-colors shadow-md flex items-center gap-2">
+                    <svg xmlns="http://www.w3.org/2000/svg" class="h-4 w-4" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 4v5h.582m15.356 2A8.001 8.001 0 004.582 9m0 0H9m11 11v-5h-.581m0 0a8.003 8.003 0 01-15.357-2m15.357 2H15" />
+                    </svg>
+                    Reset
+                </button>
+            </div>
+        </div>
+    </div>
+
+    <div id="checkup-container" class="grid grid-cols-1 gap-8">
+        </div>
+</main>
+
+    <div id="floating-cart-btn" onclick="toggleCart()" class="fixed bottom-6 right-6 z-40 hidden cursor-pointer group">
+        <div class="bg-slate-900 text-white w-16 h-16 rounded-full flex items-center justify-center shadow-2xl shadow-slate-400 relative transition-transform hover:scale-110">
+            <i class="fas fa-shopping-basket text-2xl"></i>
+            <span id="float-cart-count" class="absolute top-0 right-0 bg-red-500 text-white text-xs w-6 h-6 rounded-full flex items-center justify-center font-bold border-2 border-white">0</span>
+        </div>
+    </div>
+
+    <div id="detailsModal" class="fixed inset-0 z-[100] hidden items-end sm:items-center justify-center sm:p-4 modal-bg transition-all duration-300">
+        <div class="bg-white w-full sm:max-w-3xl lg:max-w-4xl rounded-t-[2rem] sm:rounded-[2.5rem] overflow-hidden shadow-2xl transition-transform transform translate-y-full sm:translate-y-0 h-[85vh] sm:h-auto lg:h-auto flex flex-col" id="modalContent">
+            
+            <div id="m-header" class="p-6 sm:p-8 text-white relative flex-shrink-0">
+                <button onclick="shareDetails(currentDetailsId)" class="absolute top-4 right-12 text-white/70 hover:text-white transition-colors"><i class="fas fa-share-alt text-sm"></i></button>
+                <button onclick="closeModal()" class="absolute top-4 right-4 bg-black/20 hover:bg-black/40 text-white w-8 h-8 rounded-full flex items-center justify-center transition-all">
+                    <i class="fas fa-times text-sm"></i>
+                </button>
+                <span id="m-tag" class="text-[9px] font-black uppercase tracking-widest bg-white/20 px-2 py-1 rounded-lg mb-2 inline-block"></span>
+                <h2 id="m-title" class="text-xl sm:text-3xl font-black leading-tight pr-8"></h2>
+                <div class="mt-2 flex items-baseline gap-3">
+                    <span id="m-price" class="text-2xl sm:text-3xl font-black"></span>
+                    <span id="m-mrp" class="text-xs sm:text-sm line-through opacity-70"></span>
+                </div>
+            </div>
+
+            <div class="p-6 sm:p-8 overflow-y-auto flex-1 bg-white">
+                <div class="grid grid-cols-1 sm:grid-cols-2 gap-6 sm:gap-8">
+                    <div>
+                        <h4 class="text-slate-800 font-bold text-sm mb-3 flex items-center gap-2 sticky top-0 bg-white py-1">
+                            <i class="fas fa-list-check text-purple-600"></i> Included Tests
+                        </h4>
+                        <ul id="m-list" class="space-y-2 text-xs sm:text-sm text-slate-600 font-medium pb-4"></ul>
+                    </div>
+                    <div class="bg-slate-50 p-5 rounded-2xl border border-slate-100">
+                        <h4 class="text-slate-800 font-bold text-xs mb-3 flex items-center gap-2">
+                            <i class="fas fa-star text-orange-500"></i> Benefits
+                        </h4>
+                        <div class="space-y-2 text-[11px] sm:text-xs text-slate-500">
+                            <p class="flex items-center gap-2"><i class="fas fa-check-circle text-green-500"></i> Free Home Sample Collection</p>
+                            <p class="flex items-center gap-2"><i class="fas fa-check-circle text-green-500"></i> NABL Certified Labs</p>
+                            <p class="flex items-center gap-2"><i class="fas fa-check-circle text-green-500"></i> Smart Digital Reports</p>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <div class="p-4 border-t border-slate-100 bg-white sm:hidden">
+                <button id="m-add-btn-mob" class="w-full py-3.5 bg-orange-500 text-white rounded-xl font-bold uppercase tracking-wide text-xs shadow-lg">
+                    Add to Cart
+                </button>
+            </div>
+            <div class="hidden sm:block p-8 pt-0">
+                <button id="m-add-btn" class="w-full py-4 bg-orange-500 text-white rounded-2xl font-black uppercase tracking-widest shadow-lg hover:bg-orange-600 transition-all">
+                    Add to Cart
+                </button>
+            </div>
+        </div>
+    </div>
+
+    <div id="cartModal" class="fixed inset-0 z-[150] hidden justify-end modal-bg">
+        <div class="bg-white w-full sm:max-w-md h-full shadow-2xl flex flex-col transition-transform transform translate-x-full" id="cartContent">
+            
+            <div class="p-6 bg-slate-900 text-white flex justify-between items-center">
+                <div class="flex items-center gap-3">
+                    <i class="fas fa-shopping-cart text-orange-400"></i>
+                    <h2 class="text-lg font-bold">Your Cart</h2>
+                </div>
+                <button onclick="toggleCart()" class="text-white/70 hover:text-white">
+                    <i class="fas fa-times text-xl"></i>
+                </button>
+            </div>
+
+            <div id="cart-items" class="flex-1 overflow-y-auto p-6 space-y-4 bg-slate-50">
+                <div class="text-center text-slate-400 mt-10">
+                    <i class="fas fa-shopping-basket text-4xl mb-2 opacity-50"></i>
+                    <p>Your cart is empty</p>
+                </div>
+            </div>
+
+            <div class="p-6 bg-white border-t border-slate-100 shadow-[0_-4px_20px_rgba(0,0,0,0.05)]">
+                    <div class="flex justify-between items-end mb-4">
+                        <span class="text-sm text-slate-500 font-medium">Total Amount</span>
+                        <span id="cart-original-total" class="text-sm text-slate-500 line-through mr-3 hidden"></span>
+                        <span id="cart-total" class="text-2xl font-black text-slate-800">₹0</span>
+                    </div>
+
+                    <div class="flex gap-2 mb-3 items-center">
+                        <input id="coupon-code" type="text" placeholder="Apply coupon code" class="flex-1 px-4 py-2 rounded-xl border border-slate-100 shadow-sm" />
+                        <button id="apply-coupon-btn" class="px-4 py-2 bg-purple-600 text-white rounded-xl font-bold">Apply</button>
+                        <button id="remove-coupon-btn" class="px-3 py-2 bg-slate-100 text-slate-700 rounded-xl font-bold hidden">Remove</button>
+                    </div>
+                    <p id="coupon-feedback" class="text-sm text-green-600 mb-3 hidden"></p>
+
+                    <button onclick="checkoutWhatsApp()" class="w-full py-4 bg-green-600 text-white rounded-xl font-bold uppercase tracking-widest shadow-lg shadow-green-100 hover:bg-green-700 transition-all flex items-center justify-center gap-2">
+                        <i class="fab fa-whatsapp text-lg"></i> Checkout
+                    </button>
+            </div>
+        </div>
+    </div>
+
+    <script>
+        const WHATSAPP = "9676138576";
+        let cart = [];
+        let currentDetailsId = null;
+
+        function shareDetails(id) {
+            const pkg = allPackages.find(p => p.id === id);
+            if(!pkg) return;
+            const title = pkg.name || 'Package';
+            const text = `${title}\n\nIncluded Tests:\n${pkg.tests ? pkg.tests.map((t,i)=>`${i+1}. ${t}`).join('\n') : ''}\n\nPrice: ₹${pkg.price}\n\nShared via DIGICLINIX`;
+            if (navigator.share) { navigator.share({ title, text, url: window.location.href }).catch(()=>{}); return; }
+            const waMsg = `*${title}*%0A%0A${pkg.tests ? pkg.tests.map(t=>encodeURIComponent(t)).join('%0A') + '%0A%0A' : ''}*Price: ₹${pkg.price}*%0A%0AShared via DIGICLINIX`;
+            window.open(`https://wa.me/?text=${waMsg}`);
+            if (navigator.clipboard && navigator.clipboard.writeText) navigator.clipboard.writeText(text).catch(()=>{});
+            else { const ta = document.createElement('textarea'); ta.value = text; document.body.appendChild(ta); ta.select(); try{ document.execCommand('copy'); }catch(e){} ta.remove(); }
+            try{ alert('Share opened. Details copied to clipboard as fallback.'); }catch(e){}
+        }
+
+        const allPackages = [
+            { id: 'DI_D1', name: "Diabetes Essential", price: 999, category: 'Diabetes', color: "from-purple-700 to-indigo-800", features: ["HbA1c (Average Sugar)", "Fasting Blood Sugar", "Urine Glucose", "Estimated Average Glucose", "Kidney Health Marker"] },
+            { id: 'DI_D2', name: "Diabetes Advanced", price: 1599, category: 'Diabetes', color: "from-indigo-700 to-purple-800", features: ["All Essential Tests", "Lipid Profile (Heart)", "C-Reactive Protein", "Electrolytes Panel", "Full Blood Count", "Liver Markers"] },
+
+            { id: 'HE_1', name: "Lipid Profile", price: 550, category: 'Heart', color: "from-purple-500 to-indigo-600", features: ["Cholesterol", "Triglycerides", "HDL", "LDL"] },
+            { id: 'HE_2', name: "High Sensitive CRP", price: 800, category: 'Heart', color: "from-rose-500 to-purple-600", features: ["Inflammation marker for cardiac risk"] },
+            { id: 'HE_3', name: "Cholesterol Total", price: 210, category: 'Heart', color: "from-blue-500 to-indigo-700", features: ["Total Cholesterol"] },
+            { id: 'HE_4', name: "Lipoprotein (A)", price: 649, category: 'Heart', color: "from-indigo-600 to-purple-800", features: ["Hereditary cardiac risk marker"] },
+            { id: 'HE_5', name: "CPK (Creatine Phosphokinase)", price: 380, category: 'Heart', color: "from-slate-600 to-indigo-900", features: ["Enzyme released during heart muscle stress"] },
+            { id: 'HE_6', name: "NT-proBNP", price: 1936, category: 'Heart', color: "from-emerald-600 to-purple-800", features: ["Diagnose/monitor heart failure"] },
+            { id: 'HE_7', name: "Troponin-I", price: 1650, category: 'Heart', color: "from-red-600 to-purple-700", features: ["Marker for heart muscle damage"] },
+            { id: 'HE_8', name: "Apolipoprotein B (Apo-B)", price: 650, category: 'Heart', color: "from-purple-400 to-indigo-600", features: ["Cardiovascular risk evaluation"] },
+            { id: 'HE_9', name: "APO-A1/APO-B Ratio", price: 1080, category: 'Heart', color: "from-teal-600 to-purple-900", features: ["Advanced cardiac risk ratio"] },
+            { id: 'HE_10', name: "Direct LDL Cholesterol", price: 500, category: 'Heart', color: "from-sky-500 to-indigo-800", features: ["Direct LDL measurement"] },
+
+            { id: 'VT_1', name: "Vitamin D, Total", price: 990, category: 'Vitamins', color: "from-amber-500 to-orange-700", features: ["25-Hydroxy Vitamin D"] },
+            { id: 'VT_2', name: "Vitamin B12", price: 790, category: 'Vitamins', color: "from-blue-600 to-indigo-700", features: ["Cyanocobalamin"] },
+            { id: 'VT_3', name: "Vitamin D Gold Panel", price: 2725, category: 'Vitamins', color: "from-yellow-400 to-amber-600", features: ["Vit D2, Vit D3 & Vit D Total"] },
+            { id: 'VT_4', name: "Folic Acid (Vit B9)", price: 1200, category: 'Vitamins', color: "from-emerald-600 to-teal-800", features: ["Folic Acid"] },
+            { id: 'VT_5', name: "Vitamin C (Ascorbic Acid)", price: 3750, category: 'Vitamins', color: "from-orange-500 to-red-600", features: ["Ascorbic Acid"] },
+            { id: 'VT_6', name: "Vitamin B Complex", price: 8470, category: 'Vitamins', color: "from-purple-600 to-violet-800", features: ["Comprehensive B Vitamins panel"] },
+            { id: 'VT_7', name: "Vitamin A (Retinol)", price: 4795, category: 'Vitamins', color: "from-rose-600 to-pink-800", features: ["Vitamin A testing"] },
+            { id: 'VT_8', name: "Vitamin B6 (Pyridoxal)", price: 3500, category: 'Vitamins', color: "from-cyan-600 to-blue-800", features: ["Vitamin B6 testing"] },
+            { id: 'VT_9', name: "Vitamin E (Tocopherol)", price: 4540, category: 'Vitamins', color: "from-emerald-700 to-green-900", features: ["Vitamin E testing"] },
+            { id: 'VT_10', name: "Vitamin B1 (Thiamine)", price: 3870, category: 'Vitamins', color: "from-lime-600 to-green-700", features: ["Vitamin B1 testing"] },
+            { id: 'VT_11', name: "Vitamin K1", price: 4950, category: 'Vitamins', color: "from-red-600 to-rose-900", features: ["Vitamin K testing"] },
+            { id: 'VT_12', name: "Vitamin B2 (Riboflavin)", price: 3815, category: 'Vitamins', color: "from-sky-600 to-indigo-800", features: ["Vitamin B2 testing"] },
+
+            { id: 'AL_1', name: "Complete Food Allergy (ImmunoCAP)", price: 25900, category: 'Allergy', color: "from-rose-500 to-pink-700", features: ["Covers 44 major food allergens"] },
+            { id: 'AL_2', name: "Food Intolerance Checkup", price: 14999, category: 'Allergy', color: "from-purple-600 to-indigo-800", features: ["Detailed screening for 188 parameters"] },
+            { id: 'AL_3', name: "Comprehensive Allergy Panel", price: 17900, category: 'Allergy', color: "from-emerald-600 to-teal-800", features: ["Respiratory and food triggers"] },
+            { id: 'AL_4', name: "Veg Food Allergy Panel", price: 6500, category: 'Allergy', color: "from-green-500 to-emerald-700", features: ["Vegetarian food allergens"] },
+            { id: 'AL_5', name: "Dust Allergy Panel", price: 3900, category: 'Allergy', color: "from-amber-500 to-orange-700", features: ["House dust & mites"] },
+            { id: 'AL_6', name: "Dairy Allergy Panel", price: 3900, category: 'Allergy', color: "from-blue-500 to-cyan-600", features: ["Milk, cheese, casein"] },
+            { id: 'AL_7', name: "Fungus/Mold Allergy Panel", price: 4400, category: 'Allergy', color: "from-slate-600 to-slate-800", features: ["Indoor & outdoor molds"] },
+            { id: 'AL_8', name: "Nuts Allergy Panel", price: 6100, category: 'Allergy', color: "from-orange-700 to-red-800", features: ["Peanuts, almonds, walnuts"] },
+            { id: 'AL_9', name: "Fruits Allergy Panel", price: 6100, category: 'Allergy', color: "from-pink-500 to-rose-600", features: ["Citrus, apple, tropical fruits"] },
+            { id: 'AL_10', name: "Non-Veg Food Allergy Panel", price: 7000, category: 'Allergy', color: "from-red-600 to-rose-800", features: ["Meat & seafood allergies"] },
+            { id: 'AL_11', name: "Infant Allergy Panel", price: 5200, category: 'Allergy', color: "from-sky-400 to-blue-500", features: ["Safe screening for toddlers & infants"] },
+            { id: 'AL_12', name: "Child Allergy Panel", price: 12900, category: 'Allergy', color: "from-indigo-500 to-purple-600", features: ["Pediatric allergy panel"] },
+            { id: 'AL_13', name: "Spices Allergy Panel", price: 5900, category: 'Allergy', color: "from-orange-600 to-red-700", features: ["Kitchen spice triggers"] },
+            { id: 'AL_14', name: "Grass Pollen Allergy", price: 3600, category: 'Allergy', color: "from-lime-500 to-green-600", features: ["Seasonal grass pollen"] },
+            { id: 'AL_15', name: "Tree Pollen Allergy", price: 3900, category: 'Allergy', color: "from-emerald-500 to-teal-700", features: ["Seasonal tree pollen"] },
+            { id: 'AL_16', name: "Weed Pollen Allergy", price: 4900, category: 'Allergy', color: "from-yellow-600 to-amber-700", features: ["Weed-based allergens"] },
+            { id: 'AL_17', name: "Environmental Allergy", price: 15900, category: 'Allergy', color: "from-cyan-700 to-blue-900", features: ["Wide panel: dust, pollen, pets"] },
+            { id: 'AL_18', name: "Common Allergens & Eczema", price: 8800, category: 'Allergy', color: "from-violet-600 to-purple-800", features: ["Eczema-linked triggers"] },
+            { id: 'AL_19', name: "Asthma/Rhinitis Comprehensive", price: 11500, category: 'Allergy', color: "from-blue-800 to-indigo-900", features: ["Respiratory allergy management"] },
+            { id: 'AL_20', name: "Sea Food Allergy Panel", price: 6000, category: 'Allergy', color: "from-teal-400 to-cyan-600", features: ["Fish, prawns, shellfish"] },
+            { id: 'AL_22', name: "House Dust Panel", price: 3500, category: 'Allergy', color: "from-slate-400 to-slate-600", features: ["Indoor dust mite sensitivity"] },
+
+            { id: 'SE_S1', name: "Sexual Health - Essential", price: 1499, category: 'Sexual Health', color: "from-purple-500 to-indigo-600", features: ["HIV I & II", "VDRL (Syphilis)", "HBsAg (Hepatitis B)"] },
+            { id: 'SE_S2', name: "Sexual Health - Advanced", price: 3999, category: 'Sexual Health', color: "from-purple-600 to-purple-800", features: ["HIV", "Syphilis", "Hepatitis B & C", "Herpes", "Chlamydia"] },
+            { id: 'SE_S3', name: "Sexual Health - Full Panel", price: 7999, category: 'Sexual Health', color: "from-indigo-700 to-purple-900", features: ["Full STD Panel", "CBC", "Liver Markers", "Private Consultation"] },
+
+            { id: 'WO_W1', name: "Women Health Checkup - Essential", price: 1599, category: 'Women', color: "from-purple-500 to-indigo-700", features: ["71 parameters", "6 Hours"] },
+            { id: 'WO_W2', name: "Women Health Checkup - Advanced", price: 2699, category: 'Women', color: "from-purple-500 to-indigo-700", features: ["97 parameters", "6 Hours"] },
+            { id: 'WO_W3', name: "Women Health Checkup - Comprehensive", price: 3799, category: 'Women', color: "from-purple-500 to-indigo-700", features: ["100 parameters", "12 Hours"] },
+            { id: 'WO_P1', name: "PCOD Screening", price: 1499, category: 'Women', color: "from-emerald-600 to-teal-800", features: ["35 parameters", "12 Hours"] },
+            { id: 'WO_P2', name: "PCOD Screening - Comprehensive", price: 5999, category: 'Women', color: "from-emerald-600 to-teal-800", features: ["39 parameters", "12 Hours"] },
+            { id: 'WO_A1', name: "Antenatal Checkup - Basic", price: 999, category: 'Women', color: "from-purple-500 to-indigo-700", features: ["57 parameters", "12 Hours"] },
+            { id: 'WO_A2', name: "Antenatal Checkup - Comprehensive", price: 1499, category: 'Women', color: "from-purple-500 to-indigo-700", features: ["59 parameters", "12 Hours"] },
+
+            { id: 'LB_1', name: "CBC (Complete Blood Count)", price: 350, category: 'Individual Tests', color: "from-blue-600 to-indigo-700", features: ["Hemoglobin", "WBC", "RBC", "Platelet Count"] },
+            { id: 'LB_2', name: "HbA1c (Glycosylated Hb)", price: 490, category: 'Individual Tests', color: "from-emerald-600 to-teal-800", features: ["Average Sugar (3 Months)"] },
+            { id: 'LB_3', name: "Fasting Blood Sugar (FBS)", price: 120, category: 'Individual Tests', color: "from-orange-500 to-red-600", features: ["Glucose - Fasting"] },
+            { id: 'LB_4', name: "Thyroid Function Test (TFT)", price: 400, category: 'Individual Tests', color: "from-cyan-600 to-blue-800", features: ["T3", "T4", "TSH"] },
+            { id: 'LB_5', name: "Urine Complete Analysis", price: 250, category: 'Individual Tests', color: "from-yellow-500 to-orange-700", features: ["pH", "Sugar", "Protein"] },
+            { id: 'LB_6', name: "Lipid Profile", price: 550, category: 'Individual Tests', color: "from-rose-600 to-pink-800", features: ["Cholesterol", "Triglycerides", "HDL", "LDL"] },
+            { id: 'LB_7', name: "Liver Function Test (LFT)", price: 700, category: 'Individual Tests', color: "from-emerald-700 to-green-900", features: ["Bilirubin", "SGOT", "SGPT", "Albumin"] },
+            { id: 'LB_8', name: "Kidney Function Test (KFT)", price: 700, category: 'Individual Tests', color: "from-sky-600 to-indigo-800", features: ["Urea", "Creatinine", "Electrolytes"] },
+            { id: 'LB_9', name: "Vitamin B12", price: 790, category: 'Individual Tests', color: "from-purple-600 to-violet-800", features: ["Cyanocobalamin"] },
+            { id: 'LB_10', name: "Vitamin D, Total", price: 990, category: 'Individual Tests', color: "from-amber-500 to-orange-700", features: ["25-Hydroxy Vitamin D"] },
+            { id: 'LB_11', name: "C-Reactive Protein (CRP)", price: 500, category: 'Individual Tests', color: "from-red-600 to-rose-900", features: ["Inflammation Marker"] },
+            { id: 'LB_12', name: "PPBS (Post Prandial)", price: 180, category: 'Individual Tests', color: "from-lime-600 to-green-700", features: ["Blood Glucose - After Meal"] },
+            { id: 'LB_13', name: "Urine Culture", price: 900, category: 'Individual Tests', color: "from-teal-600 to-emerald-800", features: ["Bacterial Sensitivity"] },
+            { id: 'LB_14', name: "Creatinine", price: 200, category: 'Individual Tests', color: "from-blue-500 to-indigo-600", features: ["Kidney Health Marker"] },
+            { id: 'LB_15', name: "Beta HCG (Pregnancy)", price: 750, category: 'Individual Tests', color: "from-pink-500 to-rose-600", features: ["Pregnancy Confirmation"] },
+            { id: 'LB_16', name: "Blood Sugar (Random)", price: 180, category: 'Individual Tests', color: "from-orange-400 to-orange-600", features: ["Instant Glucose"] },
+            { id: 'LB_17', name: "CBC with ESR", price: 450, category: 'Individual Tests', color: "from-indigo-600 to-purple-800", features: ["CBC", "Sedimentation Rate"] },
+            { id: 'LB_18', name: "Dengue Profile", price: 900, category: 'Individual Tests', color: "from-red-700 to-slate-900", features: ["NS1", "IgG", "IgM"] },
+            { id: 'LB_19', name: "Platelet Count", price: 150, category: 'Individual Tests', color: "from-emerald-500 to-teal-700", features: ["Thrombocytes"] },
+            { id: 'LB_20', name: "TSH Only", price: 350, category: 'Individual Tests', color: "from-violet-500 to-indigo-700", features: ["Thyroid Stimulating Hormone"] }
+        ];
+
+        // Render grouped packages (used by filters too)
+        function renderPackages(packagesList) {
+            const container = document.getElementById('checkup-container');
+            const order = ['Diabetes','Heart','Vitamins','Allergy','Sexual Health','Women','Individual Tests'];
+            const grouped = packagesList.reduce((acc, pkg) => {
+                (acc[pkg.category] = acc[pkg.category] || []).push(pkg);
+                return acc;
+            }, {});
+
+            let html = '';
+            order.forEach(cat => {
+                const items = grouped[cat];
+                if (!items || items.length === 0) return;
+                html += `
+                <section class="mb-10 w-full">
+                    <div class="flex items-center justify-between mb-4">
+                        <h3 class="text-2xl font-extrabold text-slate-800">${cat}</h3>
+                        <span class="text-sm text-slate-500">${items.length} items</span>
+                    </div>
+                    <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 xl:grid-cols-5 gap-6">
+                `;
+
+                items.forEach(pkg => {
+                    html += `
+                        <div class="checkup-card bg-white rounded-[2rem] lg:rounded-[1rem] overflow-hidden flex flex-col h-full shadow-sm border border-slate-50">
+                            <div class="bg-gradient-to-br ${pkg.color} p-5 lg:p-6 text-white relative">
+                                <span class="absolute top-4 left-4 bg-white/20 text-[9px] lg:text-[10px] px-2 py-0.5 rounded font-black uppercase tracking-wider">${pkg.category || ''}</span>
+                                <h3 class="text-lg lg:text-xl font-bold pr-8 leading-tight mb-3 mt-5 h-12 lg:h-auto line-clamp-2">${pkg.name}</h3>
+                                <div class="flex items-end gap-2">
+                                    <div>
+                                        <span class="text-xl lg:text-2xl font-black">₹${pkg.price}</span>
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="p-5 lg:p-6 flex flex-col flex-1">
+                                <div class="text-slate-500 mb-3 text-sm">
+                                    ${pkg.features ? `<ul class="list-disc pl-4 text-sm">${pkg.features.map(f=>`<li>${f}</li>`).join('')}</ul>` : ''}
+                                </div>
+                                <div class="flex gap-2 mt-auto">
+                                    <button onclick="openDetails('${pkg.id}')" class="flex-1 py-2.5 lg:py-3 border border-purple-100 text-purple-700 rounded-xl font-bold text-[9px] lg:text-[10px] uppercase tracking-widest hover:bg-purple-50 transition-all">Details</button>
+                                    <button onclick="addToCart('${pkg.id}')" id="btn-${pkg.id}" class="flex-[1.5] py-2.5 lg:py-3 bg-orange-400 text-white rounded-xl font-bold text-[9px] lg:text-[10px] uppercase tracking-widest shadow-lg shadow-orange-100 hover:bg-orange-500 active:scale-95 transition-all">Add to Cart</button>
+                                </div>
+                            </div>
+                        </div>
+                    `;
+                });
+
+                html += `</div></section>`;
+            });
+
+            // uncategorized
+            const uncategorized = packagesList.filter(p => !p.category || !order.includes(p.category));
+            if (uncategorized.length) {
+               html += `
+<section class="mb-8 w-full">
+    <div class="flex items-center justify-between mb-3">
+        <h3 class="text-xl font-bold text-slate-800">Other</h3>
+        <span class="text-xs text-slate-500">${uncategorized.length} items</span>
+    </div>
+    <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 xl:grid-cols-5 gap-5">
+`;
+
+uncategorized.forEach(pkg => {
+    html += `
+        <div class="checkup-card bg-white rounded-[2rem] lg:rounded-[2.5rem] overflow-hidden flex flex-col h-full shadow-sm border border-slate-50">
+            
+            <div class="bg-gradient-to-br ${pkg.color} p-4 lg:p-5 text-white relative">
+                <h3 class="text-base lg:text-lg font-semibold pr-6 leading-snug mb-3 line-clamp-2">
+                    ${pkg.name}
+                </h3>
+                <div>
+                    <span class="text-lg lg:text-xl font-bold">₹${pkg.price}</span>
+                </div>
+            </div>
+
+            <div class="p-4 lg:p-5 flex flex-col flex-1">
+                <div class="text-slate-500 mb-3 text-xs leading-relaxed">
+                    ${pkg.features 
+                        ? `<ul class="list-disc pl-4 space-y-1">${pkg.features.map(f=>`<li>${f}</li>`).join('')}</ul>` 
+                        : ''}
+                </div>
+
+                <div class="flex gap-2 mt-auto">
+                    <button onclick="openDetails('${pkg.id}')" 
+                        class="flex-1 py-2 border border-purple-100 text-purple-700 rounded-xl font-semibold text-[10px] uppercase tracking-wide hover:bg-purple-50 transition-all">
+                        Details
+                    </button>
+
+                    <button onclick="addToCart('${pkg.id}')" 
+                        id="btn-${pkg.id}" 
+                        class="flex-[1.5] py-2 bg-orange-400 text-white rounded-xl font-semibold text-[10px] uppercase tracking-wide shadow-lg shadow-orange-100 hover:bg-orange-500 active:scale-95 transition-all">
+                        Add to Cart
+                    </button>
+                </div>
+            </div>
+
+        </div>
+    `;
+});
+
+html += `</div></section>`;
+            }
+
+            container.innerHTML = html;
+            updateCartUI();
+        }
+
+        // Initialize filters and events
+        function populateCategoryFilter() {
+            const sel = document.getElementById('filter-category');
+            const cats = Array.from(new Set(allPackages.map(p => p.category).filter(Boolean)));
+            cats.forEach(c => {
+                const opt = document.createElement('option'); opt.value = c; opt.innerText = c; sel.appendChild(opt);
+            });
+        }
+
+        function applyFilters() {
+            const q = (document.getElementById('filter-search').value || '').trim().toLowerCase();
+            const cat = document.getElementById('filter-category').value;
+            const price = document.getElementById('filter-price').value;
+
+            let filtered = allPackages.slice();
+            if (cat) filtered = filtered.filter(p => p.category === cat);
+            if (price) {
+                if (price === 'lt500') filtered = filtered.filter(p => p.price < 500);
+                else if (price === '500-1000') filtered = filtered.filter(p => p.price >= 500 && p.price <= 1000);
+                else if (price === 'gt1000') filtered = filtered.filter(p => p.price > 1000);
+            }
+            if (q) {
+                filtered = filtered.filter(p => (p.name || '').toLowerCase().includes(q) || (p.features||[]).join(' ').toLowerCase().includes(q));
+            }
+
+            renderPackages(filtered);
+        }
+
+        function resetFilters() {
+            document.getElementById('filter-search').value = '';
+            document.getElementById('filter-category').value = '';
+            document.getElementById('filter-price').value = '';
+            renderPackages(allPackages);
+        }
+
+        function init() {
+            populateCategoryFilter();
+            // wire events
+            document.getElementById('filter-search').addEventListener('input', () => applyFilters());
+            document.getElementById('filter-category').addEventListener('change', () => applyFilters());
+            document.getElementById('filter-price').addEventListener('change', () => applyFilters());
+            document.getElementById('filter-reset').addEventListener('click', () => resetFilters());
+
+            renderPackages(allPackages);
+        }
+
+        // --- Details Modal Functions ---
+        function openDetails(id) {
+            const pkg = allPackages.find(p => p.id === id);
+            const modal = document.getElementById('detailsModal');
+            const content = document.getElementById('modalContent');
+
+            currentDetailsId = id;
+
+            document.getElementById('m-header').className = `p-6 sm:p-8 text-white relative flex-shrink-0 bg-gradient-to-br ${pkg.color}`;
+            document.getElementById('m-tag').innerText = pkg.category || '';
+            document.getElementById('m-title').innerText = pkg.name;
+            document.getElementById('m-price').innerText = `₹${pkg.price}`;
+            document.getElementById('m-mrp').innerText = pkg.mrp ? `₹${pkg.mrp}` : '';
+
+            const listItems = (pkg.features || pkg.tests || []);
+            document.getElementById('m-list').innerHTML = listItems.map(t => `
+                <li class="flex items-center gap-3"><i class="fas fa-circle-check text-purple-500"></i> ${t}</li>
+            `).join('');
+
+            // Setup Add buttons in modal
+            const addHandler = () => { addToCart(pkg.id); closeModal(); };
+            document.getElementById('m-add-btn').onclick = addHandler;
+            document.getElementById('m-add-btn-mob').onclick = addHandler;
+
+            modal.classList.remove('hidden');
+            modal.classList.add('flex');
+            setTimeout(() => {
+                content.classList.remove('translate-y-full', 'scale-95');
+                content.classList.add('translate-y-0', 'scale-100');
+            }, 10);
+        }
+
+        function closeModal() {
+            const content = document.getElementById('modalContent');
+            const modal = document.getElementById('detailsModal');
+            content.classList.remove('translate-y-0', 'scale-100');
+            content.classList.add('translate-y-full', 'scale-95');
+            setTimeout(() => {
+                modal.classList.add('hidden');
+                modal.classList.remove('flex');
+            }, 300);
+        }
+
+        // --- Cart Functions ---
+        function addToCart(id) {
+            const pkg = allPackages.find(p => p.id === id);
+            if(!pkg) return;
+            // Check for duplicate
+            if(cart.some(item => item.id === id)) {
+                alert("This package is already in your cart!");
+                toggleCart();
+                return;
+            }
+
+            cart.push(pkg);
+            updateCartUI();
+
+            // Visual feedback on button
+            const btn = document.getElementById(`btn-${id}`);
+            if(btn) {
+                const originalText = btn.innerText;
+                btn.innerText = "Added!";
+                btn.classList.add("bg-green-500");
+                setTimeout(() => { btn.innerText = originalText; btn.classList.remove("bg-green-500"); }, 1500);
+            }
+        }
+
+        function removeFromCart(index) {
+            cart.splice(index, 1);
+            updateCartUI();
+        }
+
+        function updateCartUI() {
+            // Update Counts
+            document.getElementById('float-cart-count').innerText = cart.length;
+            document.getElementById('nav-cart-count').innerText = cart.length;
+            
+            // Show/Hide Floating Button
+            const floatBtn = document.getElementById('floating-cart-btn');
+            const navCount = document.getElementById('nav-cart-count');
+            
+            if (cart.length > 0) {
+                floatBtn.classList.remove('hidden');
+                floatBtn.classList.add('cart-bounce');
+                navCount.classList.remove('hidden');
+                setTimeout(() => floatBtn.classList.remove('cart-bounce'), 300);
+            } else {
+                floatBtn.classList.add('hidden');
+                navCount.classList.add('hidden');
+            }
+
+            // Render Items in Modal
+            const cartContainer = document.getElementById('cart-items');
+            if (cart.length === 0) {
+                cartContainer.innerHTML = `
+                    <div class="text-center text-slate-400 mt-10">
+                        <i class="fas fa-shopping-basket text-4xl mb-2 opacity-50"></i>
+                        <p>Your cart is empty</p>
+                    </div>`;
+            } else {
+                cartContainer.innerHTML = cart.map((item, index) => `
+                    <div class="bg-white p-4 rounded-xl border border-slate-100 shadow-sm flex justify-between items-center">
+                        <div class="min-w-0">
+                            <h4 class="font-bold text-slate-800 text-sm truncate">${item.name}</h4>
+                            <p class="text-purple-600 font-bold text-sm">₹${item.price}</p>
+                        </div>
+                        <button onclick="removeFromCart(${index})" class="text-red-400 hover:text-red-600 p-2 flex-shrink-0 z-10">
+                            <i class="fas fa-trash-alt"></i>
+                        </button>
+                    </div>
+                `).join('');
+            }
+
+            // Update Total
+            const total = cart.reduce((sum, item) => sum + item.price, 0);
+            updateCartTotalWithCoupon(total);
+        }
+
+        function toggleCart() {
+            const modal = document.getElementById('cartModal');
+            const content = document.getElementById('cartContent');
+            
+            if (modal.classList.contains('hidden')) {
+                modal.classList.remove('hidden');
+                modal.classList.add('flex');
+                setTimeout(() => content.classList.remove('translate-x-full'), 10);
+            } else {
+                content.classList.add('translate-x-full');
+                setTimeout(() => {
+                    modal.classList.add('hidden');
+                    modal.classList.remove('flex');
+                }, 300);
+            }
+        }
+
+        function checkoutWhatsApp() {
+            if (cart.length === 0) return;
+
+            const subtotal = cart.reduce((sum, item) => sum + item.price, 0);
+            const { discount, finalTotal } = computeDiscount(subtotal);
+            const couponLine = appliedCoupon && COUPONS[appliedCoupon] ? `Coupon: ${appliedCoupon} (${COUPONS[appliedCoupon].label})\nSaved: ₹${discount}\n` : '';
+
+            let msg = `*DIGICLINIX DIAGNOSTICS*\n\n`;
+            cart.forEach((item, index) => { msg += `${index + 1}. ${item.name} - ₹${item.price}\n`; });
+            const city = localStorage.getItem('selectedCity') || (document.getElementById('city-text-pc') && document.getElementById('city-text-pc').innerText) || (document.getElementById('city-text-mob') && document.getElementById('city-text-mob').innerText) || 'Not specified';
+            msg += `\nSubtotal: ₹${subtotal}\n${couponLine}Payable: ₹${finalTotal}\nBooking City: ${city}\n\nPlease confirm my appointment.`;
+
+            window.open(`https://wa.me/${WHATSAPP}?text=${encodeURIComponent(msg)}`);
+        }
+
+        // --- Coupon logic ---
+        const COUPONS = {
+            'DIGI10': { type: 'percent', value: 10, label: '10% off' },
+            'FREECONSULT': { type: 'flat', value: 0, label: 'Free consult' }
+        };
+        let appliedCoupon = null;
+
+        function computeDiscount(total) {
+            if (!appliedCoupon) return { discount: 0, finalTotal: total };
+            const c = COUPONS[appliedCoupon];
+            if (!c) return { discount: 0, finalTotal: total };
+            let discount = 0;
+            if (c.type === 'percent') discount = Math.round((c.value / 100) * total);
+            else discount = c.value;
+            const finalTotal = Math.max(0, total - discount);
+            return { discount, finalTotal };
+        }
+
+        function updateCartTotalWithCoupon(total) {
+            const originalEl = document.getElementById('cart-original-total');
+            const totalEl = document.getElementById('cart-total');
+            const feedback = document.getElementById('coupon-feedback');
+            const removeBtn = document.getElementById('remove-coupon-btn');
+            const applyBtn = document.getElementById('apply-coupon-btn');
+            const codeInput = document.getElementById('coupon-code');
+
+            if (appliedCoupon) {
+                const { discount, finalTotal } = computeDiscount(total);
+                originalEl.innerText = `₹${total}`;
+                originalEl.classList.remove('hidden');
+                totalEl.innerText = `₹${finalTotal}`;
+                feedback.classList.remove('hidden');
+                feedback.classList.add('text-green-600');
+                feedback.innerText = `${COUPONS[appliedCoupon].label} applied — saved ₹${discount}`;
+                removeBtn.classList.remove('hidden');
+                applyBtn.disabled = true;
+                codeInput.disabled = true;
+            } else {
+                originalEl.classList.add('hidden');
+                totalEl.innerText = `₹${total}`;
+                feedback.classList.add('hidden');
+                removeBtn.classList.add('hidden');
+                applyBtn.disabled = false;
+                codeInput.disabled = false;
+            }
+        }
+
+        document.addEventListener('DOMContentLoaded', () => {
+            const applyBtn = document.getElementById('apply-coupon-btn');
+            const removeBtn = document.getElementById('remove-coupon-btn');
+            if (applyBtn) applyBtn.addEventListener('click', () => {
+                const code = (document.getElementById('coupon-code').value || '').trim().toUpperCase();
+                if (!code) return alert('Enter coupon code');
+                if (!COUPONS[code]) return alert('Invalid coupon');
+                appliedCoupon = code;
+                updateCartUI();
+            });
+            if (removeBtn) removeBtn.addEventListener('click', () => {
+                appliedCoupon = null;
+                document.getElementById('coupon-code').value = '';
+                updateCartUI();
+            });
+        });
+
+        init();
+    </script>
+</body>
+</html>
